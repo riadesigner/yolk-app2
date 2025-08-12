@@ -1,4 +1,4 @@
-FROM node:22-alpine
+FROM node:24-alpine
 WORKDIR /app
 # Добавляем недостающие крипто-зависимости (для vite)
 RUN apk add --no-cache openssl  
@@ -6,4 +6,3 @@ COPY package.json package-lock.json ./
 RUN npm install
 # Vite в режиме разработки (hot-reload)
 CMD ["npm", "run", "dev"]  
-# CMD ["sh", "-c", "echo 'Container is running...'; sleep infinity"]

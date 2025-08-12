@@ -17,7 +17,7 @@ export function AuthProvider({ children }) {
   };  
 
   const logout = async () => {
-    await api.post('/auth/logout');
+    // await api.post('/auth/logout');
     localStorage.removeItem('jwt');
     setIsAuthenticated(false);    
     console.log('Logout executed'); // Для отладки

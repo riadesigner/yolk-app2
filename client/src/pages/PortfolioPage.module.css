@@ -1,0 +1,21 @@
+
+.portfolios{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;    
+}
+
+
+/* ----------------------------- 
+    
+   STARTED MOBILE MODE FROM HERE 
+
+   ----------------------------- */
+
+@media (max-width: 1023px) {
+ 
+    .portfolios{    
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+}

@@ -1,0 +1,39 @@
+
+.info{
+    display:grid;
+    grid-template-columns: 1fr 3fr;
+    gap:1rem 1rem;    
+}
+
+.info2{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap:1rem 1rem;    
+}
+
+
+.info p{    
+    margin: 0 !important;
+    line-height: 1.4;    
+}
+
+
+/* ----------------------------- 
+    
+   STARTED MOBILE MODE FROM HERE 
+
+   ----------------------------- */
+
+@media (max-width: 1023px) {
+ 
+    .info, .info2{    
+        grid-template-columns: repeat(1, 1fr);
+        gap:.25rem 0;
+    }
+
+    .info p:not(:last-child):nth-child(2n+2){        
+        margin:0 0 .75rem 0 !important;
+        line-height: 1.3;    
+    }
+
+}

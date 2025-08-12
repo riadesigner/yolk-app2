@@ -1,24 +1,17 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Navigation from './components/Navigation';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Profile from './pages/private/Profile';
-import AuthCallback from './pages/AuthCallback';
+import { Outlet } from 'react-router-dom';
+import './styles/style-init.css'
+import './styles/style.css'
 
-function App() {
-    return (
-        <BrowserRouter>
-            <Navigation />
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/auth-callback" element={<AuthCallback />} />
-                {/* Перенаправление несуществующих путей на главную */}
-                <Route path="*" element={<Navigate to="/" />} />
-            </Routes>
-        </BrowserRouter>
-    );
+import SiteHeader from './components/SiteHeader'
+import SiteFooter from './components/SiteFooter'
+
+export default function App() {
+  
+  return (
+    <>
+      <SiteHeader /> 
+      <Outlet />
+      <SiteFooter />
+    </>
+  )
 }
-
-export default App;

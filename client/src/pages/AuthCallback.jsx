@@ -12,7 +12,7 @@ export default function AuthCallback() {
     if (token) {      
       login(token);      
       window.history.replaceState({}, '', '/'); // Очищаем URL
-      navigate('/profile'); // Перенаправляем в личный кабинет
+      navigate('/cp/designer'); // Перенаправляем в личный кабинет
     } else {
       navigate('/login'); // Если токена нет
     }
