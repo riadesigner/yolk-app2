@@ -1,33 +1,70 @@
 require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const cors = require('cors');
+const error404 = require('./middleware/error404')
 const session = require('express-session');
+const path = require('path')
+const mongoose = require('mongoose')
+const cors = require('cors');
 const passport = require('passport');
 const configurePassport = require('./config/passport');
+
+const MONGO_URL =`mongodb://${process.env.MONGO_ROOT_USER}:${process.env.MONGO_ROOT_PASSWORD}@mongo:27017`;
+// const MONGO_DB = process.env.DB_NAME;
+const MONGO_DB = 'new-yolk-db';
+const PUBLIC_PATH = path.join(__dirname+'/public');
+
+// ----------------
+//  CONNECT TO DB
+// ---------------- 
+(async ()=>{    
+    try{
+        const db_hdlr = await mongoose.connect(MONGO_URL, {dbName:MONGO_DB});        
+        console.log('DB CONNECTED');
+    }catch(e){
+        console.log(e, "error connect to mongo / mongoose");        
+    }    
+})();
 
 // -------------------
 //      APP INIT
 // -------------------
 const app = express();
 
-// Настройка сессии 
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'fallback_secret',
-  resave: false,
+app.set('view engine','ejs')
+app.set('views', __dirname + '/views');
+
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+app.use('/public',express.static(PUBLIC_PATH))
+
+// -----------------
+//    USE SESSION
+// ----------------- 
+
+const sessionMiddleware = session({
+  secret: process.env.SESSION_SECRET,
+  resave: true,
+  rolling: true,  
   saveUninitialized: false,
   cookie: {
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'none',
-    httpOnly: true,
-    maxAge: 86400000 // 24 часа
+    httpOnly: false,
+    maxAge: 10 * 60 * 1000,
   }
-}));
+});
+
+app.use(sessionMiddleware);
+
+// -----------------
+//    USE PASSPORT
+// ----------------- 
 
 // Конфигурация Passport
 configurePassport();
 
-// Middleware
+// Middleware passport
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -64,6 +101,8 @@ app.get('/', (req, res)=>{
     const user = req.user;
     res.render('index',{user});
 });
+
+app.use('/api',require('./users/users.routes'));
 
 // Инициируем OAuth-поток в Yandex
 app.get('/auth/yandex', passport.authenticate('yandex'));
