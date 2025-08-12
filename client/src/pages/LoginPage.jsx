@@ -17,7 +17,7 @@ export default function LoginPage(){
         try {
             // Используем настроенную копию axios (а не нативный fetch) как интерцептор
             // Интерцептор созранит jwt токен и обработает ошибки
-            const response = await api.get('/auth/check-auth');            
+            const response = await api.get('/auth/check-auth');
 
             console.log('response', response);
 

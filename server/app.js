@@ -9,6 +9,7 @@ const cors = require('cors');
 const passport = require('passport');
 const configurePassport = require('./config/passport');
 const requestLogger = require('./middleware/requestLogger')
+const { asyncHandler, sendSuccess, sendError } = require('./middleware/utils');
 
 const MONGO_URL =`mongodb://${process.env.MONGO_ROOT_USER}:${process.env.MONGO_ROOT_PASSWORD}@mongo:27017`;
 // const MONGO_DB = process.env.DB_NAME;
@@ -93,7 +94,7 @@ app.get('/', (req, res)=>{
 
 app.use('/auth',require('./auth/auth.routes')); // auth через яндекс  
 app.use('/api',require('./auth/auth-api.routes')); // logout
-app.use('/api',require('./users/users.routes'));
+app.use('/api',require('./users/users-api.routes'));
 
 // Защищённый роут
 app.get('/api/protected', (req, res) => {
@@ -106,15 +107,13 @@ app.get('/api/protected', (req, res) => {
   }
 });
 
-// Защищённый роут
-app.get('/api/user', 
-    passport.authenticate('jwt', { session: false }),
-    (req, res) => {
-        res.json(req.user);
-    }
-);
-
 app.use(error404)
+
+// Централизованный обработчик ошибок
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  sendError(res, 'Internal server error', 500, process.env.NODE_ENV === 'development' ? err.stack : null);
+});
 
 app.listen(process.env.PORT, () => {
   console.log(`Сервер запущен на http://localhost:${process.env.PORT}`);

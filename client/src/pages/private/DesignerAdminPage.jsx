@@ -20,11 +20,15 @@ export default function DesignerAdminPage(){
 
         console.log('Auth status changed:', isAuthenticated);
 
-        const fetchUser = async () => {          
+        const fetchUser = async () => {         
             try {
                 const response = await api.get('/user');
-                setUser(response.data);
+
+                console.log('response', response);
+
+                setUser(response.data.data);
                 console.log('response.data = ', response.data);
+                console.log('user = ', user);
             } catch (err) {
                 console.error('Ошибка загрузки профиля', err);
                 navigate('/login');

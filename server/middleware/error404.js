@@ -1,4 +1,5 @@
+const { sendError } = require('./utils/apiHelpers');
+
 module.exports = (req,res)=>{
-    res.status(404)
-    res.render('error')
+    sendError(res, 'Not found', 404);
 }

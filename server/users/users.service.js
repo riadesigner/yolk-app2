@@ -14,8 +14,9 @@ const UsersModel = require('./users.model');
     })
   }
 
-  exports.create = function (data) {  
+  exports.create = function (userCreateDto) {  
       return new Promise(async (res,rej)=>{ 
+        const data = {...userCreateDto, createdAt:Date.now(), updatedAt:Date.now() }        
         try{
           const newUser = await UsersModel.create(data);
           newUser.save();
