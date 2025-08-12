@@ -1,12 +1,46 @@
 const express = require('express')
 const crypto = require('crypto');
 const UserService = require('../users/users.service')
+const passport = require('passport');
 
 const router = express.Router();
 
 const passportLocal = require('../libs/pass-local')
 passportLocal.init(router,'email','password');
 
+// --------------------------
+//         AUTH YANDEX
+// --------------------------
+
+// Инициируем OAuth-поток в Yandex
+router.get('/yandex', passport.authenticate('yandex'));
+
+// Обработчик callback
+router.get('/yandex/callback', 
+  (req, res, next) => {    
+    const errRedirect = `${process.env.FRONT_URL}/login`;
+    passport.authenticate('yandex', { session: false, failureRedirect: `${errRedirect}?error=auth-failed` })(req, res, err => {
+    // проверка на ошибку, когда jwt устарел 
+      if (err) {
+        if (err.message.includes('Code has expired')) {
+          return res.redirect(`${errRedirect}?error=session_expired`);
+        }
+        return next(err);
+      }
+      // ошибок нет, идем дальше
+      next();
+    });
+  },
+  (req, res) => {
+    // Успешная аутентификация     
+    res.redirect(`${process.env.FRONT_URL}/auth-callback?token=${encodeURIComponent(req.user.token)}`);    
+  }
+);
+
+
+// ------------------------------------
+//   AUTH LOCAL-STRATEGY WITH SESSION
+// ------------------------------------
 
 router.get('/login', (req, res) => {
   res.status(200)

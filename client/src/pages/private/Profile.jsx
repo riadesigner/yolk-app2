@@ -18,7 +18,7 @@ function Profile() {
         setUser(response.data);
       } catch (err) {
         console.error('Ошибка загрузки профиля', err);
-        navigate('/login');
+        navigate('/');
       }
     };
     

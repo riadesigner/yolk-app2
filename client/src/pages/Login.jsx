@@ -19,11 +19,15 @@ const Login = () => {
       try {
         // Используем настроенную копию axios (а не нативный fetch) как интерцептор
         // Интерцептор созранит jwt токен и обработает ошибки
-        const response = await api.get('/check-auth');        
+        const response = await api.get('/auth/check-auth');        
         console.log('response = ', response);
 
         if (response.data.isAuthenticated) {
-          // navigate('/profile');
+          // никуда автоматически не переходим, чтобы не зациклитьб
+          // т.к. когда jwt устареет, профиль отправит пользователя
+          // на страницу /login, чтобы еще раз войти. 
+          // если здесь будет автоматический редирект на /profile –
+          // попадем в бесконечный цикл          
         } 
       } catch (err) {                
         console.log('Пользователь не аутентифицирован. Необходимо заново войти', err);

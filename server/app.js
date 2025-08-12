@@ -8,6 +8,7 @@ const mongoose = require('mongoose')
 const cors = require('cors');
 const passport = require('passport');
 const configurePassport = require('./config/passport');
+const requestLogger = require('./middleware/requestLogger')
 
 const MONGO_URL =`mongodb://${process.env.MONGO_ROOT_USER}:${process.env.MONGO_ROOT_PASSWORD}@mongo:27017`;
 // const MONGO_DB = process.env.DB_NAME;
@@ -61,10 +62,7 @@ app.use(sessionMiddleware);
 //    USE PASSPORT
 // ----------------- 
 
-// Конфигурация Passport
 configurePassport();
-
-// Middleware passport
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -79,19 +77,10 @@ const corsOptions = {
   ]  
 };
 app.use(cors(corsOptions));
-
 app.use(cookieParser());
 app.use(express.json());
+app.use(requestLogger);
 app.set('view engine','ejs');
-
-// Middleware для логирования заголовков (для отладки)
-app.use((req, res, next) => {
-  console.log('\n=== Новый запрос ===');
-  console.log('Session ID:', req.sessionID);
-  console.log('Headers:', req.headers);
-  //console.log('Cookies:', req.cookies);
-  next();
-});
 
 // ------------
 //    ROUTS
@@ -102,44 +91,9 @@ app.get('/', (req, res)=>{
     res.render('index',{user});
 });
 
-app.use('/api',require('./auth/auth.routes'));
+app.use('/auth',require('./auth/auth.routes')); // auth через яндекс  
+app.use('/api',require('./auth/auth-api.routes')); // logout
 app.use('/api',require('./users/users.routes'));
-
-// Инициируем OAuth-поток в Yandex
-app.get('/auth/yandex', passport.authenticate('yandex'));
-
-// Обработчик callback
-app.get('/auth/yandex/callback', 
-  (req, res, next) => {
-    passport.authenticate('yandex', { session: false, failureRedirect: '/auth-failed' })(req, res, err => {
-    // проверка на ошибку, когда jwt устарел 
-      if (err) {
-        if (err.message.includes('Code has expired')) {
-          return res.redirect(`${process.env.FRONT_URL}/login?error=session_expired`);
-        }
-        return next(err);
-      }
-      // ошибок нет, идем дальше
-      next();
-    });
-  },
-  (req, res) => {
-    // Успешная аутентификация     
-    res.redirect(`${process.env.FRONT_URL}/auth-callback?token=${encodeURIComponent(req.user.token)}`);    
-  }
-);
-
-
-// Проверка аутентификации (опционально)
-app.get('/api/check-auth', 
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    res.json({ 
-      isAuthenticated: true,
-      user: req.user 
-    });
-  }
-);
 
 // Защищённый роут
 app.get('/api/protected', (req, res) => {
@@ -160,16 +114,7 @@ app.get('/api/user',
     }
 );
 
-app.post('/api/auth/logout', 
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    // Здесь можно:
-    // 1. Добавить токен в blacklist
-    // 2. Записать лог выхода
-    // 3. Очистить refresh-токен (если используется)    
-    res.json({ success: true, message: 'Logged out' });
-  }
-);
+app.use(error404)
 
 app.listen(process.env.PORT, () => {
   console.log(`Сервер запущен на http://localhost:${process.env.PORT}`);
