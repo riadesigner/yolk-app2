@@ -102,6 +102,7 @@ app.get('/', (req, res)=>{
     res.render('index',{user});
 });
 
+app.use('/api',require('./auth/auth.routes'));
 app.use('/api',require('./users/users.routes'));
 
 // Инициируем OAuth-поток в Yandex
