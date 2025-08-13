@@ -30,7 +30,8 @@ export default function DesignerAdminPage(){
                 
             } catch (err) {
                 console.error('Ошибка загрузки профиля', err);
-                navigate('/login');
+                // navigate('/login');
+                navigate('/');
             }
         };
         

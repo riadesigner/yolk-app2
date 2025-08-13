@@ -15,8 +15,19 @@ export default function DesignerInfoPage(){
     const [user, setUser] = useState(null);
     const [userAge, setUserAge] = useState(null);
     const [avatar, setAvatar] = useState(noPhoto);
+    const [userEducation, setUserEducation] = useState('Не указано');
     const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
+
+    // firstName: { type:String },  
+    // secondName: { type:String },
+    // sex: { type:String }, // 'male' | 'female'
+    // phone: { type:String },
+    // social: { type: Array }, // string[]
+    // softSkills: { type: Array }, // string[]
+    // hardSkills: { type: Array }, // string[]    
+    // education: { type: Array }, // string[]    
+    // rating: { type: Array }, // string[]
 
     useEffect(() => {
 
@@ -35,13 +46,16 @@ export default function DesignerInfoPage(){
 
             } catch (err) {
                 console.error('Ошибка загрузки анкеты', err);
-                navigate('/login');
+                // navigate('/login');
+                navigate('/');
             }
         };
         
         fetchUser();
     }, []);
 
+    // Высшее, ФБОУ ВО Владивостокский Государственный Университет, 2021
+    
     return (
         <>
         <section className="container is-max-desktop desktop-only">
@@ -84,7 +98,7 @@ export default function DesignerInfoPage(){
                         <h1 className="title is-size-3 mb-2">{user && user.name}&nbsp;</h1>
                         <p className="">Дизайнер{userAge && (<>, {userAge}</>)}</p>
                         <p className="is-size-7 mb-0 subtitle"><strong>Образование</strong></p>
-                        <p className="mt-1 " style={{lineHeight:1.4}}>Высшее, ФБОУ ВО Владивостокский Государственный Университет, 2021</p>
+                        <p className="mt-1 " style={{lineHeight:1.4}}>{userEducation}</p>
                         <p className="is-size-7 mb-0 subtitle"><strong>Специальность</strong></p>
                         <p className="mt-1" style={{lineHeight:1.4}}>Дизайнер</p>
                         <p className="is-size-7 mb-2 is-primary"><strong>Статистика</strong></p>

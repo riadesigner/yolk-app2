@@ -10,11 +10,14 @@ const passport = require('passport');
 const configurePassport = require('./config/passport');
 const requestLogger = require('./middleware/requestLogger')
 const { asyncHandler, sendSuccess, sendError } = require('./middleware/utils');
+const { authErrorHandler, apiErrorHandler, fallbackErrorHandler } = require('./middleware/errorHandlers');
+
 
 const MONGO_URL =`mongodb://${process.env.MONGO_ROOT_USER}:${process.env.MONGO_ROOT_PASSWORD}@mongo:27017`;
 // const MONGO_DB = process.env.DB_NAME;
 const MONGO_DB = 'new-yolk-db';
 const PUBLIC_PATH = path.join(__dirname+'/public');
+
 
 // ----------------
 //  CONNECT TO DB
@@ -107,13 +110,18 @@ app.get('/api/protected', (req, res) => {
   }
 });
 
-app.use(error404)
+// 404 — если ни один маршрут не сработал
+app.use(error404);
 
-// Централизованный обработчик ошибок
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  sendError(res, 'Internal server error', 500, process.env.NODE_ENV === 'development' ? err.stack : null);
-});
+// Ошибка для /auth
+app.use('/auth', authErrorHandler);
+
+// Ошибка для /api
+app.use('/api', apiErrorHandler(sendError));
+
+// Фолбэк
+app.use(fallbackErrorHandler);
+
 
 app.listen(process.env.PORT, () => {
   console.log(`Сервер запущен на http://localhost:${process.env.PORT}`);

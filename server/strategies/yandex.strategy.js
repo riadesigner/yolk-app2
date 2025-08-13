@@ -10,7 +10,7 @@ module.exports = (passport) => {
   }, async (accessToken, refreshToken, profile, done) => {
     try {
 
-      const { id, username, emails, photos } = profile;
+      const { id, username, emails, photos, name, gender } = profile;
 
       console.log('profile', profile);
 
@@ -18,22 +18,28 @@ module.exports = (passport) => {
         throw new Error("Email is required");
       }
 
-      const yandexUser = {
-        id: id,
+      const userData = {
+        yandexId: id,
         email: emails[0].value,
         name: username,
         avatar: photos?.[0]?.value
       };
       
-      let usr = await usersService.findByEmail(yandexUser.email);
+      const userInfo = {
+        firstName: name.familyName,
+        secondName: name.givenName,
+        gender: gender,     
+      }
+
+      let usr = await usersService.findByEmail(userData.email);
       
       if(!usr){
         try{
-          console.log( `пользователь ${yandexUser.email} не найден, будет создан новый`);
-          usr = await usersService.create(yandexUser);
+          console.log( `пользователь ${userData.email} не найден, будет создан новый`);
+          usr = await usersService.create(userData, userInfo);
           console.log('создан newUser = ', usr);      
-        }catch(e){
-          console.log('err:', e.message || e);
+        }catch(err){
+          console.log('err:', err);
           return done('не удалось создать пользователя');          
         }
       }

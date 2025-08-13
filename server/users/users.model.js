@@ -1,4 +1,6 @@
-const {Schema, model} = require('mongoose')
+const { Schema, model } = require('mongoose');
+
+require('../userinfo/userinfo.model');
 
 const userSchema = new Schema({
     email: { type:String, required:true},
@@ -8,11 +10,10 @@ const userSchema = new Schema({
     passwordHash:{ type:String },
     name: { type:String },
     avatar: { type:String },    
-    role: { type:String },
-    // userInfo: { type:String },
-    // portfolio: { type:String },
-    createdAt: { type:Date, required:true },
-    updatedAt: { type:Date, required:true },
+    role: { type:String },    
+    userInfo: { type: Schema.Types.ObjectId, ref: 'UserInfo' },
+    createdAt: { type:Date },
+    updatedAt: { type:Date },
 }, {
   timestamps: true,
   toJSON: {
@@ -24,5 +25,5 @@ const userSchema = new Schema({
     }
   }
 });
-module.exports = model('users', userSchema);
+module.exports = model('Users', userSchema);
 

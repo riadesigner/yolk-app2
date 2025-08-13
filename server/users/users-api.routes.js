@@ -19,7 +19,8 @@ router.get('/user',
 router.get('/user-with-info',
     passport.authenticate('jwt', { session: false }),
     asyncHandler(async (req, res) => { 
-        const user = await UserService.findByEmail(req.user.email);        
+        
+        const user = await UserService.findByEmail(req.user.email, true);        
         
         if (!user) {
             return sendError(res, 'User not found', 404);
