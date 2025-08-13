@@ -1,10 +1,7 @@
-import { useEffect, useState } from 'react';    
 
 export default function Field(props){
-    const {type, label, sublabel, placeHolder, initialValue} = props;
+    const {type, label, sublabel, placeHolder, value, onChange} = props;
     const strPlaceHolder = placeHolder??'Введите текст';    
-
-    const [value, setValue] = useState(initialValue||"");
 
     return(
         <div className="field">
@@ -32,7 +29,7 @@ export default function Field(props){
                         type="text" 
                         placeholder={strPlaceHolder} 
                         value={value}
-                        onChange={e => setValue(e.target.value)} // обновляем state
+                        onChange={(e) => onChange(e.target.value)}
                         />
                 )
             }            

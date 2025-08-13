@@ -20,9 +20,19 @@ export default function DesignerEditInfoPage(){
         {link:'#', title:'Редактирование', isActive:true},
     ];        
 
+    const hdlSave = ()=>{
+        console.log('firstName', firstName)
+        console.log('secondName', secondName)
+        console.log('middleName', middleName)
+    }
+
     const [user, setUser] = useState(null);
     const [avatar, setAvatar] = useState(noPhoto);
-    const [nameFields, setNameFields] = useState([]);
+
+    const [firstName, setFirstName] = useState("");
+    const [secondName, setSecondName] = useState("");
+    const [middleName, setMiddleName] = useState("");
+
 
     const [userAge, setUserAge] = useState(null);    
     const [userEducation, setUserEducation] = useState('Не указано');
@@ -41,12 +51,10 @@ export default function DesignerEditInfoPage(){
                     const user = response.data.user;
                     setUser(user);  
                     setAvatar(user.avatar);
-                    // setSecondName('петя');
-                    setNameFields([                        
-                        {label:'Фамилия', initValue:user.userInfo.secondName},
-                        {label:'Имя', initValue:user.userInfo.firstName},
-                        {label:'Отчество', initValue:user.userInfo.middleName},
-                    ])
+
+                    setSecondName(user?.userInfo?.secondName || '');
+                    setFirstName(user?.userInfo?.firstName || '');
+                    setMiddleName(user?.userInfo?.middleName || '');                    
                 }
 
             } catch (err) {
@@ -89,13 +97,9 @@ export default function DesignerEditInfoPage(){
                         </div>
                     </div>
                     <div className="userFio box">
-                        {
-                            nameFields.map((el, i)=>{                                
-                                return (
-                                    <Field key={i} label={el.label} initialValue={el.initValue}/>            
-                                )
-                            })
-                        }
+                        <Field  label="Фамилия" value={secondName} onChange={setSecondName} />
+                        <Field  label="Имя" value={firstName} onChange={setFirstName} />
+                        <Field  label="Отчество" value={middleName} onChange={setMiddleName} />
                     </div>
                     <div className="box">
                         <Field label="День рождения" />                        
@@ -153,7 +157,7 @@ export default function DesignerEditInfoPage(){
             </div>        
 
             <div className="block has-text-right">                
-                <button className="button is-primary is-medium is-regular-mobile">Сохранить</button>                            
+                <button className="button is-primary is-medium is-regular-mobile" onClick={hdlSave}>Сохранить</button>                            
             </div>                                
 
                         
