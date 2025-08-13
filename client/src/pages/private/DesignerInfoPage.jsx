@@ -25,11 +25,13 @@ export default function DesignerInfoPage(){
         const fetchUser = async () => {          
             try {
                 const response = await api.get('/user-with-info');
-                setUser(response.data);  
-                setAvatar(response.data.avatar);              
-                // setUserAge(21);
-
-                console.log('response 2', response);
+                console.log('response', response);
+                
+                if(response.data.success){
+                    const user = response.data.user;
+                    setUser(user);  
+                    setAvatar(user.avatar);                              
+                }
 
             } catch (err) {
                 console.error('Ошибка загрузки анкеты', err);

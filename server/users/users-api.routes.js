@@ -8,13 +8,25 @@ const router = express.Router();
 router.get('/user',
     passport.authenticate('jwt', { session: false }),
     asyncHandler(async (req, res) => { 
-        const user = await UserService.findByEmail(req.user.email);        
-        console.log('== user ==', user)
+        const user = await UserService.findByEmail(req.user.email);         
         if (!user) {
             return sendError(res, 'User not found', 404);
         }
-        sendSuccess(res, user);        
+        sendSuccess(res, { user:user.toJSON() });        
     })
-)
+);
+
+router.get('/user-with-info',
+    passport.authenticate('jwt', { session: false }),
+    asyncHandler(async (req, res) => { 
+        const user = await UserService.findByEmail(req.user.email);        
+        
+        if (!user) {
+            return sendError(res, 'User not found', 404);
+        }
+        
+        sendSuccess(res, { user:user.toJSON() });        
+    })
+);
 
 module.exports = router;

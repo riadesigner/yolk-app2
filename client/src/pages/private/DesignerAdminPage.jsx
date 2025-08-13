@@ -24,11 +24,10 @@ export default function DesignerAdminPage(){
             try {
                 const response = await api.get('/user');
 
-                console.log('response', response);
-
-                setUser(response.data.data);
-                console.log('response.data = ', response.data);
-                console.log('user = ', user);
+                if(response.data.success){                    
+                    setUser(response.data.user);
+                }
+                
             } catch (err) {
                 console.error('Ошибка загрузки профиля', err);
                 navigate('/login');
