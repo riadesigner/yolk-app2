@@ -31,8 +31,6 @@ export default function DesignerInfoPage(){
 
     useEffect(() => {
 
-        console.log('Auth status changed:', isAuthenticated);
-
         const fetchUser = async () => {          
             try {
                 const response = await api.get('/user-with-info');
@@ -41,7 +39,7 @@ export default function DesignerInfoPage(){
                 if(response.data.success){
                     const user = response.data.user;
                     setUser(user);  
-                    setAvatar(user.avatar);                              
+                    setAvatar(user.avatar);
                 }
 
             } catch (err) {

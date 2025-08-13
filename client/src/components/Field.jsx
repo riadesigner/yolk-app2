@@ -1,8 +1,10 @@
-
+import { useEffect, useState } from 'react';    
 
 export default function Field(props){
-    const {type, label, sublabel, placeHolder} = props;
-    const strPlaceHolder = placeHolder??'Введите текст';
+    const {type, label, sublabel, placeHolder, initialValue} = props;
+    const strPlaceHolder = placeHolder??'Введите текст';    
+
+    const [value, setValue] = useState(initialValue||"");
 
     return(
         <div className="field">
@@ -23,9 +25,15 @@ export default function Field(props){
         <div className="control">
             {
                 type && type==='textarea' ? (
-                    <textarea className="input" rows="8" placeholder={strPlaceHolder}></textarea>
+                    <textarea className="input" rows="8" placeholder={strPlaceHolder}>{value}</textarea>
                 ):(
-                    <input className="input" type="text" placeholder={strPlaceHolder} />
+                    <input 
+                        className="input" 
+                        type="text" 
+                        placeholder={strPlaceHolder} 
+                        value={value}
+                        onChange={e => setValue(e.target.value)} // обновляем state
+                        />
                 )
             }            
         </div>

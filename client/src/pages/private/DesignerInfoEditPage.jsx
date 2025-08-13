@@ -1,10 +1,16 @@
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
+import { useAuth } from '../../contexts/AuthContext';
+import api from '../../utils/api';
 
 import styles from '../../pages/private/DesignerInfoEditPage.module.css'
 import Field from '../../components/Field'
 
 import userPhoto from '/no-image.jpg';
 import Breadcrumb from '../../components/Breadcrumb';
+
+const noPhoto = '/no-image.jpg'; 
 
 export default function DesignerEditInfoPage(){
     const links = [
@@ -13,6 +19,46 @@ export default function DesignerEditInfoPage(){
         {link:'/cp/designer/info', title:'Анкета'},
         {link:'#', title:'Редактирование', isActive:true},
     ];        
+
+    const [user, setUser] = useState(null);
+    const [avatar, setAvatar] = useState(noPhoto);
+    const [nameFields, setNameFields] = useState([]);
+
+    const [userAge, setUserAge] = useState(null);    
+    const [userEducation, setUserEducation] = useState('Не указано');
+    const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
+    
+
+    useEffect(() => {
+
+        const fetchUser = async () => {          
+            try {
+                const response = await api.get('/user-with-info');
+                console.log('response', response);
+                
+                if(response.data.success){
+                    const user = response.data.user;
+                    setUser(user);  
+                    setAvatar(user.avatar);
+                    // setSecondName('петя');
+                    setNameFields([                        
+                        {label:'Фамилия', initValue:user.userInfo.secondName},
+                        {label:'Имя', initValue:user.userInfo.firstName},
+                        {label:'Отчество', initValue:user.userInfo.middleName},
+                    ])
+                }
+
+            } catch (err) {
+                console.error('Ошибка загрузки страницы редактирования анкеты', err);
+                // navigate('/login');
+                navigate('/');
+            }
+        };
+        
+        fetchUser();
+    }, []);
+
 
     return (
         <>
@@ -32,7 +78,7 @@ export default function DesignerEditInfoPage(){
                     <div className="box">    
                         <div className={styles.userPhotoBox}>
                         
-                        <img className="is-max-4-mobile" src={userPhoto} style={{
+                        <img className="is-max-4-mobile" src={avatar} style={{
                             width:'70%',
                             borderRadius:'10px',
                             objectFit:'cover',
@@ -43,9 +89,13 @@ export default function DesignerEditInfoPage(){
                         </div>
                     </div>
                     <div className="userFio box">
-                        <Field label="Фамилия" />
-                        <Field label="Имя" />
-                        <Field label="Отчество" />                    
+                        {
+                            nameFields.map((el, i)=>{                                
+                                return (
+                                    <Field key={i} label={el.label} initialValue={el.initValue}/>            
+                                )
+                            })
+                        }
                     </div>
                     <div className="box">
                         <Field label="День рождения" />                        
@@ -72,7 +122,7 @@ export default function DesignerEditInfoPage(){
                 <h2 className="subtitle is-size-7"><strong>Контакты</strong></h2>
                 <div className={styles.info2}>
                     <div className="box">
-                        <Field label="Почта" />
+                        <Field label="Сайт" />
                     </div>
                     <div className="box">                        
                         <Field label="Телефон" />            

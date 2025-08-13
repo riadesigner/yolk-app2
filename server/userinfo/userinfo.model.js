@@ -3,6 +3,7 @@ const { Schema, model } = require('mongoose');
 const userInfoSchema = new Schema({
     firstName: { type:String },  
     secondName: { type:String },
+    middleName: { type:String },
     gender: { type:String }, // 'male' | 'female'
     phone: { type:String },
     social: { type: Array }, // string[]
