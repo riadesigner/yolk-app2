@@ -24,6 +24,7 @@ export default function DesignerEditInfoPage(){
         console.log('firstName', firstName)
         console.log('secondName', secondName)
         console.log('middleName', middleName)
+        console.log("Form data:", schools);
     }
 
     const [user, setUser] = useState(null);
@@ -33,6 +34,39 @@ export default function DesignerEditInfoPage(){
     const [secondName, setSecondName] = useState("");
     const [middleName, setMiddleName] = useState("");
 
+    const [schools, setSchools] = useState([{
+      id: 1,
+      title: "",
+      year: "",
+      speciality: "",
+      city: "",
+    },]);
+
+    const addSchool = () => {
+        const newId = schools.length > 0 ? Math.max(...schools.map(s => s.id)) + 1 : 1;
+        setSchools([
+        ...schools,
+        {
+            id: newId,
+            title: "",
+            year: "",
+            speciality: "",
+            city: "",
+        },
+        ]);
+    };
+
+    const removeSchool = (id) => {
+        setSchools(schools.filter((s) => s.id !== id));
+    };    
+    
+    const handleChange = (id, fieldName, value) => {
+        setSchools(
+        schools.map((school) =>
+            school.id === id ? { ...school, [fieldName]: value } : school
+        )
+        );
+    };
 
     const [userAge, setUserAge] = useState(null);    
     const [userEducation, setUserEducation] = useState('Не указано');
@@ -88,6 +122,7 @@ export default function DesignerEditInfoPage(){
                         
                         <img className="is-max-4-mobile" src={avatar} style={{
                             width:'70%',
+                            maxWidth:'200px',
                             borderRadius:'10px',
                             objectFit:'cover',
                         }} alt="" />
@@ -109,17 +144,42 @@ export default function DesignerEditInfoPage(){
                 
             <div className="block mb-6">
                 <h2 className="subtitle is-size-7"><strong>Образование</strong></h2>
+
                 <div className={styles.schools}>
-                    <div className="school box">
-                        <Field label="Институт / Университет" />
-                        <Field label="Специальность" />
-                        <Field label="Год окончания" />
-                        <Field label="Город" />                    
-                    </div>
+                    {
+                        schools.map((school) =>(                                                        
+                            <div className="box" key={school.id}>        
+                                <Field name="title" 
+                                    label="Институт / Университет" 
+                                    value={school.title}
+                                    onChange={(val) => handleChange(school.id, "title", val)}
+                                    />
+                                <Field name="speciality" 
+                                    label="Специальность"
+                                    value={school.speciality}
+                                    onChange={(val) => handleChange(school.id, "speciality", val)}
+                                    />
+                                <Field name="year" 
+                                    label="Год окончания"
+                                    value={school.year}
+                                    onChange={(val) => handleChange(school.id, "year", val)}
+                                    />
+                                <Field name="city" 
+                                    label="Город"
+                                    value={school.sicy}
+                                    onChange={(val) => handleChange(school.id, "city", val)}
+                                    />
+                                    <div className={styles.btnDelete}>
+                                        <button className="button is-small is-link is-inverted" onClick={()=>removeSchool(school.id)}>x</button>
+                                    </div>                            
+                            </div>
+                        ))
+                    }
                     <div className={styles.addSchoolBox}>
-                        <button className="button is-link is-inverted is-small-mobile">Добавить еще</button>
+                        <button className="button is-link is-inverted is-small-mobile" onClick={addSchool}>Добавить еще</button>
                     </div>                
                 </div>
+
             </div>                
 
             <div className="block mb-6">

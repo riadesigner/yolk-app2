@@ -5,6 +5,7 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;    
 }
+.schools>div {position: relative;}
 
 .info2{
     display: grid;
@@ -25,9 +26,13 @@
     justify-items:center;
     align-items: center;    
     width: 100%;
-    height: 100%;
+    height: 100%;    
 }
 
+.btnDelete{
+    position: absolute;
+    top:1rem;right:1rem;
+}
                             
 
 /* ----------------------------- 
