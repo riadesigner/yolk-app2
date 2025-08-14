@@ -15,6 +15,7 @@ export default function useFetchUser({setErrorMessage}) {
     const [middleName, setMiddleName] = useState("");
     const [webSite, setWebSite] = useState("");
     const [phone, setPhone] = useState("");
+    const [specialization, setSpecialization] = useState("");
     const navigate = useNavigate();
 
     const { schools, setSchools, addSchool, removeSchool, handleSchoolChange } = useSchools([]);
@@ -26,7 +27,7 @@ export default function useFetchUser({setErrorMessage}) {
         
         setErrorMessage(null);
 
-        const userInput = { firstName, secondName, middleName, softSkills, hardSkills, schools, webSite, phone }
+        const userInput = { firstName, secondName, middleName, softSkills, hardSkills, schools, webSite, phone, specialization }
         user.userInfo = {
             ...user.userInfo,
             ...userInput,
@@ -55,6 +56,7 @@ export default function useFetchUser({setErrorMessage}) {
             setSecondName(user?.userInfo?.secondName || "");
             setFirstName(user?.userInfo?.firstName || "");
             setMiddleName(user?.userInfo?.middleName || ""); 
+            setSpecialization(user?.userInfo?.specialization || "");             
             
             // Education           
             let userSchools = user?.userInfo?.schools || [{id:1, title:'', year:'', speciality:'', city:'',}];            
@@ -111,6 +113,8 @@ export default function useFetchUser({setErrorMessage}) {
         addHardSkill,
         removeHardSkill,
         handleHardSkillChange,
+        specialization, 
+        setSpecialization,
         hdlSaveUser,
     };
 }

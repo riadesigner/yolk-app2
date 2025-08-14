@@ -22,7 +22,7 @@ module.exports = (passport) => {
         yandexId: id,
         email: emails[0].value,
         name: username,
-        avatar: photos?.[0]?.value
+        avatar: photos?.[0]?.value        
       };
       
       const userInfo = {
@@ -35,6 +35,7 @@ module.exports = (passport) => {
       
       if(!usr){
         try{
+          userData.role = 'unknown';
           console.log( `пользователь ${userData.email} не найден, будет создан новый`);
           usr = await usersService.create(userData, userInfo);
           console.log('создан newUser = ', usr);      
@@ -44,13 +45,10 @@ module.exports = (passport) => {
         }
       }
 
-      const token = jwt.sign(
-        { id: usr.id, email: usr.email },
-        process.env.JWT_SECRET,
-        { expiresIn: '1h' }
-      );      
+      const payload = { id: usr.id, email: usr.email, role:usr.role };
+      const token = jwt.sign( payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-      console.log('Yandex auth success for:', usr.email);
+      console.log('Yandex auth success for:', payload );
       return done(null, { ...usr, token, accessToken });
 
     } catch (err) {

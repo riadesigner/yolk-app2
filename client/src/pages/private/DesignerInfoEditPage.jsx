@@ -42,7 +42,9 @@ export default function DesignerEditInfoPage(){
         addHardSkill,
         removeHardSkill,
         handleHardSkillChange,
-        hdlSaveUser,
+        specialization,
+        setSpecialization,
+        hdlSaveUser,        
     } = useFetchUser({errorMessage, setErrorMessage});
 
     return (
@@ -128,19 +130,19 @@ export default function DesignerEditInfoPage(){
 
             </div>                
 
-            {/* Блок контактов */}
+            {/* Блок специализации */}
 
             <div className="block mb-6">
-                <h2 className="subtitle is-size-7"><strong>Контакты</strong></h2>
-                <div className={styles.info2}>
-                    <div className="box">
-                        <Field name="webSite" label="Сайт" value={webSite} onChange={(val)=>{setWebSite(val)}}/>
-                    </div>
-                    <div className="box">
-                        <Field name="phone" label="Телефон" value={phone} onChange={(val)=>{setPhone(val)}} />            
-                    </div>
+                <h2 className="subtitle is-size-7"><strong>Специализация</strong></h2>
+                <div className="box">
+                    <Field 
+                        name="specialization" 
+                        value={specialization}
+                        onChange={(val) => setSpecialization(val)}
+                        placeHolder="Графический дизайн, веб дизайн, UI/UX, Презентации" />
                 </div>
-            </div>                  
+            </div>
+            
 
             {/* Блок навыков */}
 
@@ -203,6 +205,20 @@ export default function DesignerEditInfoPage(){
                     </div>                    
                 </div>
             </div>        
+
+            {/* Блок контактов */}
+
+            <div className="block mb-6">
+                <h2 className="subtitle is-size-7"><strong>Контакты</strong></h2>
+                <div className={styles.info2}>
+                    <div className="box">
+                        <Field name="webSite" label="Сайт" value={webSite} onChange={(val)=>{setWebSite(val)}}/>
+                    </div>
+                    <div className="box">
+                        <Field name="phone" label="Телефон" value={phone} onChange={(val)=>{setPhone(val)}} />            
+                    </div>
+                </div>
+            </div>                  
 
             <div className="block has-text-right">                
                 <button className="button is-primary is-medium is-regular-mobile" onClick={hdlSaveUser}>Сохранить</button>                            

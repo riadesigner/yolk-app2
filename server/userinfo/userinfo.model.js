@@ -10,6 +10,7 @@ const userInfoSchema = new Schema({
     softSkills: { type: Array },
     hardSkills: { type: Array },    
     schools: { type: Array },
+    specialization: { type: String },
     rating: { type: String },
     createdAt: { type:Date },
     updatedAt: { type:Date },

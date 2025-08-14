@@ -11,23 +11,13 @@ const noPhoto = '/no-image.jpg';
 
 export default function DesignerInfoPage(){
 
-
     const [user, setUser] = useState(null);
     const [userAge, setUserAge] = useState(null);
     const [avatar, setAvatar] = useState(noPhoto);
-    const [userEducation, setUserEducation] = useState('Не указано');
+    const [schools, setSchools] = useState([]);
+    const [specialization, setSpecialization] = useState('');
     const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
-
-    // firstName: { type:String },  
-    // secondName: { type:String },
-    // sex: { type:String }, // 'male' | 'female'
-    // phone: { type:String },
-    // social: { type: Array }, // string[]
-    // softSkills: { type: Array }, // string[]
-    // hardSkills: { type: Array }, // string[]    
-    // education: { type: Array }, // string[]    
-    // rating: { type: Array }, // string[]
 
     useEffect(() => {
 
@@ -40,6 +30,8 @@ export default function DesignerInfoPage(){
                     const user = response.data.user;
                     setUser(user);  
                     setAvatar(user.avatar);
+                    setSchools(user.userInfo.schools);
+                    setSpecialization(user.userInfo.specialization)
                 }
 
             } catch (err) {
@@ -96,9 +88,25 @@ export default function DesignerInfoPage(){
                         <h1 className="title is-size-3 mb-2">{user && user.name}&nbsp;</h1>
                         <p className="">Дизайнер{userAge && (<>, {userAge}</>)}</p>
                         <p className="is-size-7 mb-0 subtitle"><strong>Образование</strong></p>
-                        <p className="mt-1 " style={{lineHeight:1.4}}>{userEducation}</p>
-                        <p className="is-size-7 mb-0 subtitle"><strong>Специальность</strong></p>
-                        <p className="mt-1" style={{lineHeight:1.4}}>Дизайнер</p>
+                        <p className="mt-1 " style={{lineHeight:1.4}}>{
+                            (schools && schools.length > 0 && schools[0].title ) ? (
+                                schools.map((s)=>{
+                                    return (
+                                        <><span key={s.id}>{s.title} ({s.speciality}), {s.year}, {s.city}</span><br /></>
+                                    )
+                                })
+                            ) : (
+                                <>Не указано</>
+                            )
+                        }</p>
+                        <p className="is-size-7 mb-0 subtitle"><strong>Специализация</strong></p>
+                        <p className="mt-1" style={{lineHeight:1.4}}>{
+                            specialization ? (
+                                <>{specialization}</>
+                            ):(
+                                <>Не указано</>
+                            )
+                            }</p>
                         <p className="is-size-7 mb-2 is-primary"><strong>Статистика</strong></p>
                         <div className="is-size-7">
                             <span style={{marginRight:'10px'}} className="is-primary"><i className="fa-regular fa-face-smile"></i></span>
@@ -124,16 +132,32 @@ export default function DesignerInfoPage(){
                         <div className="columns ">
                             <div className="column is-5">
                                 <h2 className="is-size-6 subtitle">Soft skills</h2>
-                                <Progressbar title="Коммуникабельность" value="90" />
-                                <Progressbar title="Ответственность" value="100" />
-                                <Progressbar title="Внимательность" value="80" />                                
+                                { (user?.userInfo?.softSkills 
+                                    && user.userInfo.softSkills.length > 0
+                                    && user.userInfo.softSkills[0].title !=='') ? (
+                                    user.userInfo.softSkills.map((s)=>{                                        
+                                        return (                                            
+                                            <Progressbar title={s.title} value={s.percent} />
+                                        )
+                                    })
+                                ):(
+                                    <>Не указано</>
+                                )}
                             </div>                            
                             <div className="column is-5">
                                 <h2 className="is-size-6 subtitle">Hard skills</h2>
                                 <div className="block">
-                                <Progressbar title="Дизайн графический" value="90" />
-                                <Progressbar title="UI/UX" value="100" />
-                                <Progressbar title="Веб-программирование" value="60" />    
+                                { (user?.userInfo?.hardSkills 
+                                    && user.userInfo.hardSkills.length > 0 
+                                    && user.userInfo.hardSkills[0].title!=='' ) ? (
+                                    user.userInfo.hardSkills.map((s)=>{                                        
+                                        return (                                            
+                                            <Progressbar title={s.title} value={s.percent} />
+                                        )
+                                    })
+                                ):(
+                                    <>Не указано</>
+                                )}   
                                 </div>
                             </div>
                             <div className="column  desktop-only"></div>                            
@@ -148,30 +172,32 @@ export default function DesignerInfoPage(){
                     <h2>Контакты</h2>
                     <div className="level is-3 is-2-mobile">                        
                         
-                        <div className="level-item ">
-                            <button className="button is-small is-link is-inverted">
-                            <span><i className="fa-regular fa-at"></i></span>
-                            <span>asya.pri</span>
-                            </button>
-                        </div>
+                        { user?.name && (
+                            <div className="level-item ">
+                                <button className="button is-small is-link is-inverted">
+                                <span><i className="fa-regular fa-at"></i></span>
+                                <span>{user.name}</span>
+                                </button>
+                            </div>
+                        )}
                         
-
+                        { user?.email && (
+                            <div className="level-item ">
+                                <button className="button is-small is-link is-inverted">
+                                <span><i className="fa-regular fa-envelope"></i></span>
+                                <span>{user?.email}</span>
+                                </button>
+                            </div>
+                        )}
                         
-                        <div className="level-item ">
-                            <button className="button is-small is-link is-inverted">
-                            <span><i className="fa-regular fa-envelope"></i></span>
-                            <span>p.asya.p@yandex.ru</span>
-                            </button>
-                        </div>
-                        
-                        
-                        
-                        <div className="level-item ">
-                            <button className="button is-small is-link is-inverted">
-                            <span><i className="fa-regular fa-face-smile"></i></span>
-                            <span>+7 (914) 530-31-36</span>
-                            </button>
-                        </div>
+                        { user?.userInfo?.phone && (
+                            <div className="level-item ">
+                                <button className="button is-small is-link is-inverted">
+                                <span><i className="fa-regular fa-face-smile"></i></span>
+                                <span>{user.userInfo.phone}</span>
+                                </button>
+                            </div>
+                        )}                                                
                         
                     </div>                                        
                 </div>

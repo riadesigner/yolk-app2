@@ -19,12 +19,13 @@ import DesignersPage from './pages/DesignersPage.jsx';
 import CompaniesPage from './pages/CompaniesPage.jsx';
 import ChatPage from './pages/ChatPage.jsx';
 
-import AuthCallback from './pages/AuthCallback.jsx';
 
+
+import AuthCallback from './pages/AuthCallback.jsx';
+import RoleSelectionPage from './pages/private/RoleSelectionPage.jsx';
 import DesignerAdminPage from './pages/private/DesignerAdminPage.jsx'
 import DesignerInfoPage from './pages/private/DesignerInfoPage.jsx'
 import DesignerInfoEditPage from './pages/private/DesignerInfoEditPage.jsx'
-
 import CompanyAdminPage from './pages/private/CompanyAdminPage.jsx'
 import CompanyInfoPage from './pages/private/CompanyInfoPage.jsx'
 import CompanyInfoEditPage from './pages/private/CompanyInfoEditPage.jsx'
@@ -54,6 +55,7 @@ const router = createBrowserRouter([
       { path: 'companies/123', element: <CompanyPublicPage /> }, // 
       { path: 'companies', element: <CompaniesPage /> }, // 
       { path: 'chats/123', element: <ChatPage /> }, //       
+      { path: 'role-selection', element: <RoleSelectionPage /> }, //       
 
       { path: 'auth-callback', element: <AuthCallback /> }, //             
 

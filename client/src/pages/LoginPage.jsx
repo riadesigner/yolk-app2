@@ -22,7 +22,8 @@ export default function LoginPage(){
             console.log('response', response);
 
             if (response.data.isAuthenticated) {                
-                navigate('/cp/designer');                
+                // navigate('/cp/designer');                
+                console.log(' готов перейти в личный кабинет')
             } 
         } catch (err) {                
             console.log('Пользователь не аутентифицирован. Необходимо заново войти', err);

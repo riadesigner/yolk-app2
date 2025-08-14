@@ -30,13 +30,13 @@ export default function Portfolio(props){
                 <div className={styles.portfolio}>                    
                     <div className="columns">
                     {
-                        items.map((i)=>{
+                        items.map((p, i)=>{
                             return(
                                 <PortfolioItem 
-                                    
-                                    title={i.title} 
-                                    img={i.img} 
-                                    linkto={i.linkTo} 
+                                    key={i}
+                                    title={p.title} 
+                                    img={p.img} 
+                                    linkto={p.linkTo} 
                                 />
                             )
                         })
