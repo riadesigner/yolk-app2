@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import api from "../../../utils/api"; // Путь к вашему API
 import useSchools from './useSchools';
 import useSoftSkills from './useSoftSkills';
+import useHardSkills from './useHardSkills';
+
 
 export default function useFetchUser() {
     const [user, setUser] = useState(null);
@@ -17,7 +19,32 @@ export default function useFetchUser() {
 
     const { schools, setSchools, addSchool, removeSchool, handleSchoolChange } = useSchools([]);
     const { softSkills, setSoftSkills, addSoftSkill, removeSoftSkill, handleSoftSkillChange } = useSoftSkills();
+    const { hardSkills, setHardSkills, addHardSkill, removeHardSkill, handleHardSkillChange } = useHardSkills();
 
+    const saveUser = async (userData) => {
+        try {
+            const response = await api.post('/user/save', userData);
+            console.log('Успешно:', response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Ошибка:', error.response?.data || error.message);
+            throw error; // Можно обработать ошибку в компоненте
+        }
+    };
+
+    const hdlSaveAll = ()=>{                
+        const userInput = { firstName, secondName, middleName, softSkills, hardSkills, schools, webSite, phone }
+        user.userInfo = {
+            ...user.userInfo,
+            ...userInput,
+        }
+
+        console.log('user = ', user );
+        
+        saveUser(user)
+        .then(data => console.log('Данные сохранены:', data))
+        .catch(err => console.error('Не удалось сохранить:', err));        
+    }
 
     useEffect(() => {
     const fetchUser = async () => {
@@ -29,19 +56,28 @@ export default function useFetchUser() {
             setAvatar(user.avatar);
             setSecondName(user?.userInfo?.secondName || "");
             setFirstName(user?.userInfo?.firstName || "");
-            setMiddleName(user?.userInfo?.middleName || "");
-            const userSchools = user?.userInfo?.schools || [{
-                id:1, title:'', year:'', speciality:'', city:'',
-            }];
+            setMiddleName(user?.userInfo?.middleName || ""); 
+            
+            // Education           
+            let userSchools = user?.userInfo?.schools || [{id:1, title:'', year:'', speciality:'', city:'',}];            
             setSchools(userSchools);
-            // const userSoftSkills = user?.userInfo?.softSkills || [{
-            //     id:1, title:'', percent:'',
-            // }];            
-            // setSoftSkills(userSoftSkills);
-            setSoftSkills([{ id:1, title:'', percent:''}]);
+            
+            // Soft Skills
+            const userSoftSkills = user?.userInfo?.softSkills || [{
+                id:1, title:'', percent:'',
+            }];            
+            setSoftSkills(userSoftSkills);
 
-            // console.log('user?.userInfo?.softSkills' , user?.userInfo?.softSkills)
-            // console.log('softSkills' , softSkills)            
+            // Hard Skills
+            const userHardSkills = user?.userInfo?.hardSkills || [{
+                id:1, title:'', percent:'',
+            }];            
+            setHardSkills(userHardSkills);
+            
+            // Contacts
+            setWebSite(user?.userInfo?.webSite || "");
+            setPhone(user?.userInfo?.phone || "");
+            
         }
         } catch (err) {
         console.error("Ошибка загрузки данных пользователя", err);
@@ -72,5 +108,11 @@ export default function useFetchUser() {
         addSoftSkill,
         removeSoftSkill,
         handleSoftSkillChange,
+        hardSkills,
+        setHardSkills,
+        addHardSkill,
+        removeHardSkill,
+        handleHardSkillChange,
+        hdlSaveAll,
     };
 }

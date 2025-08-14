@@ -6,11 +6,11 @@ const userInfoSchema = new Schema({
     middleName: { type:String },
     gender: { type:String }, // 'male' | 'female'
     phone: { type:String },
-    social: { type: Array }, // string[]
-    softSkills: { type: Array }, // string[]
-    hardSkills: { type: Array }, // string[]    
-    education: { type: Array }, // string[]    
-    rating: { type: Array }, // string[]
+    webSite: { type: String }, 
+    softSkills: { type: Array },
+    hardSkills: { type: Array },    
+    schools: { type: Array },
+    rating: { type: String },
     createdAt: { type:Date },
     updatedAt: { type:Date },
 }, {

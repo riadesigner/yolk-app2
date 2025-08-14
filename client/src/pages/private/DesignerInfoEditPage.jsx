@@ -34,19 +34,12 @@ export default function DesignerEditInfoPage(){
         addSoftSkill,
         removeSoftSkill,
         handleSoftSkillChange,
+        hardSkills,
+        addHardSkill,
+        removeHardSkill,
+        handleHardSkillChange,
+        hdlSaveAll,
     } = useFetchUser();
-
-    const hdlSave = ()=>{
-        // console.log('firstName', firstName)
-        // console.log('secondName', secondName)
-        // console.log('middleName', middleName)
-        // console.log("Form data:", schools);
-    }
-
-    // const [userAge, setUserAge] = useState(null);    
-    // const [userEducation, setUserEducation] = useState('Не указано');
-    // const navigate = useNavigate();
-    // const { isAuthenticated } = useAuth();
 
     return (
         <>
@@ -114,7 +107,7 @@ export default function DesignerEditInfoPage(){
                                     />
                                 <Field name="city" 
                                     label="Город"
-                                    value={school.sicy}
+                                    value={school.city}
                                     onChange={(val) => handleSchoolChange(school.id, "city", val)}
                                     />
                                     <div className={styles.btnDelete}>
@@ -174,21 +167,40 @@ export default function DesignerEditInfoPage(){
                                 )
                             })
                         }
-                        <button className="button is-link is-small mt-3" onClick={addSoftSkill}>Добавить качество</button>
+                        <button className="button is-link is-small" onClick={addSoftSkill}>Добавить качество</button>
                     </div>
                     <div className="box">                        
                         <p className="title is-size-5 mb-3">Hard skills</p>
-                        <div className="columns is-1 mb-3">
-                            <div className="column is-9"><Field placeHolder="UI/UX" /></div>
-                            <div className="column is-3"><Field placeHolder="100" /></div>
-                        </div>
-                        <button className="button is-link is-small">Добавить навык</button>
+                        {
+                            hardSkills.map((s)=>{
+                                return (
+                                <div key={s.id} className="columns is-1 mb-3">
+                                    <div className="column is-9 ">
+                                        <Field 
+                                            name="softSkillTitle" 
+                                            value={s.title}
+                                            onChange={(val) => handleHardSkillChange(s.id, "title", val)}
+                                            placeHolder="UI/UX" /></div>
+                                    <div className="column is-2">
+                                        <Field 
+                                            name="softSkillPercent" 
+                                            value={s.percent} 
+                                            onChange={(val) => handleHardSkillChange(s.id, "percent", val)}
+                                            placeHolder="100" /></div>
+                                    <div className="column is-1">
+                                        <button className="button is-small is-link is-inverted" onClick={()=>{removeHardSkill(s.id)}}>x</button>
+                                    </div>
+                                </div>
+                                )
+                            })
+                        }                        
+                        <button className="button is-link is-small" onClick={addHardSkill}>Добавить навык</button>
                     </div>                    
                 </div>
             </div>        
 
             <div className="block has-text-right">                
-                <button className="button is-primary is-medium is-regular-mobile" onClick={hdlSave}>Сохранить</button>                            
+                <button className="button is-primary is-medium is-regular-mobile" onClick={hdlSaveAll}>Сохранить</button>                            
             </div>                                
 
                         
