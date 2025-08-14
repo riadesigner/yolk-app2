@@ -1,18 +1,11 @@
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-
-import { useAuth } from '../../contexts/AuthContext';
-import api from '../../utils/api';
 
 import styles from '../../pages/private/DesignerInfoEditPage.module.css'
 import Field from '../../components/Field'
-
-import userPhoto from '/no-image.jpg';
 import Breadcrumb from '../../components/Breadcrumb';
-
-const noPhoto = '/no-image.jpg'; 
+import useFetchUser from './hooks/useFetchUser';
 
 export default function DesignerEditInfoPage(){
+
     const links = [
         {link:'/', title:'Главная'},
         {link:'/cp/designer', title:'Панель управления'},
@@ -20,87 +13,40 @@ export default function DesignerEditInfoPage(){
         {link:'#', title:'Редактирование', isActive:true},
     ];        
 
+    const {
+        user,
+        avatar,
+        firstName,
+        setFirstName,
+        secondName,
+        setSecondName,
+        middleName,
+        setMiddleName,
+        schools, 
+        addSchool, 
+        removeSchool, 
+        handleSchoolChange,
+        webSite,
+        setWebSite,
+        phone,
+        setPhone,
+        softSkills,
+        addSoftSkill,
+        removeSoftSkill,
+        handleSoftSkillChange,
+    } = useFetchUser();
+
     const hdlSave = ()=>{
-        console.log('firstName', firstName)
-        console.log('secondName', secondName)
-        console.log('middleName', middleName)
-        console.log("Form data:", schools);
+        // console.log('firstName', firstName)
+        // console.log('secondName', secondName)
+        // console.log('middleName', middleName)
+        // console.log("Form data:", schools);
     }
 
-    const [user, setUser] = useState(null);
-    const [avatar, setAvatar] = useState(noPhoto);
-
-    const [firstName, setFirstName] = useState("");
-    const [secondName, setSecondName] = useState("");
-    const [middleName, setMiddleName] = useState("");
-
-    const [schools, setSchools] = useState([{
-      id: 1,
-      title: "",
-      year: "",
-      speciality: "",
-      city: "",
-    },]);
-
-    const addSchool = () => {
-        const newId = schools.length > 0 ? Math.max(...schools.map(s => s.id)) + 1 : 1;
-        setSchools([
-        ...schools,
-        {
-            id: newId,
-            title: "",
-            year: "",
-            speciality: "",
-            city: "",
-        },
-        ]);
-    };
-
-    const removeSchool = (id) => {
-        setSchools(schools.filter((s) => s.id !== id));
-    };    
-    
-    const handleChange = (id, fieldName, value) => {
-        setSchools(
-        schools.map((school) =>
-            school.id === id ? { ...school, [fieldName]: value } : school
-        )
-        );
-    };
-
-    const [userAge, setUserAge] = useState(null);    
-    const [userEducation, setUserEducation] = useState('Не указано');
-    const navigate = useNavigate();
-    const { isAuthenticated } = useAuth();
-    
-
-    useEffect(() => {
-
-        const fetchUser = async () => {          
-            try {
-                const response = await api.get('/user-with-info');
-                console.log('response', response);
-                
-                if(response.data.success){
-                    const user = response.data.user;
-                    setUser(user);  
-                    setAvatar(user.avatar);
-
-                    setSecondName(user?.userInfo?.secondName || '');
-                    setFirstName(user?.userInfo?.firstName || '');
-                    setMiddleName(user?.userInfo?.middleName || '');                    
-                }
-
-            } catch (err) {
-                console.error('Ошибка загрузки страницы редактирования анкеты', err);
-                // navigate('/login');
-                navigate('/');
-            }
-        };
-        
-        fetchUser();
-    }, []);
-
+    // const [userAge, setUserAge] = useState(null);    
+    // const [userEducation, setUserEducation] = useState('Не указано');
+    // const navigate = useNavigate();
+    // const { isAuthenticated } = useAuth();
 
     return (
         <>
@@ -137,11 +83,13 @@ export default function DesignerEditInfoPage(){
                         <Field  label="Отчество" value={middleName} onChange={setMiddleName} />
                     </div>
                     <div className="box">
-                        <Field label="День рождения" />                        
+                        <Field disabled label="День рождения" />                        
                     </div>
                 </div> 
             </div>
                 
+            {/* Блок образования */}
+
             <div className="block mb-6">
                 <h2 className="subtitle is-size-7"><strong>Образование</strong></h2>
 
@@ -152,22 +100,22 @@ export default function DesignerEditInfoPage(){
                                 <Field name="title" 
                                     label="Институт / Университет" 
                                     value={school.title}
-                                    onChange={(val) => handleChange(school.id, "title", val)}
+                                    onChange={(val) => handleSchoolChange(school.id, "title", val)}
                                     />
                                 <Field name="speciality" 
                                     label="Специальность"
                                     value={school.speciality}
-                                    onChange={(val) => handleChange(school.id, "speciality", val)}
+                                    onChange={(val) => handleSchoolChange(school.id, "speciality", val)}
                                     />
                                 <Field name="year" 
                                     label="Год окончания"
                                     value={school.year}
-                                    onChange={(val) => handleChange(school.id, "year", val)}
+                                    onChange={(val) => handleSchoolChange(school.id, "year", val)}
                                     />
                                 <Field name="city" 
                                     label="Город"
                                     value={school.sicy}
-                                    onChange={(val) => handleChange(school.id, "city", val)}
+                                    onChange={(val) => handleSchoolChange(school.id, "city", val)}
                                     />
                                     <div className={styles.btnDelete}>
                                         <button className="button is-small is-link is-inverted" onClick={()=>removeSchool(school.id)}>x</button>
@@ -182,32 +130,55 @@ export default function DesignerEditInfoPage(){
 
             </div>                
 
+            {/* Блок контактов */}
+
             <div className="block mb-6">
                 <h2 className="subtitle is-size-7"><strong>Контакты</strong></h2>
                 <div className={styles.info2}>
                     <div className="box">
-                        <Field label="Сайт" />
+                        <Field name="webSite" label="Сайт" value={webSite} onChange={(val)=>{setWebSite(val)}}/>
                     </div>
-                    <div className="box">                        
-                        <Field label="Телефон" />            
-                    </div>                    
+                    <div className="box">
+                        <Field name="phone" label="Телефон" value={phone} onChange={(val)=>{setPhone(val)}} />            
+                    </div>
                 </div>
-            </div>                      
+            </div>                  
+
+            {/* Блок навыков */}
 
             <div className="block mb-6">
                 <h2 className="subtitle is-size-7"><strong>Навыки</strong></h2>
                 <div className={styles.info2}>
                     <div className="box">
-                        <p className="title is-size-5 mb-0">Soft skills</p>
-                        <div className="columns is-1">
-                            <div className="column is-9"><Field placeHolder="Коммуникабельность" /></div>
-                            <div className="column is-3"><Field placeHolder="100" /></div>
-                        </div>
-                        <button className="button is-link is-small">Добавить качество</button>
+                        <p className="title is-size-5 mb-3">Soft skills</p>
+                        {
+                            softSkills.map((s)=>{
+                                return (
+                                <div key={s.id} className="columns is-1 mb-3">
+                                    <div className="column is-9 ">
+                                        <Field 
+                                            name="softSkillTitle" 
+                                            value={s.title}
+                                            onChange={(val) => handleSoftSkillChange(s.id, "title", val)}
+                                            placeHolder="Коммуникабельность" /></div>
+                                    <div className="column is-2">
+                                        <Field 
+                                            name="softSkillPercent" 
+                                            value={s.percent} 
+                                            onChange={(val) => handleSoftSkillChange(s.id, "percent", val)}
+                                            placeHolder="100" /></div>
+                                    <div className="column is-1">
+                                        <button className="button is-small is-link is-inverted" onClick={()=>{removeSoftSkill(s.id)}}>x</button>
+                                    </div>
+                                </div>
+                                )
+                            })
+                        }
+                        <button className="button is-link is-small mt-3" onClick={addSoftSkill}>Добавить качество</button>
                     </div>
                     <div className="box">                        
-                        <p className="title is-size-5 mb-0">Hard skills</p>
-                        <div className="columns is-1">
+                        <p className="title is-size-5 mb-3">Hard skills</p>
+                        <div className="columns is-1 mb-3">
                             <div className="column is-9"><Field placeHolder="UI/UX" /></div>
                             <div className="column is-3"><Field placeHolder="100" /></div>
                         </div>

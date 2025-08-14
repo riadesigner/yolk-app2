@@ -47,7 +47,7 @@ module.exports = (passport) => {
       const token = jwt.sign(
         { id: usr.id, email: usr.email },
         process.env.JWT_SECRET,
-        { expiresIn: '15m' }
+        { expiresIn: '1h' }
       );      
 
       console.log('Yandex auth success for:', usr.email);

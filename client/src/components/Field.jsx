@@ -1,6 +1,6 @@
 
 export default function Field(props){
-    const {type, label, sublabel, placeHolder, value, onChange} = props;
+    const {type, name, label, sublabel, placeHolder, value, onChange, disabled} = props;
     const strPlaceHolder = placeHolder??'Введите текст';    
 
     return(
@@ -22,9 +22,17 @@ export default function Field(props){
         <div className="control">
             {
                 type && type==='textarea' ? (
-                    <textarea className="input" rows="8" placeholder={strPlaceHolder}>{value}</textarea>
+                    <textarea 
+                        name={name} 
+                        className="input" 
+                        rows="8" 
+                        placeholder={strPlaceHolder}
+                        disabled = {disabled} 
+                        >{value}</textarea>
                 ):(
-                    <input 
+                    <input
+                        disabled = {disabled} 
+                        name={name}
                         className="input" 
                         type="text" 
                         placeholder={strPlaceHolder} 
