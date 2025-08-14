@@ -7,7 +7,7 @@ import useSoftSkills from './useSoftSkills';
 import useHardSkills from './useHardSkills';
 
 
-export default function useFetchUser() {
+export default function useFetchUser({setErrorMessage}) {
     const [user, setUser] = useState(null);
     const [avatar, setAvatar] = useState(null);
     const [firstName, setFirstName] = useState("");
@@ -21,29 +21,27 @@ export default function useFetchUser() {
     const { softSkills, setSoftSkills, addSoftSkill, removeSoftSkill, handleSoftSkillChange } = useSoftSkills();
     const { hardSkills, setHardSkills, addHardSkill, removeHardSkill, handleHardSkillChange } = useHardSkills();
 
-    const saveUser = async (userData) => {
-        try {
-            const response = await api.post('/user/save', userData);
-            console.log('Успешно:', response.data);
-            return response.data;
-        } catch (error) {
-            console.error('Ошибка:', error.response?.data || error.message);
-            throw error; // Можно обработать ошибку в компоненте
-        }
-    };
 
-    const hdlSaveAll = ()=>{                
+    const hdlSaveUser = async ()=>{           
+        
+        setErrorMessage(null);
+
         const userInput = { firstName, secondName, middleName, softSkills, hardSkills, schools, webSite, phone }
         user.userInfo = {
             ...user.userInfo,
             ...userInput,
         }
 
-        console.log('user = ', user );
-        
-        saveUser(user)
-        .then(data => console.log('Данные сохранены:', data))
-        .catch(err => console.error('Не удалось сохранить:', err));        
+        try {
+            const response = await api.post('/user/save', user);
+            console.log('Успешно:', response.data);
+            navigate('/cp/designer/info');
+
+        } catch (error) {
+            console.error('Ошибка:', error.response?.data || error.message);            
+            setErrorMessage('Не удалось сохранить')
+            throw error; // Можно обработать ошибку в компоненте
+        }
     }
 
     useEffect(() => {
@@ -113,6 +111,6 @@ export default function useFetchUser() {
         addHardSkill,
         removeHardSkill,
         handleHardSkillChange,
-        hdlSaveAll,
+        hdlSaveUser,
     };
 }

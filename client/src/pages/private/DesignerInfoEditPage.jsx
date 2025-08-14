@@ -2,7 +2,9 @@
 import styles from '../../pages/private/DesignerInfoEditPage.module.css'
 import Field from '../../components/Field'
 import Breadcrumb from '../../components/Breadcrumb';
+import ErrorMessage from '../../components/ErrorMessage';
 import useFetchUser from './hooks/useFetchUser';
+import { useState } from 'react';
 
 export default function DesignerEditInfoPage(){
 
@@ -12,6 +14,8 @@ export default function DesignerEditInfoPage(){
         {link:'/cp/designer/info', title:'Анкета'},
         {link:'#', title:'Редактирование', isActive:true},
     ];        
+    
+    const [errorMessage, setErrorMessage] = useState(null);
 
     const {
         user,
@@ -38,8 +42,8 @@ export default function DesignerEditInfoPage(){
         addHardSkill,
         removeHardSkill,
         handleHardSkillChange,
-        hdlSaveAll,
-    } = useFetchUser();
+        hdlSaveUser,
+    } = useFetchUser({errorMessage, setErrorMessage});
 
     return (
         <>
@@ -51,6 +55,7 @@ export default function DesignerEditInfoPage(){
 
         <article> 
         <section className="container">
+
             <div className="section mt-0">
             <h2 className="is-size-3 is-size-4-mobile mb-5">Анкета</h2>
 
@@ -200,9 +205,14 @@ export default function DesignerEditInfoPage(){
             </div>        
 
             <div className="block has-text-right">                
-                <button className="button is-primary is-medium is-regular-mobile" onClick={hdlSaveAll}>Сохранить</button>                            
+                <button className="button is-primary is-medium is-regular-mobile" onClick={hdlSaveUser}>Сохранить</button>                            
             </div>                                
 
+            {
+                errorMessage && (
+                    <ErrorMessage message={errorMessage} />
+                )
+            }
                         
             </div>
         </section>  
