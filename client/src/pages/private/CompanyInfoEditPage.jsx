@@ -1,9 +1,10 @@
-import { Link, NavLink, useLocation } from 'react-router-dom';
-
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import styles from '../../pages/private/CompanyInfoEditPage.module.css'
 import Field from '../../components/Field'
-
 import Breadcrumb from '../../components/Breadcrumb';
+import ErrorMessage from '../../components/ErrorMessage';
+import useFetchUserCompany from './hooks/useFetchUserCompany';
 
 const logoImage = '/company-logo.jpg'; 
 const noimage = '/no-image.jpg'; 
@@ -15,8 +16,27 @@ export default function CompanyInfoEditPage(){
         {link:'/cp/company', title:'Панель управления'},
         {link:'/cp/company/info', title:'О компании'},        
         {link:'#', title:'Редактирование', isActive:true},
-    ];
-    const images = [];
+    ];    
+
+    const [errorMessage, setErrorMessage] = useState(null);
+
+    const {
+        company,
+        companyName,
+        setCompanyName,        
+        specialization, 
+        setSpecialization,
+        description,
+        setDescription,
+        city,
+        setCity,
+        gallery,
+        setGallery, 
+        addImage,
+        removeImage,
+        handleGalleryChange,
+        hdlSaveAll,     
+    } = useFetchUserCompany({errorMessage, setErrorMessage});        
     
  return(
     <>
@@ -48,16 +68,27 @@ export default function CompanyInfoEditPage(){
                         </div>
                     </div>
                     <div className="userFio box">
-                        <Field label="Название компании" />
-                        <Field label="Город" />                        
+                        <Field label="Название компании" value={companyName} onChange={setCompanyName} />
+                        <Field label="Город" value={city} onChange={setCity} />                        
                     </div>
                 </div> 
             </div>
             <div className="block mb-6">
                 <h2 className="subtitle is-size-7"><strong>Краткая информация</strong></h2>                
-                <div className="box">
-                    <Field label="Специализация" sublabel="(до 100 символов)" />                    
-                    <Field label="Кто мы" sublabel="(до 1500 символов)" type="textarea"/>                    
+                <div className="box">                    
+                    <Field 
+                        label="Специализация" 
+                        sublabel="(до 100 символов)" 
+                        value={specialization} 
+                        onChange={setSpecialization} 
+                        />
+                    <Field 
+                        label="Кто мы" 
+                        sublabel="(до 1500 символов)" 
+                        type="textarea"
+                        value={description}
+                        onChange={setDescription}
+                        />                    
                 </div>               
             </div>                
                      
@@ -65,9 +96,9 @@ export default function CompanyInfoEditPage(){
                 <h2 className="subtitle is-size-7"><strong>Галерея изображений</strong></h2>
                 <div className={styles.gallery}>
                     
-                    {
-                        images.length>0 && images.map((image, index) => (
-                            <div className="box">
+                    {                        
+                        gallery.length > 0 && gallery.map((image, index) => (
+                            <div key={index} className="box">
                             <img src={image} alt="" style={{
                                 width:'100%',
                                 height:'130px',                            
@@ -83,14 +114,20 @@ export default function CompanyInfoEditPage(){
                         alignItems:'center',
                         justifyContent:'center',
                     }}>
-                        <button className='button'>Добавить изображение</button>
+                        <button className='button' onClick={addImage}>Добавить изображение</button>
                     </div>                    
                 </div>
             </div>       
 
             <div className="block has-text-right">                
-                <button className="button is-primary is-medium is-regular-mobile">Сохранить</button>                            
+                <button className="button is-primary is-medium is-regular-mobile" onClick={hdlSaveAll}>Сохранить</button>                            
             </div>
+
+            {
+                errorMessage && (
+                    <ErrorMessage message={errorMessage} />
+                )
+            }
 
             </article>            
             </div>

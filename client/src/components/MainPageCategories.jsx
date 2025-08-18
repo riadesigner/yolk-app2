@@ -18,7 +18,7 @@ return (
                 {
                     cats.map((i, index)=>{
                         return (
-                            <Link to='/orders'>
+                            <Link key={index} to='/orders'>
                                 <li key={index} ><span>{i.title}</span></li>
                             </Link>
                         )

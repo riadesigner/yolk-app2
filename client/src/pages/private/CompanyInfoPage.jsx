@@ -1,21 +1,22 @@
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
+
+import { useAuth } from '../../contexts/AuthContext';
+import api from '../../utils/api';
 
 import Breadcrumb from '../../components/Breadcrumb';
 import CompanyGallery from '../../components/CompanyGallery';
 import CompanyAboutHeader from '../../components/CompanyAboutHeader';
 import CompanyAboutKeepInTouch from '../../components/CompanyAboutKeepInTouch';
 import CompanyAboutOrders from '../../components/CompanyAboutOrders';
+import TextWithBreaks from '../../components/TextWithBreaks';
 
 
 export default function CompanyInfoPage(){
 
-    const company = {
-        id:'123123',
-        title:'divan.ru',
-        city:'г. Москва',
-        specialization:'Мебельный магазин',
-        description:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sunt nemo illo atque perspiciatis laudantium, deleniti ratione ex corrupti architecto suscipit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis accusamus earum suscipit corrupti reprehenderit impedit possimus velit dolorem at tempora fugit necessitatibus aliquam modi a, quidem soluta tempore aut, optio cum! Expedita alias exercitationem, molestiae ex debitis molestias architecto obcaecati in, aspernatur nostrum non incidunt dolores laboriosam! Atque, aperiam veritatis.'
-    };
+    const [company, setCompany] = useState(null);
+
     const links = [
         {link:'/', title:'Главная'},
         {link:'/cp/company', title:'Панель управления'},
@@ -49,6 +50,37 @@ export default function CompanyInfoPage(){
         }
     ];
 
+
+    useEffect(() => {
+
+        const fetchUser = async () => {          
+            try {
+                const response = await api.get('/user/full');
+                console.log('response', response);
+                
+                if(response.data.success){
+                    const user = response.data.user;                    
+                    const company = user.userCompany;
+                    console.log('user', user);
+                    if(company){
+                        setCompany(company);
+                    }
+                    
+                    // setAvatar(user.avatar);
+                    // setSchools(user.userInfo.schools);
+                    // setSpecialization(user.userInfo.specialization)
+                }
+
+            } catch (err) {
+                console.error('Ошибка загрузки анкеты', err);
+                // navigate('/login');
+                navigate('/');
+            }
+        };
+        
+        fetchUser();
+    }, []);
+
     return (
         <>
         <section className="container is-max-desktop desktop-only">
@@ -63,7 +95,11 @@ export default function CompanyInfoPage(){
             <section className="container">                
                 <div className="section">
                     <h2>Кто мы</h2>                    
-                    <p>{company.description}</p>
+                    
+                    <p style={{'white-space': 'pre-line'}}>
+                        {company && company.description}                                     
+                    </p>
+
                 </div>
                 <div className="section">
                     <CompanyGallery images={images}/>

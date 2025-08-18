@@ -27,8 +27,10 @@ export default function Field(props){
                         className="input" 
                         rows="8" 
                         placeholder={strPlaceHolder}
+                        value={value}
+                        onChange={(e) => onChange(e.target.value)}
                         disabled = {disabled} 
-                        >{value}</textarea>
+                        ></textarea>
                 ):(
                     <input
                         disabled = {disabled} 

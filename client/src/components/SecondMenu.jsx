@@ -1,17 +1,26 @@
 import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { getPayloads } from '../utils/payloads'
 
 export default function SeconMenu(){
+    const dologout = () => {
+        logout();
+        navigate('/');
+    };
 
     const navigate = useNavigate();
     const location = useLocation();
     
     const { isAuthenticated, logout } = useAuth();
-
-    const dologout = () => {
-        logout();
-        navigate('/');
-    };
+    
+    const savedUser = getPayloads();    
+    const userRole = savedUser ? savedUser.role : 'unknown'; 
+    
+    const navTo = {
+        'company':'/cp/company',
+        'designer':'/cp/designer',
+        'unknown':'/',
+    } 
 
     return(
         <div className="second-menu">
@@ -25,9 +34,11 @@ export default function SeconMenu(){
                                     <ul>
                                         <li><a href="#"><i className="fa-regular fa-envelope"></i></a></li>                                        
                                         <li><a href="#"><i className="fa-regular fa-bell"></i></a></li>
-                                        <li className={location.pathname === "/cp/designer" ? "is-active" : ""}>
-                                            <NavLink to="/cp/designer"><i className="fa-regular fa-user"></i></NavLink>
-                                        </li>                                        
+
+                                        <li className={location.pathname === navTo[userRole] ? "is-active" : ""}>
+                                            <NavLink to={navTo[userRole]}><i className="fa-regular fa-user"></i></NavLink>
+                                        </li>
+
                                     </ul>
                                 </div>
                             </div>

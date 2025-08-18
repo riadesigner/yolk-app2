@@ -12,10 +12,14 @@ exports.create = function (userinfoCreateDto = {}) {
     })    
 }  
 
-exports.update = function (id, userInfoUpdateDto = {}) {  
+exports.update = function (userInfo = {}) {  
     return new Promise(async (res,rej)=>{ 
-
-      userInfoUpdateDto.updatedAt = Date.now();
+      
+      const id = userInfo.id;    
+      const userInfoUpdateDto = {
+        ...userInfo,
+        updatedAt:Date.now(),
+      }
 
       try{
         // { new: true } возвращает обновленный документ, а не старый

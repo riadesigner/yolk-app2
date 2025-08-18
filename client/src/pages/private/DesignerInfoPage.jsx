@@ -23,7 +23,7 @@ export default function DesignerInfoPage(){
 
         const fetchUser = async () => {          
             try {
-                const response = await api.get('/user-with-info');
+                const response = await api.get('/user/full');
                 console.log('response', response);
                 
                 if(response.data.success){

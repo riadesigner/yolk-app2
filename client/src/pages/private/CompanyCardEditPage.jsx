@@ -91,7 +91,7 @@ export default function CompanyCardEditPage(){
 
             <div className="section">
                 <div className="box">
-                    <h3 className="title">Контактное лицо</h3>
+                    <h3 className="title">Контактное лицо (руководитель)</h3>
                     <div className={styles.info}>
                         <p className="subtitle is-size-7">ФИО</p>                      
                          <Field />

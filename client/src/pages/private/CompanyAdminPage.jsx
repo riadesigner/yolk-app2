@@ -1,4 +1,10 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
+import { useAuth } from '../../contexts/AuthContext';
+import api from '../../utils/api';
+import {formatDate} from '../../utils/dateUtilits';
+
 import Breadcrumb from '../../components/Breadcrumb'
 
 export default function CompanyAdminPage(){
@@ -6,6 +12,37 @@ export default function CompanyAdminPage(){
         {link:'/', title:'Главная'},
         {link:'#', title:'Панель управления', isActive:true},
     ];    
+
+    const [user, setUser] = useState(null);
+    const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
+
+    const [regDate, setRegDate] = useState('-');
+
+    useEffect(() => {
+
+        console.log('Auth status:', isAuthenticated);
+
+        const fetchUser = async () => {         
+            try {
+                const response = await api.get('/user');
+
+                if(response.data.success){    
+                    const newUser =  response.data.user;
+                    setUser(newUser);                    
+                    setRegDate(formatDate(newUser.createdAt))                    
+                }
+                
+            } catch (err) {
+                console.error('Ошибка загрузки профиля', err);
+                // navigate('/login');
+                navigate('/');
+            }
+        };
+        
+        fetchUser();
+    }, []);
+
     return (
         <>
         <section className="container is-max-desktop desktop-only">
@@ -18,7 +55,7 @@ export default function CompanyAdminPage(){
             <div className="section mt-0">
                 <div className="banner is-primary">
                     <div className="banner-body">
-                        <h1 className='sub-title is-size-5-mobile mb-0'>Добро, пожаловать, Алексей!</h1>     
+                        <h1 className='sub-title is-size-5-mobile mb-0'>Добро, пожаловать <nobr>{ user && user.name }!</nobr></h1>     
                     </div>                     
                 </div>
             </div>
@@ -61,7 +98,7 @@ export default function CompanyAdminPage(){
                             <h2 className="is-size-5-mobile">Статистика</h2> 
 
                             <p className="subtitle is-size-7 m-0">Дата регистрации</p>
-                            <p className="is-size-7">28.08.2025</p>
+                            <p className="is-size-7">{regDate}</p>
 
                         </div>
                         <div className="column is-6">

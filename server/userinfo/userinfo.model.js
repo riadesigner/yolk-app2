@@ -4,7 +4,7 @@ const userInfoSchema = new Schema({
     firstName: { type:String },  
     secondName: { type:String },
     middleName: { type:String },
-    gender: { type:String }, // 'male' | 'female'
+    gender: { type:String },
     phone: { type:String },
     webSite: { type: String }, 
     softSkills: { type: Array },

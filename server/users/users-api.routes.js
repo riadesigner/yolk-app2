@@ -1,5 +1,6 @@
 const express = require('express')
 const UserService = require('./users.service')
+const CompanyService = require('../company/company.service')
 const passport = require('passport');
 const { asyncHandler, sendSuccess, sendError } = require('../middleware/utils');
 
@@ -16,7 +17,7 @@ router.get('/user',
     })
 );
 
-router.get('/user-with-info',
+router.get('/user/full',
     passport.authenticate('jwt', { session: false }),
     asyncHandler(async (req, res) => { 
         
@@ -36,7 +37,9 @@ router.post('/user/save',
 
         const userData = req.body;
         console.log('Получены данные:', userData);              
-        const user = await UserService.update(userData);
+        const { createdAt, updatedAt, id, ...userUpdateDto } = userData;
+
+        const user = await UserService.update(id, userUpdateDto);
         if (!user) {
             return sendError(res, 'Не удалось обоновить данные пользователя', 404);
         }
@@ -63,6 +66,13 @@ router.post('/user/select-role',
         console.log('Получены данные:', userData);
 
         const user = await UserService.update(userData);
+
+        if(userData.role === 'company' && !user.userCompany){
+            const newUserCompany = await CompanyService.create();
+            user.userCompany = newUserCompany._id;            
+            await user.save();
+        }
+
         if (!user) {
             return sendError(res, 'Не удалось обоновить данные пользователя', 404);
         }

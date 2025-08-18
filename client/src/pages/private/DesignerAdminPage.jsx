@@ -18,7 +18,7 @@ export default function DesignerAdminPage(){
 
     useEffect(() => {
 
-        console.log('Auth status changed:', isAuthenticated);
+        console.log('Auth status:', isAuthenticated);
 
         const fetchUser = async () => {         
             try {

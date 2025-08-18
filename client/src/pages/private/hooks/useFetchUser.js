@@ -48,7 +48,7 @@ export default function useFetchUser({setErrorMessage}) {
     useEffect(() => {
     const fetchUser = async () => {
         try {
-        const response = await api.get("/user-with-info");
+        const response = await api.get("/user/full");
         if (response.data.success) {
             const user = response.data.user;
             setUser(user);
