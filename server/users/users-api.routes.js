@@ -47,6 +47,32 @@ router.post('/user/save',
 );
 
 
+router.post('/user/select-role',
+    passport.authenticate('jwt', { session: false }),
+    asyncHandler(async (req, res) => {        
+
+        const data = req.body;
+
+        console.log('data =====', data);
+        
+        const userData = {
+            id:req.user.id,
+            role:data.role,
+        }
+
+        console.log('Получены данные:', userData);
+
+        const user = await UserService.update(userData);
+        if (!user) {
+            return sendError(res, 'Не удалось обоновить данные пользователя', 404);
+        }
+        console.log('saved user', user);
+
+        sendSuccess(res, { message: 'Данные сохранены' });        
+    })
+);
+
+
 
 
 module.exports = router;

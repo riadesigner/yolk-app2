@@ -19,20 +19,28 @@ const userInfoService = require('../userinfo/userinfo.service')
     return new Promise(async (res,rej)=>{
       const userId = userData.id;
 
-      try{
-        console.log('userData', userData)
-        console.log('userData.id', userData.id)
+      console.log('userData =======', userData);
 
-        const user = await UsersModel.findById(userId);                
-        user.updatedAt = Date.now();
-        await user.save();
-        // расширенная информация
-        const userInfo = await userInfoService.update(userData.userInfo);  
-        if(!userInfo){
-          rej("не удалось сохранить расширенную информацию о пользователе")
+      try{        
+
+        const updatedUser = await UsersModel.findByIdAndUpdate(
+            userId,
+            userData,
+            { new: true }
+        );                
+
+        // обновляем расширенную информацию
+        if(userData.userInfo){
+          const updatedUserInfo = await userInfoService.update(userData.userInfo);  
+          if(!updatedUserInfo){
+            rej("не удалось сохранить расширенную информацию о пользователе")
+          }          
         }
-        await user.populate('userInfo');
-        res(user); 
+
+        await updatedUser.populate('userInfo');
+        console.log('updatedUser ========= ', updatedUser)
+        res(updatedUser);
+
       }catch(e){
         console.log(`cant find user by id ${userId}, err: ${e.message || e}`)
         res(null);

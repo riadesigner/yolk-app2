@@ -2,8 +2,8 @@
 
 export default function ErrorMessage({message}){
     return (
-        <h2>
+        <p>
             Ошибка: {message}!
-        </h2>
+        </p>
     )
 }

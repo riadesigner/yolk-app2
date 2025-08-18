@@ -93,7 +93,7 @@ export default function DesignerInfoPage(){
                                 schools.map((s)=>{
                                     return (
                                         <><span key={s.id}>{s.title} ({s.speciality}), {s.year}, {s.city}</span><br /></>
-                                    )
+                                    ) 
                                 })
                             ) : (
                                 <>Не указано</>
