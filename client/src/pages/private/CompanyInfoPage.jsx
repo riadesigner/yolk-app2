@@ -15,19 +15,17 @@ import TextWithBreaks from '../../components/TextWithBreaks';
 
 export default function CompanyInfoPage(){
 
+    const navigate = useNavigate();
     const [company, setCompany] = useState(null);
+    const [gallery, setGallery] = useState(null);
+    
 
     const links = [
         {link:'/', title:'Главная'},
         {link:'/cp/company', title:'Панель управления'},
         {link:'#', title:'О компании', isActive:true},
     ];    
-    const images = [
-        '/company-gallery/gallery-1.jpg',
-        '/company-gallery/gallery-2.jpg',
-        '/company-gallery/gallery-3.jpg',
-    ];
-
+    
     const orders = [
         {          
         id:'123123',
@@ -64,6 +62,7 @@ export default function CompanyInfoPage(){
                     console.log('user', user);
                     if(company){
                         setCompany(company);
+                        setGallery(company.gallery)
                     }
                     
                     // setAvatar(user.avatar);
@@ -101,9 +100,17 @@ export default function CompanyInfoPage(){
                     </p>
 
                 </div>
+                
                 <div className="section">
-                    <CompanyGallery images={images}/>
-                </div>                                
+                    {
+                        gallery ? (
+                            <CompanyGallery images={gallery}/>
+                        ):(
+                            <>Галерея не заполнена</>
+                        )
+                    }                    
+                </div>
+
             </section>
 
             <CompanyAboutOrders orders={orders} />           

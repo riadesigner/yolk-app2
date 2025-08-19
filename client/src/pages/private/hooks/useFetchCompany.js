@@ -50,27 +50,7 @@ export default function useFetchUserCompany({setErrorMessage}) {
             setSpecialization(userCompany?.specialization || "");
             setDescription(userCompany?.description || "");
             setCity(userCompany?.city || "");
-            setGallery(userCompany?.gallery || []);            
-                        
-            // // Education           
-            // let userSchools = user?.userInfo?.schools || [{id:1, title:'', year:'', speciality:'', city:'',}];            
-            // setSchools(userSchools);
-            
-            // // Soft Skills
-            // const userSoftSkills = user?.userInfo?.softSkills || [{
-            //     id:1, title:'', percent:'',
-            // }];            
-            // setSoftSkills(userSoftSkills);
-
-            // // Hard Skills
-            // const userHardSkills = user?.userInfo?.hardSkills || [{
-            //     id:1, title:'', percent:'',
-            // }];            
-            // setHardSkills(userHardSkills);
-            
-            // // Contacts
-            // setWebSite(user?.userInfo?.webSite || "");
-            // setPhone(user?.userInfo?.phone || "");
+            setGallery(userCompany?.gallery || []);                                
             
         }
         } catch (err) {

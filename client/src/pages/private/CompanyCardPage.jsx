@@ -47,8 +47,8 @@ export default function CompanyCardPage(){
                 </div>
 
             </div>
-            <div className="section">
-              
+            
+            <div className="section">              
                 <div className="box">
                     <div className="level">
                         <div className="level-item">
@@ -68,8 +68,8 @@ export default function CompanyCardPage(){
                         </div>
                     </div>
                  </div>
-
             </div>
+
             <div className="section">
 
                 <div className="box">
@@ -140,8 +140,12 @@ export default function CompanyCardPage(){
                     <div className={styles.info}>
                         <p className="subtitle is-size-7">ФИО</p>                      
                         <p>Иванов Иван</p>
-                        <p className="subtitle is-size-7">Должность</p>
-                        <p>Директор</p>
+
+                        {activeTab === 'ООО' && <>
+                            <p className="subtitle is-size-7">Должность</p>
+                            <p>Директор</p>
+                        </>}
+
                         <p className="subtitle is-size-7">Телефон</p>
                         <p>+7 (924) 456-45-67</p>
                         <p className="subtitle is-size-7">Еmail</p>                    

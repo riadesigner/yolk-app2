@@ -5,10 +5,10 @@ export default function CompanyGallery({images}){
     return(
         <div className={styles.gallery}>
             {
-                images.map((i, index)=>{
+                images.map((img)=>{
                     return(
-                        <div key={index} style={{
-                            background: `url(${i}) no-repeat center / cover`
+                        <div key={img.key} style={{
+                            background: `url(${img.url}) no-repeat center / cover`
                         }}></div>
                     )
                 })

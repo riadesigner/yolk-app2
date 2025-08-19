@@ -1,7 +1,9 @@
 import { Link, NavLink, useLocation } from 'react-router-dom';
-
+import { useEffect, useState } from 'react';
+import ErrorMessage from '../../components/ErrorMessage';
 import styles from '../../pages/private/CompanyCardEditPage.module.css'
 import Field from '../../components/Field'
+import useFetchCompanyCard from './hooks/useFetchCompanyCard'
 
 import Breadcrumb from '../../components/Breadcrumb';
 
@@ -17,6 +19,50 @@ export default function CompanyCardEditPage(){
         {link:'#', title:'Редактирование', isActive:true},
     ];
     
+    const [errorMessage, setErrorMessage] = useState(null);
+    const [activeTab, setActiveTab] = useState('ИП');
+
+    const {
+        company,
+        details,
+        setDetails,
+        fullName,
+        setFullName,
+        shortName,
+        setShortName,        
+        fullAddress,
+        setFullAddress,
+        webSite,
+        setWebSite,
+        codeINN,
+        setCodeINN,
+        codeKPP,
+        setCodeKPP,
+        codeOGRN,
+        setCodeOGRN,
+        codeOKPO,
+        wetCodeOKPO,
+        bankRS,
+        settBankRS,
+        bankKS,
+        setBankKS,
+        bankBIK,
+        setBankBIK,
+        contactFIO,
+        setContactFIO,
+        contactPhone,
+        setContactPhone,
+        contactEmail,
+        setContactEmail,
+        hdlSaveAll,     
+    } = useFetchCompanyCard({errorMessage, setErrorMessage}); 
+
+
+    const handleTabClick = (e, tabName) => {
+        e.preventDefault()
+        setActiveTab(tabName);
+    }
+
  return(
     <>
         <section className="container is-max-desktop desktop-only">
@@ -35,7 +81,32 @@ export default function CompanyCardEditPage(){
                         <h2 className="is-size-3 is-size-4-mobile mb-0 mb-1-mobile">Карточка компании</h2>
                     </div>
                 </div>
+            </div>
+            
+           
+                <div className="section">              
+                    <div className="box">
+                        <div className="level">
+                            <div className="level-item">
+                                Тип юр. лица: 
+                            </div>
+                            <div className="level-item is-right">
+                                <div className="tabs">                    
+                                    <ul>
+                                        <li className={activeTab === 'ООО' ? 'is-active' : ''}>
+                                        <a href="#" onClick={(e) => handleTabClick(e, 'ООО')}>ООО</a>
+                                        </li>
+                                        <li className={activeTab === 'ИП' ? 'is-active' : ''}>
+                                        <a href="#" onClick={(e) => handleTabClick(e, 'ИП')}>ИП</a>
+                                        </li>
+                                    </ul>
+                                </div>                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <div className="section">
                 <div className="box">
                     <h3 className="title">Общая информация</h3>
                     
@@ -46,19 +117,18 @@ export default function CompanyCardEditPage(){
                     <p className="subtitle is-size-7">Краткое наименование</p>                        
                     <Field />
                     
-                    <p className="subtitle is-size-7">Юридический адрес</p>
+                    <p className="subtitle is-size-7">
+                        {activeTab === 'ООО' && <>Полный юридический адрес</>}
+                        {activeTab === 'ИП' && <>Адрес</>}
+                    </p>
                     <Field />
 
-                    <p className="subtitle is-size-7">Фактический адрес (если отличается)</p>
-                    <Field />                    
+                    {activeTab === 'ООО' && <>
+                        <p className="subtitle is-size-7">Номер телефона <br />(с указанием кода города)</p>
+                        <Field />
+                    </>}
 
-                    <p className="subtitle is-size-7">Номера телефонов с указанием кода города</p>
-                    <Field />
-
-                    <p className="subtitle is-size-7">Ссылка на официальный сайт</p>
-                    <Field />
-
-                    <p className="subtitle is-size-7">Адрес электронной почты</p>
+                    <p className="subtitle is-size-7">Ссылка на сайт</p>
                     <Field />
 
                     </div>  
@@ -80,10 +150,16 @@ export default function CompanyCardEditPage(){
                     <div className="box">
                         <h3 className="title">Идентификационные коды:</h3>
                         <div className={styles.info}>
-                        <p className="subtitle is-size-7">ИНН:</p><Field placeHolder="10 симолов"/>
-                        <p className="subtitle is-size-7">КПП:</p><Field placeHolder="9 симолов"/>
-                        <p className="subtitle is-size-7">ОГРН:</p><Field placeHolder="13 симолов"/>
-                        <p className="subtitle is-size-7">ОКПО:</p><Field placeHolder="8 симолов"/>
+                        {activeTab === 'ООО' && <>
+                            <p className="subtitle is-size-7">ИНН:</p><Field placeHolder="10 симолов"/>
+                            <p className="subtitle is-size-7">КПП:</p><Field placeHolder="9 симолов"/>
+                            <p className="subtitle is-size-7">ОГРН:</p><Field placeHolder="13 симолов"/>
+                            <p className="subtitle is-size-7">ОКПО:</p><Field placeHolder="8 симолов"/>                        
+                        </>}    
+                        {activeTab === 'ИП' && <>
+                            <p className="subtitle is-size-7">ИНН:</p><Field placeHolder="10 симолов"/>
+                            <p className="subtitle is-size-7">ОГРН:</p><Field placeHolder="13 симолов"/>
+                        </>}                            
                         </div>
                     </div>                            
                 </div>                   
@@ -91,12 +167,16 @@ export default function CompanyCardEditPage(){
 
             <div className="section">
                 <div className="box">
-                    <h3 className="title">Контактное лицо (руководитель)</h3>
+                    <h3 className="title">Контактное лицо</h3>
                     <div className={styles.info}>
                         <p className="subtitle is-size-7">ФИО</p>                      
                          <Field />
-                        <p className="subtitle is-size-7">Должность</p>
-                        <Field />
+
+                        {activeTab === 'ООО' && <>
+                            <p className="subtitle is-size-7">Должность</p>
+                            <Field />
+                        </>}    
+
                         <p className="subtitle is-size-7">Телефон</p>
                         <Field />
                         <p className="subtitle is-size-7">Еmail</p>                    

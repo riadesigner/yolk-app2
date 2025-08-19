@@ -4,7 +4,7 @@ import styles from '../../pages/private/CompanyInfoEditPage.module.css'
 import Field from '../../components/Field'
 import Breadcrumb from '../../components/Breadcrumb';
 import ErrorMessage from '../../components/ErrorMessage';
-import useFetchUserCompany from './hooks/useFetchUserCompany';
+import useFetchUserCompany from './hooks/useFetchCompany';
 import ImageUploader from '../../components/ImageUploader';
 
 const logoImage = '/company-logo.jpg'; 
@@ -33,9 +33,9 @@ export default function CompanyInfoEditPage(){
         setCity,
         gallery,
         setGallery, 
-        addImage,
-        removeImage,
-        handleGalleryChange,
+        // addImage,
+        // removeImage,
+        // handleGalleryChange,
         hdlSaveAll,     
     } = useFetchUserCompany({errorMessage, setErrorMessage});        
     
@@ -113,7 +113,7 @@ export default function CompanyInfoEditPage(){
 
                     {
                         company && (
-                                <div key={gallery.length} className="box" style={{ display:'flex', alignItems:'center', justifyContent:'center',}}>
+                                <div key={gallery.length} className="box" style={{ display:'flex', alignItems:'center', justifyContent:'center',}}>                                
                                 <ImageUploader 
                                     companyId={company.id}
                                     setGallery={setGallery}                                    
