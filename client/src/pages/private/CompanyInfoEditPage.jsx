@@ -5,6 +5,7 @@ import Field from '../../components/Field'
 import Breadcrumb from '../../components/Breadcrumb';
 import ErrorMessage from '../../components/ErrorMessage';
 import useFetchUserCompany from './hooks/useFetchUserCompany';
+import ImageUploader from '../../components/ImageUploader';
 
 const logoImage = '/company-logo.jpg'; 
 const noimage = '/no-image.jpg'; 
@@ -96,26 +97,31 @@ export default function CompanyInfoEditPage(){
                 <h2 className="subtitle is-size-7"><strong>Галерея изображений</strong></h2>
                 <div className={styles.gallery}>
                     
-                    {                        
-                        gallery.length > 0 && gallery.map((image, index) => (
-                            <div key={index} className="box">
-                            <img src={image} alt="" style={{
-                                width:'100%',
-                                height:'130px',                            
-                                objectFit:'cover',
-                                borderRadius:'10px',
-                            }}/>
+                    {
+                        company && 
+                        gallery.length > 0 && 
+                        gallery.map((image, index) => (                                
+                            <div key={image.key} className="box" style={{ display:'flex', alignItems:'center', justifyContent:'center',}}>                                
+                                <ImageUploader 
+                                    companyId={company.id}
+                                    setGallery={setGallery}
+                                    image={image}
+                                    />
                             </div>
-                        ))
+                            ))                        
+                    } 
+
+                    {
+                        company && (
+                                <div key={gallery.length} className="box" style={{ display:'flex', alignItems:'center', justifyContent:'center',}}>
+                                <ImageUploader 
+                                    companyId={company.id}
+                                    setGallery={setGallery}                                    
+                                    />
+                            </div>                        
+                        )                            
                     }
-                    
-                    <div className="box" style={{
-                        display:'flex',
-                        alignItems:'center',
-                        justifyContent:'center',
-                    }}>
-                        <button className='button' onClick={addImage}>Добавить изображение</button>
-                    </div>                    
+
                 </div>
             </div>       
 

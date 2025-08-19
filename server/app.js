@@ -5,6 +5,7 @@ const error404 = require('./middleware/error404')
 const session = require('express-session');
 const path = require('path')
 const mongoose = require('mongoose')
+
 const cors = require('cors');
 const passport = require('passport');
 const configurePassport = require('./config/passport');
@@ -12,11 +13,11 @@ const requestLogger = require('./middleware/requestLogger')
 const { asyncHandler, sendSuccess, sendError } = require('./middleware/utils');
 const { authErrorHandler, apiErrorHandler, fallbackErrorHandler } = require('./middleware/errorHandlers');
 
-
 const MONGO_URL =`mongodb://${process.env.MONGO_ROOT_USER}:${process.env.MONGO_ROOT_PASSWORD}@mongo:27017`;
 // const MONGO_DB = process.env.DB_NAME;
 const MONGO_DB = 'new-yolk-db';
 const PUBLIC_PATH = path.join(__dirname+'/public');
+
 
 
 // ----------------

@@ -50,9 +50,8 @@ export default function useFetchUserCompany({setErrorMessage}) {
             setSpecialization(userCompany?.specialization || "");
             setDescription(userCompany?.description || "");
             setCity(userCompany?.city || "");
-            
-            
-            
+            setGallery(userCompany?.gallery || []);            
+                        
             // // Education           
             // let userSchools = user?.userInfo?.schools || [{id:1, title:'', year:'', speciality:'', city:'',}];            
             // setSchools(userSchools);

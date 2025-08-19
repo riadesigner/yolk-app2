@@ -282,6 +282,7 @@ hr {width: 50%;border:none;border-bottom:1px solid #b5b5b5;margin-top:2rem;margi
 .button.is-link{color:white !important;background-color: var(--link-color) !important;}
 .button.is-link.is-inverted{color:var(--link-color) !important;background-color:white !important;border:1px solid var(--link-color); }
 .button.is-primary{color:white !important;background-color: var(--primary-color) !important;}
+.button.is-danger{color:white !important; background-color: var(--danger-color) !important;}
 
 .is-link{ color: var(--link-color);}
 .is-primary{ color: var(--primary-color);}

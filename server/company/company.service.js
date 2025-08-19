@@ -20,7 +20,7 @@ exports.update = function (id, companyUpdateDto = {}) {
       try{        
         const updatedCompany = await CompanyModel.findByIdAndUpdate(
             id,
-            companyUpdateDto,
+            companyUpdateDto,            
             { new: true }
         );
         res(updatedCompany);
@@ -31,3 +31,35 @@ exports.update = function (id, companyUpdateDto = {}) {
     })    
 }  
 
+
+exports.findById = function (id) {  
+    return new Promise(async (res,rej)=>{ 
+      try{ 
+        const company = await CompanyModel.findById(id);
+        res(company);
+      }catch(e){
+        console.log(`not found company with id ${id}, err:${e}`);
+        res(null);
+      }        
+    })    
+} 
+
+exports.deleteFromGallery = function(id, imageKey){
+    return new Promise(async (res,rej)=>{ 
+      try{ 
+        const company = await CompanyModel.findById(id);
+        const newGallery = (company.gallery || []).filter((i)=>i.key!==imageKey)
+        
+        const updatedCompany = await CompanyModel.findByIdAndUpdate(
+            id,
+            {gallery : newGallery},            
+            { new: true }
+        );
+        res(updatedCompany);
+
+      }catch(e){
+        console.log(`can not update company with id ${id}, err:${e}`);
+        res(null);
+      }        
+    })  
+}
