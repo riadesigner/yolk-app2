@@ -12,19 +12,22 @@ export default function useFetchCompanyCard({setErrorMessage}) {
     const [fullName, setFullName] = useState('');
     const [shortName, setShortName] = useState('');
     const [fullAddress, setFullAddress] = useState('');
+    const [companyPhone, setCompanyPhone] = useState('');    
     const [webSite, setWebSite] = useState('');
 
     const [codeINN, setCodeINN] = useState('');
     const [codeKPP, setCodeKPP] = useState('');
     const [codeOGRN, setCodeOGRN] = useState('');
-    const [codeOKPO, wetCodeOKPO] = useState('');    
+    const [codeOKPO, setCodeOKPO] = useState('');    
 
-    const [bankRS, settBankRS] = useState('');
+    const [bankName, setBankName] = useState('');
+    const [bankRS, setBankRS] = useState('');
     const [bankKS, setBankKS] = useState('');
     const [bankBIK, setBankBIK] = useState('');
     
     const [contactFIO, setContactFIO] = useState('');        
-    const [contactPhone, setContactPhone] = useState('');        
+    const [contactPhone, setContactPhone] = useState('');    
+    const [contactJobTitle, setContactJobTitle] = useState('');    
     const [contactEmail, setContactEmail] = useState('');        
     
     const navigate = useNavigate();    
@@ -85,6 +88,8 @@ export default function useFetchCompanyCard({setErrorMessage}) {
         setShortName,        
         fullAddress,
         setFullAddress,
+        companyPhone,
+        setCompanyPhone,        
         webSite,
         setWebSite,
         codeINN,
@@ -94,9 +99,11 @@ export default function useFetchCompanyCard({setErrorMessage}) {
         codeOGRN,
         setCodeOGRN,
         codeOKPO,
-        wetCodeOKPO,
+        setCodeOKPO,
+        bankName,
+        setBankName,        
         bankRS,
-        settBankRS,
+        setBankRS,
         bankKS,
         setBankKS,
         bankBIK,
@@ -105,6 +112,8 @@ export default function useFetchCompanyCard({setErrorMessage}) {
         setContactFIO,
         contactPhone,
         setContactPhone,
+        contactJobTitle,
+        setContactJobTitle,                
         contactEmail,
         setContactEmail,
         hdlSaveAll, 

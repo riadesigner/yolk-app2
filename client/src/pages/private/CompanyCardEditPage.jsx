@@ -32,6 +32,8 @@ export default function CompanyCardEditPage(){
         setShortName,        
         fullAddress,
         setFullAddress,
+        companyPhone,
+        setCompanyPhone,
         webSite,
         setWebSite,
         codeINN,
@@ -41,9 +43,11 @@ export default function CompanyCardEditPage(){
         codeOGRN,
         setCodeOGRN,
         codeOKPO,
-        wetCodeOKPO,
+        setCodeOKPO,
+        bankName,
+        setBankName,
         bankRS,
-        settBankRS,
+        setBankRS,
         bankKS,
         setBankKS,
         bankBIK,
@@ -52,7 +56,9 @@ export default function CompanyCardEditPage(){
         setContactFIO,
         contactPhone,
         setContactPhone,
-        contactEmail,
+        contactJobTitle,
+        setContactJobTitle,        
+        contactEmail,        
         setContactEmail,
         hdlSaveAll,     
     } = useFetchCompanyCard({errorMessage, setErrorMessage}); 
@@ -112,24 +118,24 @@ export default function CompanyCardEditPage(){
                     
                     <div className={styles.info}>
                     <p className="subtitle is-size-7">Полное наименование</p>
-                    <Field />
+                    <Field value={fullName} onChange={setFullName} />
 
                     <p className="subtitle is-size-7">Краткое наименование</p>                        
-                    <Field />
+                    <Field value={shortName} onChange={setShortName} />
                     
                     <p className="subtitle is-size-7">
                         {activeTab === 'ООО' && <>Полный юридический адрес</>}
                         {activeTab === 'ИП' && <>Адрес</>}
                     </p>
-                    <Field />
+                    <Field value={fullAddress} onChange={setFullAddress} />
 
                     {activeTab === 'ООО' && <>
                         <p className="subtitle is-size-7">Номер телефона <br />(с указанием кода города)</p>
-                        <Field />
+                        <Field value={companyPhone} onChange={setCompanyPhone} />
                     </>}
 
                     <p className="subtitle is-size-7">Ссылка на сайт</p>
-                    <Field />
+                    <Field value={webSite} onChange={setWebSite} />
 
                     </div>  
                 </div>
@@ -141,25 +147,25 @@ export default function CompanyCardEditPage(){
                     <div className="box">
                         <h3 className="title">Банковские реквизиты</h3>
                         <div className={styles.info}>
-                        <p className="subtitle is-size-7">Наименование банка:</p><Field />
-                        <p className="subtitle is-size-7">Р/с:</p><Field placeHolder="20 симолов"/>
-                        <p className="subtitle is-size-7">К/с:</p><Field placeHolder="20 симолов"/>
-                        <p className="subtitle is-size-7">БИК:</p><Field placeHolder="9 симолов"/>
+                        <p className="subtitle is-size-7">Наименование банка:</p><Field value={bankName} onChange={setBankName} />
+                        <p className="subtitle is-size-7">Р/с:</p><Field value={bankRS} onChange={setBankRS} placeHolder="20 симолов"/>
+                        <p className="subtitle is-size-7">К/с:</p><Field value={bankKS} onChange={setBankKS} placeHolder="20 симолов"/>
+                        <p className="subtitle is-size-7">БИК:</p><Field value={bankBIK} onChange={setBankBIK} placeHolder="9 симолов"/>
                         </div>                            
                     </div>
                     <div className="box">
                         <h3 className="title">Идентификационные коды:</h3>
                         <div className={styles.info}>
                         {activeTab === 'ООО' && <>
-                            <p className="subtitle is-size-7">ИНН:</p><Field placeHolder="10 симолов"/>
-                            <p className="subtitle is-size-7">КПП:</p><Field placeHolder="9 симолов"/>
-                            <p className="subtitle is-size-7">ОГРН:</p><Field placeHolder="13 симолов"/>
-                            <p className="subtitle is-size-7">ОКПО:</p><Field placeHolder="8 симолов"/>                        
+                            <p className="subtitle is-size-7">ИНН:</p><Field value={codeINN} onChange={setCodeINN}  placeHolder="10 симолов"/>
+                            <p className="subtitle is-size-7">КПП:</p><Field value={codeKPP} onChange={setCodeKPP} placeHolder="9 симолов"/>
+                            <p className="subtitle is-size-7">ОГРН:</p><Field value={codeOGRN} onChange={setCodeOGRN} placeHolder="13 симолов"/>
+                            <p className="subtitle is-size-7">ОКПО:</p><Field value={codeOKPO} onChange={setCodeOKPO} placeHolder="8 симолов"/>                        
                         </>}    
                         {activeTab === 'ИП' && <>
-                            <p className="subtitle is-size-7">ИНН:</p><Field placeHolder="10 симолов"/>
-                            <p className="subtitle is-size-7">ОГРН:</p><Field placeHolder="13 симолов"/>
-                        </>}                            
+                            <p className="subtitle is-size-7">ИНН:</p><Field value={codeINN} onChange={setCodeINN} placeHolder="10 симолов"/>
+                            <p className="subtitle is-size-7">ОГРНИП:</p><Field value={codeOGRN} onChange={setCodeOGRN} placeHolder="13 симолов"/>
+                        </>}
                         </div>
                     </div>                            
                 </div>                   
@@ -170,17 +176,17 @@ export default function CompanyCardEditPage(){
                     <h3 className="title">Контактное лицо</h3>
                     <div className={styles.info}>
                         <p className="subtitle is-size-7">ФИО</p>                      
-                         <Field />
+                         <Field value={contactFIO} onChange={setContactFIO} />
 
                         {activeTab === 'ООО' && <>
                             <p className="subtitle is-size-7">Должность</p>
-                            <Field />
+                            <Field value={contactJobTitle} onChange={setContactJobTitle} />
                         </>}    
 
                         <p className="subtitle is-size-7">Телефон</p>
-                        <Field />
+                        <Field value={contactPhone} onChange={setContactPhone} />
                         <p className="subtitle is-size-7">Еmail</p>                    
-                        <Field />
+                        <Field value={contactEmail} onChange={setContactEmail} />
                     </div>                            
                 </div>
             </div> 
