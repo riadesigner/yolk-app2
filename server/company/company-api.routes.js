@@ -1,5 +1,5 @@
 const express = require('express')
-const UserService = require('../users/users.service')
+const UsersService = require('../users/users.service')
 const CompanyService = require('./company.service')
 const passport = require('passport');
 const { asyncHandler, sendSuccess, sendError } = require('../middleware/utils');
@@ -40,7 +40,7 @@ router.get('/company/:id',
         let { id: companyId  } =  req.params;
 
         if(!companyId || companyId==='by-user'){
-            const user = await UserService.findByEmail(req.user.email);         
+            const user = await UsersService.findByEmail(req.user.email);
             if (!user) { 
                 return sendError(res, 'User not found', 404);
             }
@@ -202,22 +202,6 @@ router.delete('/company/delete-image',
         
     })
 );
-
-
-// /company/upload
-
-//  companyData =  {
-//    details: [],
-//    createdAt: '2025-08-18T06:39:43.741Z',
-//    updatedAt: '2025-08-18T06:39:43.741Z',
-//    id: '68a2caaf49e21318401da4fa',
-//    companyName: 'диваны',
-//    gallery: [],
-//    description: 'и тут туже',
-//    city: '',
-//    specialization: 'тут всякое'
-//  }
- 
 
 
 

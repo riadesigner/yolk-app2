@@ -1,6 +1,6 @@
 const express = require('express')
 const crypto = require('crypto');
-const UserService = require('../users/users.service')
+const UsersService = require('../users/users.service')
 const passport = require('passport');
 
 const router = express.Router();
@@ -92,14 +92,14 @@ router.post('/signup', async (req, res) => {
   };
  
   try{
-      const user = await UserService.findByEmail(email);
+      const user = await UsersService.findByEmail(email);
       if(user){
         res.json({
           "error": `пользователь c почтой ${email} уже есть`,
           "status": "error"
         });        
       }else{
-        const user = await UserService.create(data);        
+        const user = await UsersService.create(data);        
         const answer =
         {
           "data": {

@@ -2,8 +2,10 @@
 
 export default function ErrorMessage({message}){
     return (
-        <p>
-            Ошибка: {message}!
-        </p>
+        <section className="container">
+            <div className="section has-text-centered is-danger">
+                Ошибка: {message}!
+            </div>
+        </section>
     )
 }

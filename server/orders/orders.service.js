@@ -1,10 +1,10 @@
 
-const UserInfoModel = require('./userinfo.model');
+const OrdersModel = require('./orders.model');
 
-exports.create = function (userinfoCreateDto = {}) {  
+exports.create = function (companyId, orderCreateDto = {}) {  
     return new Promise(async (res,rej)=>{ 
       try{
-        res(await UserInfoModel.create(userinfoCreateDto));
+        res(await OrdersModel.create(orderCreateDto));
       }catch(e){
         console.log(`cant create new userinfo, err:${e}`)
         res(null);
@@ -12,27 +12,20 @@ exports.create = function (userinfoCreateDto = {}) {
     })    
 }  
 
-exports.update = function (userInfo = {}) {  
-    return new Promise(async (res,rej)=>{ 
-      
-      const id = userInfo.id;    
-      const userInfoUpdateDto = {
-        ...userInfo,
-        updatedAt:Date.now(),
-      }
+exports.update = function (id, orderUpdateDto = {}) {  
+    return new Promise(async (res,rej)=>{             
 
-      try{
-        // { new: true } возвращает обновленный документ, а не старый
-        const updatedUserInfo = await UserInfoModel.findByIdAndUpdate(
+      try{        
+        const updatedOrder = await OrdersModel.findByIdAndUpdate(
             id,
-            userInfoUpdateDto,
+            orderUpdateDto,
             { new: true }
         );
-        res(updatedUserInfo);
+        res(updatedOrder);
       }catch(e){
-        console.log(`cant update userInfo, err:${e}`)
+        console.log(`cant update order, err:${e}`)
         res(null);
-      }        
+      } 
     })    
 }  
 

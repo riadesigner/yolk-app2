@@ -1,6 +1,6 @@
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
-const UserService = require('../users/users.service')
+const UsersService = require('../users/users.service')
 const crypto = require('crypto');
 
 const passportLocal = {
@@ -15,7 +15,7 @@ const passportLocal = {
         
         passport.use(new LocalStrategy( fields, async (email, password, done)=> {                    
           try{        
-              const user = await UserService.findByEmail(email); 
+              const user = await UsersService.findByEmail(email); 
               if(!user){
                 return done("неправильный логин или пароль", false );
               }else{                
@@ -38,7 +38,7 @@ const passportLocal = {
 
         passport.deserializeUser( async (id, done) => {
           try{
-            const user = await UserService.findById(id);
+            const user = await UsersService.findById(id);
             if(!user){
               done(null, false)
             }else{

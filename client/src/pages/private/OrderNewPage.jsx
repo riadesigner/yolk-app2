@@ -13,7 +13,7 @@ export default function OrderEditPage({companyId}){
             {link:'#', title:'Добавление заказа', isActive:true},
         ];
 
-    const [errorMessage, setErrorMessage] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(null);    
 
     const {
         order,
@@ -24,7 +24,7 @@ export default function OrderEditPage({companyId}){
         files,
         setFiles,        
         hdlSaveUser,        
-    } = useFetchOrder({errorMessage, setErrorMessage});
+    } = useFetchOrder({ orderId:null, errorMessage, setErrorMessage});
 
     return(
         <>

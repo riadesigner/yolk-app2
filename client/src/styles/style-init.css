@@ -286,6 +286,7 @@ hr {width: 50%;border:none;border-bottom:1px solid #b5b5b5;margin-top:2rem;margi
 
 .is-link{ color: var(--link-color);}
 .is-primary{ color: var(--primary-color);}
+.is-danger{ color: var(--danger-color);}
 
 .banner.is-link, .banner.is-link h1, .banner.is-link h2, .banner.is-link p{
     background-color: var(--link-color); color:white !important;

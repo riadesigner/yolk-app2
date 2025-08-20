@@ -32,6 +32,8 @@ import CompanyInfoEditPage from './pages/private/CompanyInfoEditPage.jsx'
 import CompanyCardPage from './pages/private/CompanyCardPage.jsx'
 import CompanyCardEditPage from './pages/private/CompanyCardEditPage.jsx'
 import OrderEditPage from './pages/private/OrderEditPage.jsx'
+import OrderNewPage from './pages/private/OrderNewPage.jsx'
+
 import { AuthProvider } from './contexts/AuthContext.jsx';
 
 import ErrorPage from './pages/ErrorPage.jsx'
@@ -72,7 +74,8 @@ const router = createBrowserRouter([
       { path: 'cp/company/info/edit', element: <CompanyInfoEditPage /> }, // /редактирование общей информации о компании      
       { path: 'cp/company/card', element: <CompanyCardPage /> }, // /карточка компании (реквизиты)      
       { path: 'cp/company/card/edit', element: <CompanyCardEditPage /> }, // /редактирование карточки компании 
-      { path: 'cp/company/order-edit', element: <OrderEditPage /> }, // /редактирование (добавление) заказа
+      { path: 'cp/company/order-edit', element: <OrderEditPage /> }, // /редактирование заказа
+      { path: 'cp/company/order-new', element: <OrderNewPage /> }, // /добавление заказа
 
       // Ленивая загрузка (опционально)
       // { 

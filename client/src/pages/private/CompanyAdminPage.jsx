@@ -19,6 +19,11 @@ export default function CompanyAdminPage(){
 
     const [regDate, setRegDate] = useState('-');
 
+    const hdlNewOrder = (e)=>{
+        e.preventDefault();
+        navigate(`/cp/company/order-new`);       
+    }
+
     useEffect(() => {
 
         console.log('Auth status:', isAuthenticated);
@@ -87,12 +92,12 @@ export default function CompanyAdminPage(){
 
                             <h2 className="is-size-5-mobile">Заказы</h2> 
                             <div className="block mb-6 mb-5-mobile">
-                                <Link to="/cp/company/order-edit">
+                                <a href="#" onClick={(e)=>hdlNewOrder(e)}>
                                 <button className="button is-fluid is-medium is-regular-mobile is-white">
                                     <span>Создать новый</span>
                                     <span className="icon"><i className="fa fa-angle-right"></i></span>
                                 </button>                                              
-                                </Link>
+                                </a>
                             </div>          
 
                             <h2 className="is-size-5-mobile">Статистика</h2> 

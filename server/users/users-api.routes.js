@@ -1,5 +1,5 @@
 const express = require('express')
-const UserService = require('./users.service')
+const UsersService = require('./users.service')
 const CompanyService = require('../company/company.service')
 const passport = require('passport');
 const { asyncHandler, sendSuccess, sendError } = require('../middleware/utils');
@@ -9,7 +9,7 @@ const router = express.Router();
 router.get('/user',
     passport.authenticate('jwt', { session: false }),
     asyncHandler(async (req, res) => { 
-        const user = await UserService.findByEmail(req.user.email);         
+        const user = await UsersService.findByEmail(req.user.email);         
         if (!user) {
             return sendError(res, 'User not found', 404);
         }
@@ -21,7 +21,7 @@ router.get('/user/full',
     passport.authenticate('jwt', { session: false }),
     asyncHandler(async (req, res) => { 
         
-        const user = await UserService.findByEmail(req.user.email, true);        
+        const user = await UsersService.findByEmail(req.user.email, true);        
         
         if (!user) {
             return sendError(res, 'User not found', 404);
@@ -39,7 +39,7 @@ router.post('/user/save',
         console.log('Получены данные:', userData);              
         const { createdAt, updatedAt, id, ...userUpdateDto } = userData;
 
-        const user = await UserService.update(id, userUpdateDto);
+        const user = await UsersService.update(id, userUpdateDto);
         if (!user) {
             return sendError(res, 'Не удалось обоновить данные пользователя', 404);
         }
@@ -65,7 +65,7 @@ router.post('/user/select-role',
 
         console.log('Получены данные:', userData);
 
-        const user = await UserService.update(userData);
+        const user = await UsersService.update(userData);
 
         if(userData.role === 'company' && !user.userCompany){
             const newUserCompany = await CompanyService.create();
