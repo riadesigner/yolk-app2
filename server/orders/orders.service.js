@@ -12,6 +12,28 @@ exports.create = function (companyId, orderCreateDto = {}) {
     })    
 }  
 
+exports.find = function (opt = {}) {  
+    return new Promise(async (res,rej)=>{ 
+      try{
+        res(await OrdersModel.find(opt));
+      }catch(e){
+        console.log(`not found orders for company ${opt.companyId}, err:${e}`)
+        res(null);
+      }        
+    })    
+}  
+
+exports.findById = function (id) {  
+    return new Promise(async (res,rej)=>{ 
+      try{
+        res(await OrdersModel.findById(id));
+      }catch(e){
+        console.log(`not found order ${id}, err:${e}`)
+        res(null);
+      }
+    })    
+}  
+
 exports.update = function (id, orderUpdateDto = {}) {  
     return new Promise(async (res,rej)=>{             
 

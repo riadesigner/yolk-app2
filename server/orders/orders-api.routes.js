@@ -8,7 +8,14 @@ const { asyncHandler, sendSuccess, sendError } = require('../middleware/utils');
 
 const router = express.Router();
 
-router.get('/order/:id',    
+// GET /orders – получить список заказов
+// POST /orders – создать новый заказ
+// GET /orders/:id – получить один заказ
+// PUT /orders/:id – полностью обновить заказ
+// PATCH /orders/:id – частично обновить заказ
+// DELETE /orders/:id – удалить заказ
+
+router.get('/orders/:id',    
     asyncHandler(async (req, res) => { 
         const { id } = req.params;
         const order = await OrdersService.findById(id);                 
@@ -18,6 +25,22 @@ router.get('/order/:id',
         sendSuccess(res, { order:order.toJSON() });        
     })
 );
+
+router.get('/orders/by-company/:companyId',
+    asyncHandler(async (req, res) => { 
+        const { companyId } = req.params;
+        const orders = await OrdersService.find({companyId:companyId});
+        console.log('companyId =', companyId);
+        console.log('orders ============= \n', orders);
+        // .toJSON()
+        sendSuccess(res, { orders:orders });
+        // if (!orders ) {
+        //     return sendError(res, 'Order not found', 404);
+        // }
+        // sendSuccess(res, { order:order.toJSON() });        
+    })
+);
+
 
 router.put('/orders/:companyId',
     passport.authenticate('jwt', { session: false }),
@@ -29,7 +52,7 @@ router.put('/orders/:companyId',
         if (!user) {  return sendError(res, 'Unknown user', 404); }        
         if (user.role !=='company') {  return sendError(res, 'User not autorized for this action', 403);}                
 
-        const company = await CompanyService.getById(companyId);
+        const company = await CompanyService.findById(companyId);
         if(!company){ return sendError(res, `Company with id ${companyId} not found`, 404); }
 
         const orderCreateDto = {

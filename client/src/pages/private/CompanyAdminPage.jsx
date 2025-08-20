@@ -14,19 +14,25 @@ export default function CompanyAdminPage(){
     ];    
 
     const [user, setUser] = useState(null);
+    const [companyId, setCompanyId] = useState(null);
+    const [orders, setOrders] = useState([]);
+
     const navigate = useNavigate();
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated } = useAuth();    
 
     const [regDate, setRegDate] = useState('-');
 
     const hdlNewOrder = (e)=>{
         e.preventDefault();
-        navigate(`/cp/company/order-new`);       
+        navigate(`/cp/company/${companyId}/order-new`);       
     }
 
-    useEffect(() => {
+    const hdlOpenOrder = (e, orderId)=>{
+        e.preventDefault();
+        navigate(`/orders/${orderId}`);
+    }        
 
-        console.log('Auth status:', isAuthenticated);
+    useEffect(() => {
 
         const fetchUser = async () => {         
             try {
@@ -36,6 +42,15 @@ export default function CompanyAdminPage(){
                     const newUser =  response.data.user;
                     setUser(newUser);                    
                     setRegDate(formatDate(newUser.createdAt))                    
+                    const newCompanyId = newUser.userCompany;
+                    setCompanyId(newCompanyId)
+
+                    console.log('companyId', newCompanyId);
+
+                    const responseOrders = await api.get(`/orders/by-company/${newCompanyId}`);
+                    if(responseOrders.data.success){                        
+                        setOrders(responseOrders.data.orders);
+                    }
                 }
                 
             } catch (err) {
@@ -91,14 +106,31 @@ export default function CompanyAdminPage(){
                             </div>
 
                             <h2 className="is-size-5-mobile">Заказы</h2> 
-                            <div className="block mb-6 mb-5-mobile">
-                                <a href="#" onClick={(e)=>hdlNewOrder(e)}>
-                                <button className="button is-fluid is-medium is-regular-mobile is-white">
-                                    <span>Создать новый</span>
-                                    <span className="icon"><i className="fa fa-angle-right"></i></span>
-                                </button>                                              
-                                </a>
-                            </div>          
+
+                            {
+                                orders && orders.length > 0 && orders.map((order)=>{
+                                    return  (
+                                    <button className="button is-fluid is-medium is-regular-mobile is-primary is-left mb-3"
+                                    onClick={(e)=>hdlOpenOrder(e, order.id)}
+                                    >
+                                        <span>{order.title}</span>
+                                    </button>
+                                    )
+                                })
+                            }
+
+                            {
+                                companyId && (
+                                <div className="block mb-6 mb-5-mobile">
+                                    <a href="#" onClick={(e)=>hdlNewOrder(e)}>
+                                    <button className="button is-fluid is-medium is-regular-mobile is-white">
+                                        <span>Создать новый</span>
+                                        <span className="icon"><i className="fa fa-angle-right"></i></span>
+                                    </button>
+                                    </a>
+                                </div>
+                                )
+                            }
 
                             <h2 className="is-size-5-mobile">Статистика</h2> 
 
