@@ -7,7 +7,7 @@ const companySchema = new Schema({
     description: { type:String },
     gallery: { type:Array },    
     orders: { type: Schema.Types.ObjectId, ref: 'Orders' },
-    details: { type:Array },
+    details: { type:Object },
     createdAt: { type:Date },
     updatedAt: { type:Date },
 }, {

@@ -33,30 +33,46 @@ const upload = multer({
 
 const router = express.Router();
 
-router.get('/company',
+router.get('/company/:id',
     passport.authenticate('jwt', { session: false }),
     asyncHandler(async (req, res) => { 
-        const user = await UserService.findByEmail(req.user.email);         
-        if (!user) {
-            return sendError(res, 'User not found', 404);
+        
+        let { id: companyId  } =  req.params;
+
+        if(!companyId || companyId==='by-user'){
+            const user = await UserService.findByEmail(req.user.email);         
+            if (!user) { 
+                return sendError(res, 'User not found', 404);
+            }
+            companyId = user.userCompany;
         }
-        sendSuccess(res, { user:user.toJSON() });        
+
+        try{
+            const company = await CompanyService.findById(companyId);
+            sendSuccess(res, { company: company.toJSON() })
+
+        }catch(e){
+            return sendError(res, `Company with id ${companyId} not found`, 404);
+        }
     })
 );
 
-// router.get('/company/full',
-//     passport.authenticate('jwt', { session: false }),
-//     asyncHandler(async (req, res) => { 
+router.post('/company/:id/update',
+    passport.authenticate('jwt', { session: false }),
+    asyncHandler(async (req, res) => {        
         
-//         const user = await UserService.findByEmail(req.user.email, true);        
+        const { id: companyId }= req.params; 
+        const { companyUpdateDto } = req.body;
+
+        console.log('Получены данные:', companyId, companyUpdateDto);
         
-//         if (!user) {
-//             return sendError(res, 'User not found', 404);
-//         }
-        
-//         sendSuccess(res, { user:user.toJSON() });        
-//     })
-// );
+        const company = await CompanyService.update(companyId, companyUpdateDto);
+        if (!company) {
+            return sendError(res, 'Не удалось обоновить данные компании', 404);
+        }    
+        sendSuccess(res, { message: 'Данные сохранены' });        
+    })
+);
 
 router.post('/company/save',
     passport.authenticate('jwt', { session: false }),

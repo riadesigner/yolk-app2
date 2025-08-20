@@ -7,9 +7,6 @@ import useFetchCompanyCard from './hooks/useFetchCompanyCard'
 
 import Breadcrumb from '../../components/Breadcrumb';
 
-// const logoImage = '/company-logo.jpg'; 
-
-
 export default function CompanyCardEditPage(){
     
     const links = [
@@ -20,12 +17,11 @@ export default function CompanyCardEditPage(){
     ];
     
     const [errorMessage, setErrorMessage] = useState(null);
-    const [activeTab, setActiveTab] = useState('ИП');
 
     const {
         company,
-        details,
-        setDetails,
+        legalType,
+        setLegalType,        
         fullName,
         setFullName,
         shortName,
@@ -66,7 +62,7 @@ export default function CompanyCardEditPage(){
 
     const handleTabClick = (e, tabName) => {
         e.preventDefault()
-        setActiveTab(tabName);
+        setLegalType(tabName);
     }
 
  return(
@@ -99,10 +95,10 @@ export default function CompanyCardEditPage(){
                             <div className="level-item is-right">
                                 <div className="tabs">                    
                                     <ul>
-                                        <li className={activeTab === 'ООО' ? 'is-active' : ''}>
+                                        <li className={legalType === 'ООО' ? 'is-active' : ''}>
                                         <a href="#" onClick={(e) => handleTabClick(e, 'ООО')}>ООО</a>
                                         </li>
-                                        <li className={activeTab === 'ИП' ? 'is-active' : ''}>
+                                        <li className={legalType === 'ИП' ? 'is-active' : ''}>
                                         <a href="#" onClick={(e) => handleTabClick(e, 'ИП')}>ИП</a>
                                         </li>
                                     </ul>
@@ -124,12 +120,12 @@ export default function CompanyCardEditPage(){
                     <Field value={shortName} onChange={setShortName} />
                     
                     <p className="subtitle is-size-7">
-                        {activeTab === 'ООО' && <>Полный юридический адрес</>}
-                        {activeTab === 'ИП' && <>Адрес</>}
+                        {legalType === 'ООО' && <>Полный юридический адрес</>}
+                        {legalType === 'ИП' && <>Адрес</>}
                     </p>
                     <Field value={fullAddress} onChange={setFullAddress} />
 
-                    {activeTab === 'ООО' && <>
+                    {legalType === 'ООО' && <>
                         <p className="subtitle is-size-7">Номер телефона <br />(с указанием кода города)</p>
                         <Field value={companyPhone} onChange={setCompanyPhone} />
                     </>}
@@ -156,13 +152,13 @@ export default function CompanyCardEditPage(){
                     <div className="box">
                         <h3 className="title">Идентификационные коды:</h3>
                         <div className={styles.info}>
-                        {activeTab === 'ООО' && <>
+                        {legalType === 'ООО' && <>
                             <p className="subtitle is-size-7">ИНН:</p><Field value={codeINN} onChange={setCodeINN}  placeHolder="10 симолов"/>
                             <p className="subtitle is-size-7">КПП:</p><Field value={codeKPP} onChange={setCodeKPP} placeHolder="9 симолов"/>
                             <p className="subtitle is-size-7">ОГРН:</p><Field value={codeOGRN} onChange={setCodeOGRN} placeHolder="13 симолов"/>
                             <p className="subtitle is-size-7">ОКПО:</p><Field value={codeOKPO} onChange={setCodeOKPO} placeHolder="8 симолов"/>                        
                         </>}    
-                        {activeTab === 'ИП' && <>
+                        {legalType === 'ИП' && <>
                             <p className="subtitle is-size-7">ИНН:</p><Field value={codeINN} onChange={setCodeINN} placeHolder="10 симолов"/>
                             <p className="subtitle is-size-7">ОГРНИП:</p><Field value={codeOGRN} onChange={setCodeOGRN} placeHolder="13 симолов"/>
                         </>}
@@ -178,7 +174,7 @@ export default function CompanyCardEditPage(){
                         <p className="subtitle is-size-7">ФИО</p>                      
                          <Field value={contactFIO} onChange={setContactFIO} />
 
-                        {activeTab === 'ООО' && <>
+                        {legalType === 'ООО' && <>
                             <p className="subtitle is-size-7">Должность</p>
                             <Field value={contactJobTitle} onChange={setContactJobTitle} />
                         </>}    
@@ -197,7 +193,7 @@ export default function CompanyCardEditPage(){
             <div className="section">
 
             <div className="block has-text-right">                
-                <button className="button is-primary is-medium is-regular-mobile">Сохранить</button>                            
+                <button className="button is-primary is-medium is-regular-mobile" onClick={(e)=>hdlSaveAll(e)}>Сохранить</button>                            
             </div>  
 
             </div>

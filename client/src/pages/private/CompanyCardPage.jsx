@@ -1,7 +1,8 @@
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import styles from '../../pages/private/CompanyCardPage.module.css'
 import Breadcrumb from '../../components/Breadcrumb';
+import api from "../../utils/api";
 
 
 export default function CompanyCardPage(){
@@ -11,13 +12,71 @@ export default function CompanyCardPage(){
         {link:'#', title:'Карточка компании', isActive:true},
     ];    
 
+    const navigate = useNavigate();    
     
-    const [activeTab, setActiveTab] = useState('ИП');
+    const [legalType, setLegalType] = useState('ИП');
+    
+    const [fullName, setFullName] = useState('');
+    const [shortName, setShortName] = useState('');
+    const [fullAddress, setFullAddress] = useState('');
+    const [companyPhone, setCompanyPhone] = useState('');    
+    const [webSite, setWebSite] = useState('');
 
-    const handleTabClick = (e, tabName) => {
-        e.preventDefault()
-        setActiveTab(tabName);
-    }
+    const [codeINN, setCodeINN] = useState('');
+    const [codeKPP, setCodeKPP] = useState('');
+    const [codeOGRN, setCodeOGRN] = useState('');
+    const [codeOKPO, setCodeOKPO] = useState('');    
+
+    const [bankName, setBankName] = useState('');
+    const [bankRS, setBankRS] = useState('');
+    const [bankKS, setBankKS] = useState('');
+    const [bankBIK, setBankBIK] = useState('');
+    
+    const [contactFIO, setContactFIO] = useState('');        
+    const [contactPhone, setContactPhone] = useState('');    
+    const [contactJobTitle, setContactJobTitle] = useState('');    
+    const [contactEmail, setContactEmail] = useState('');      
+
+    useEffect(() => {
+
+        const fetchCompany = async () => {          
+            try {
+                const response = await api.get('/company/by-user');                
+                
+                if(response.data.success){                    
+                    const company = response.data.company;                    
+                    if(company){
+                        const details = company.details;
+                        setLegalType(details.legalType || 'ИП');
+                        setFullName(details.fullName || '');
+                        setShortName(details.shortName || '');
+                        setFullAddress(details.fullAddress || '');
+                        setCompanyPhone(details.companyPhone || '');
+                        setWebSite(details.webSite || '');
+                        setCodeINN(details.codeINN || '');
+                        setCodeKPP(details.codeKPP || '');
+                        setCodeOGRN(details.codeOGRN || '');
+                        setCodeOKPO(details.codeOKPO || '');
+                        setBankName(details.bankName || '');
+                        setBankRS(details.bankRS || '');
+                        setBankKS(details.bankKS || '');
+                        setBankBIK(details.bankBIK || '');
+                        setContactFIO(details.contactFIO || '');
+                        setContactPhone(details.contactPhone || '');
+                        setContactJobTitle(details.contactJobTitle || '');
+                        setContactEmail(details.contactEmail || '');
+                    }                    
+                }
+
+            } catch (err) {
+                console.error('Ошибка загрузки данных компании', err);                
+                navigate('/');
+            }
+        };
+        
+        fetchCompany();
+    }, []);
+
 
     return (
         <>
@@ -50,23 +109,7 @@ export default function CompanyCardPage(){
             
             <div className="section">              
                 <div className="box">
-                    <div className="level">
-                        <div className="level-item">
-                            Тип юр. лица: 
-                        </div>
-                        <div className="level-item is-right">
-                            <div className="tabs">                    
-                                <ul>
-                                    <li className={activeTab === 'ООО' ? 'is-active' : ''}>
-                                    <a href="#" onClick={(e) => handleTabClick(e, 'ООО')}>ООО</a>
-                                    </li>
-                                    <li className={activeTab === 'ИП' ? 'is-active' : ''}>
-                                    <a href="#" onClick={(e) => handleTabClick(e, 'ИП')}>ИП</a>
-                                    </li>
-                                </ul>
-                            </div>                            
-                        </div>
-                    </div>
+                    <h2 className="title m-0">Тип юридического лица: {legalType} </h2>
                  </div>
             </div>
 
@@ -78,26 +121,25 @@ export default function CompanyCardPage(){
                     <div className={styles.info}>
 
                     <p className="subtitle is-size-7">Полное наименование</p>
-                    <p>-</p>
+                    <p>{fullName}</p>
 
                     <p className="subtitle is-size-7">Краткое наименование</p>                        
-                    <p >-</p>
+                    <p >{shortName}</p>
                     
                     <p className="subtitle is-size-7">
-                        {activeTab === 'ООО' && <>Полный юридический адрес</>}
-                        {activeTab === 'ИП' && <>Адрес</>}
+                        {legalType === 'ООО' && <>Полный юридический адрес</>}
+                        {legalType === 'ИП' && <>Адрес</>}
                     </p>
+                    <p>{fullAddress}</p>
 
-                    <p>123456, г. Москва, ул. Ленина, д. 45, оф. 301</p>
-
-                    {activeTab === 'ООО' && <>
+                    {legalType === 'ООО' && <>
                         <p className="subtitle is-size-7">Телефон компании <br/>(с указанием кода города) </p>
-                        <p>+7 (495) 123-45-67</p>
+                        <p>{companyPhone}</p>
                     </>}
 
 
                     <p className="subtitle is-size-7">Ссылка на сайт</p>
-                    <p><a href="#">www.tps.ru</a></p>                        
+                    <p><a href={"https://" + webSite} target="_blank">{webSite}</a></p>                        
 
                     </div>  
                 </div>
@@ -109,48 +151,48 @@ export default function CompanyCardPage(){
                     <div className="box">
                         <h3 className="title">Банковские реквизиты</h3>
                         <div className={styles.info}>
-                        <p className="subtitle is-size-7">Наименование банка:</p><p>ПАО "Сбербанк России"</p>
-                        <p className="subtitle is-size-7">Р/с:</p><p>40702810500000012345</p>
-                        <p className="subtitle is-size-7">К/с:</p><p>30101810400000000225</p>
-                        <p className="subtitle is-size-7">БИК:</p><p>044525225</p>                                                    
+                        <p className="subtitle is-size-7">Наименование банка:</p><p>{bankName}</p>
+                        <p className="subtitle is-size-7">Р/с:</p><p>{bankRS}</p>
+                        <p className="subtitle is-size-7">К/с:</p><p>{bankKS}</p>
+                        <p className="subtitle is-size-7">БИК:</p><p>{bankBIK}</p>                                                    
                         </div>                            
                     </div>
 
                     <div className="box">
                         <h3 className="title">Идентификационные коды:</h3>
                         <div className={styles.info}>
-                        {activeTab === 'ООО' && <>
-                            <p className="subtitle is-size-7">ИНН:</p><p>7701234567</p>
-                            <p className="subtitle is-size-7">КПП:</p><p>770101001</p>
-                            <p className="subtitle is-size-7">ОГРН:</p><p>1123456789012</p>
-                            <p className="subtitle is-size-7">ОКПО:</p><p>12345678</p>                            
+                        {legalType === 'ООО' && <>
+                            <p className="subtitle is-size-7">ИНН:</p><p>{codeINN}</p>
+                            <p className="subtitle is-size-7">КПП:</p><p>{codeKPP}</p>
+                            <p className="subtitle is-size-7">ОГРН:</p><p>{codeOGRN}</p>
+                            <p className="subtitle is-size-7">ОКПО:</p><p>{codeOKPO}</p>                            
                         </>}
-                        {activeTab === 'ИП' && <>
-                            <p className="subtitle is-size-7">ИНН:</p><p>7701234567</p>                            
-                            <p className="subtitle is-size-7">ОГРНИП:</p><p>1123456789012</p>
+                        {legalType === 'ИП' && <>
+                            <p className="subtitle is-size-7">ИНН:</p><p>{codeINN}</p>                            
+                            <p className="subtitle is-size-7">ОГРНИП:</p><p>{codeOGRN}</p>
                         </>}
                         </div>
-                    </div>                            
-                </div>                   
-            </div>         
+                    </div>
+                </div>               
+            </div>
 
             <div className="section">
                 <div className="box">
                     <h3 className="title">Контактное лицо (руководитель)</h3>
                     <div className={styles.info}>
                         <p className="subtitle is-size-7">ФИО</p>                      
-                        <p>Иванов Иван</p>
+                        <p>{contactFIO}</p>
 
-                        {activeTab === 'ООО' && <>
+                        {legalType === 'ООО' && <>
                             <p className="subtitle is-size-7">Должность</p>
-                            <p>Директор</p>
+                            <p>{contactJobTitle}</p>
                         </>}
 
                         <p className="subtitle is-size-7">Телефон</p>
-                        <p>+7 (924) 456-45-67</p>
+                        <p>{contactPhone}</p>
                         <p className="subtitle is-size-7">Еmail</p>                    
-                        <p><a href="mailto:ivanov.i@mail.ru">ivanov.i@mail.ru</a></p>
-                    </div>                            
+                        <p><a href={"mailto:" + contactEmail}>{contactEmail}</a></p>
+                    </div>
                 </div>
             </div> 
                                                                                     

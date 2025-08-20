@@ -63,11 +63,7 @@ export default function CompanyInfoPage(){
                     if(company){
                         setCompany(company);
                         setGallery(company.gallery)
-                    }
-                    
-                    // setAvatar(user.avatar);
-                    // setSchools(user.userInfo.schools);
-                    // setSpecialization(user.userInfo.specialization)
+                    }                    
                 }
 
             } catch (err) {
@@ -95,7 +91,7 @@ export default function CompanyInfoPage(){
                 <div className="section">
                     <h2>Кто мы</h2>                    
                     
-                    <p style={{'white-space': 'pre-line'}}>
+                    <p style={{whiteSpace: 'pre-line'}}>
                         {company && company.description}                                     
                     </p>
 

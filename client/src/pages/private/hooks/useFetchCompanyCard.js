@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import api from "../../../utils/api"; // Путь к вашему API
 
 export default function useFetchCompanyCard({setErrorMessage}) {
-    const [user, setUser] = useState(null);
-    const [company, setCompany] = useState(null);
 
-    const [details, setDetails] = useState({});        
+    const [company, setCompany] = useState(null);    
+
+    const [legalType, setLegalType] = useState('ИП');
     
     const [fullName, setFullName] = useState('');
     const [shortName, setShortName] = useState('');
@@ -32,56 +32,85 @@ export default function useFetchCompanyCard({setErrorMessage}) {
     
     const navigate = useNavigate();    
 
-    const hdlSaveAll = async ()=>{           
+    const hdlSaveAll = async (e)=>{           
         
-        // setErrorMessage(null);
+        e.preventDefault();
 
-        // const userInput = { name:companyName, gallery, description, city, specialization }
-        // const companyToSave = {
-        //     ...company,
-        //     ...userInput,
-        // }
+        setErrorMessage(null);
 
-        // try {
-        //     const response = await api.post('/company/save', companyToSave);
-        //     console.log('Успешно:', response.data);
-        //     navigate('/cp/company/info');
+        const detailsToSave = {
+            ...company.details,
+            legalType,
+            fullName,
+            shortName,
+            fullAddress,
+            companyPhone,
+            webSite,
+            codeINN,
+            codeKPP,
+            codeOGRN,
+            codeOKPO,
+            bankName,
+            bankRS,
+            bankKS,
+            bankBIK,
+            contactFIO,
+            contactPhone,
+            contactJobTitle,
+            contactEmail,
+        }
 
-        // } catch (error) {
-        //     console.error('Ошибка:', error.response?.data || error.message);            
-        //     setErrorMessage('Не удалось сохранить')
-        //     throw error; // Можно обработать ошибку в компоненте
-        // }
+        try {
+            const response = await api.post(`/company/${company.id}/update`, {companyUpdateDto:{details: detailsToSave}});
+            console.log('Успешно:', response.data);
+            navigate('/cp/company/card');
+
+        } catch (error) {
+            console.error('Ошибка:', error.response?.data || error.message);            
+            setErrorMessage('Не удалось сохранить')
+            throw error; // Можно обработать ошибку в компоненте
+        }
     }
 
     useEffect(() => {
-    const fetchUserCompanyCard = async () => {
-        // try {
-        // const response = await api.get("/user/full");
-        // if (response.data.success) {
-        //     const user = response.data.user;
-        //     setUser(user);
-        //     const userCompany = user.userCompany;
-        //     setCompany(userCompany);            
-        //     setCompanyName(userCompany?.name || "");
-        //     setSpecialization(userCompany?.specialization || "");
-        //     setDescription(userCompany?.description || "");
-        //     setCity(userCompany?.city || "");
-        //     setGallery(userCompany?.gallery || []);                                
-            
-        // }
-        // } catch (err) {
-        // console.error("Ошибка загрузки данных", err);
-        // navigate("/");
-        // }
+    const fetchCompanyCard = async () => {
+        try {
+        const response = await api.get("/company/by-user");
+        if (response.data.success) {
+            const company = response.data.company;
+            setCompany(company);
+            const details = company.details;
+            setLegalType(details.legalType || 'ИП');
+            setFullName(details.fullName || '');
+            setShortName(details.shortName || '');
+            setFullAddress(details.fullAddress || '');
+            setCompanyPhone(details.companyPhone || '');
+            setWebSite(details.webSite || '');
+            setCodeINN(details.codeINN || '');
+            setCodeKPP(details.codeKPP || '');
+            setCodeOGRN(details.codeOGRN || '');
+            setCodeOKPO(details.codeOKPO || '');
+            setBankName(details.bankName || '');
+            setBankRS(details.bankRS || '');
+            setBankKS(details.bankKS || '');
+            setBankBIK(details.bankBIK || '');
+            setContactFIO(details.contactFIO || '');
+            setContactPhone(details.contactPhone || '');
+            setContactJobTitle(details.contactJobTitle || '');
+            setContactEmail(details.contactEmail || '');
+        }
+        } catch (err) {
+        console.error("Ошибка загрузки данных", err);
+        navigate("/");
+        }
     };
-    fetchUserCompanyCard();
+    fetchCompanyCard();
     }, []);
 
     return {
         company,
-        details,
-        setDetails,
+        legalType,
+        setLegalType,
         fullName,
         setFullName,
         shortName,
