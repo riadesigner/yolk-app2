@@ -57,39 +57,42 @@ router.get('/company/:id',
     })
 );
 
-router.post('/company/:id/update',
+router.patch('/company/:id',
     passport.authenticate('jwt', { session: false }),
-    asyncHandler(async (req, res) => {        
-        
-        const { id: companyId }= req.params; 
+    asyncHandler(async (req, res) => {                
+        const { id }= req.params; 
         const { companyUpdateDto } = req.body;
-
-        console.log('Получены данные:', companyId, companyUpdateDto);
-        
-        const company = await CompanyService.update(companyId, companyUpdateDto);
-        if (!company) {
-            return sendError(res, 'Не удалось обоновить данные компании', 404);
-        }    
-        sendSuccess(res, { message: 'Данные сохранены' });        
-    })
-);
-
-router.post('/company/save',
-    passport.authenticate('jwt', { session: false }),
-    asyncHandler(async (req, res) => {        
-
-        const companyData = req.body;
-        console.log('Получены данные:', companyData);
-        
-        const { createdAt, updatedAt, id, ...companyUpdateDto } = companyData;
-        
+        console.log('Получены данные:', id, companyUpdateDto);        
         const company = await CompanyService.update(id, companyUpdateDto);
         if (!company) {
             return sendError(res, 'Не удалось обоновить данные компании', 404);
-        }
-        console.log('saved company', company);
+        }    
+        sendSuccess(res, { message: `Данные компании ${company._id} обновлены` });        
+    })
+);
 
-        sendSuccess(res, { message: 'Данные сохранены' });        
+router.put('/company',
+    passport.authenticate('jwt', { session: false }),
+    asyncHandler(async (req, res) => {        
+        
+        // getting the User
+        const user = await UsersService.findById(req.user.id);
+        if(!user){
+            return sendError(res, `User ${user._id} not found`, 404);    
+        }
+        // creating userCompany
+        const companyData = req.body;
+        console.log('Получены данные:', companyData);        
+        const company = await CompanyService.create(companyData);                        
+        if (!company) {
+            return sendError(res, `Не удалось создать компанию для пользователя ${user._id}`, 404);
+        }        
+        // updating the User
+        const userUpdated = await UsersService.update(req.user.id, {userCompany:company._id});
+        if(!userUpdated){
+            return sendError(res, `Не удалось привязать компанию ${company._id} к пользователю ${user._id}`, 404);
+        }        
+        sendSuccess(res, { message: 'Компания создана, к пользователю привязана' });        
     })
 );
 

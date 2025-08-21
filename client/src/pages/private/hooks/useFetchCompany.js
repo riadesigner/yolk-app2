@@ -6,6 +6,7 @@ import useGallery from './useGallery';
 
 export default function useFetchUserCompany({setErrorMessage}) {
     const [user, setUser] = useState(null);
+    const [companyId, setCompanyId] = useState(null);
     const [company, setCompany] = useState(null);
     const [companyName, setCompanyName] = useState("");
     const [specialization, setSpecialization] = useState("");
@@ -20,14 +21,23 @@ export default function useFetchUserCompany({setErrorMessage}) {
         setErrorMessage(null);
 
         const userInput = { name:companyName, gallery, description, city, specialization }
-        const companyToSave = {
+        
+        const dataCompany = {
             ...company,
             ...userInput,
         }
 
+        console.log('companyId', companyId)
+
         try {
-            const response = await api.post('/company/save', companyToSave);
-            console.log('Успешно:', response.data);
+            if(companyId){
+                const response = await api.patch(`/company/${company.id}`, dataCompany);
+                console.log('Компания успешно обновлена:', response.data);                
+            }else{
+                const response = await api.put(`/company`, dataCompany);
+                console.log('Компания успешно создана:', response.data);                
+            }
+
             navigate('/cp/company/info');
 
         } catch (error) {
@@ -45,12 +55,15 @@ export default function useFetchUserCompany({setErrorMessage}) {
             const user = response.data.user;
             setUser(user);
             const userCompany = user.userCompany;
-            setCompany(userCompany);            
-            setCompanyName(userCompany?.name || "");
-            setSpecialization(userCompany?.specialization || "");
-            setDescription(userCompany?.description || "");
-            setCity(userCompany?.city || "");
-            setGallery(userCompany?.gallery || []);                                
+            setCompany(userCompany);        
+            
+            if(userCompany){
+                setCompanyName(userCompany?.name || "");
+                setSpecialization(userCompany?.specialization || "");
+                setDescription(userCompany?.description || "");
+                setCity(userCompany?.city || "");
+                setGallery(userCompany?.gallery || []);                                
+            }
             
         }
         } catch (err) {
