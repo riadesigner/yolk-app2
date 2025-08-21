@@ -61,9 +61,9 @@ router.patch('/company/:id',
     passport.authenticate('jwt', { session: false }),
     asyncHandler(async (req, res) => {                
         const { id }= req.params; 
-        const { companyUpdateDto } = req.body;
-        console.log('Получены данные:', id, companyUpdateDto);        
-        const company = await CompanyService.update(id, companyUpdateDto);
+        const { companyData } = req.body;
+        console.log('Получены данные для обновления:', id, companyData, req.body);        
+        const company = await CompanyService.update(id, companyData);
         if (!company) {
             return sendError(res, 'Не удалось обоновить данные компании', 404);
         }    

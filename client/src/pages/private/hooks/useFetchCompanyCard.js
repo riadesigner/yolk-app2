@@ -60,9 +60,19 @@ export default function useFetchCompanyCard({setErrorMessage}) {
             contactEmail,
         }
 
+        const companyData = {
+            details: detailsToSave,
+        }
+
         try {
-            const response = await api.post(`/company/${company.id}/update`, {companyUpdateDto:{details: detailsToSave}});
-            console.log('Успешно:', response.data);
+
+            if(company.id){
+                const response = await api.patch(`/company/${company.id}`, {companyData} );
+                console.log('Успешно обновлена:', response.data);
+            }else{
+                const response = await api.put(`/company`, {companyData});
+                console.log('Компания успешно создана:', response.data);                
+            }            
             navigate('/cp/company/card');
 
         } catch (error) {

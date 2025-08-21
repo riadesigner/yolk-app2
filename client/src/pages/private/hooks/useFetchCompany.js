@@ -22,7 +22,7 @@ export default function useFetchUserCompany({setErrorMessage}) {
 
         const userInput = { name:companyName, gallery, description, city, specialization }
         
-        const dataCompany = {
+        const companyData = {
             ...company,
             ...userInput,
         }
@@ -31,10 +31,10 @@ export default function useFetchUserCompany({setErrorMessage}) {
 
         try {
             if(companyId){
-                const response = await api.patch(`/company/${company.id}`, dataCompany);
+                const response = await api.patch(`/company/${company.id}`, {companyData});
                 console.log('Компания успешно обновлена:', response.data);                
             }else{
-                const response = await api.put(`/company`, dataCompany);
+                const response = await api.put(`/company`, {companyData} );
                 console.log('Компания успешно создана:', response.data);                
             }
 
