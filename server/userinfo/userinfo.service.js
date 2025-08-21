@@ -15,18 +15,17 @@ exports.create = function (userinfoCreateDto = {}) {
 exports.update = function (id, userInfoUpdateDto = {}) {  
     return new Promise(async (res,rej)=>{ 
 
-      userInfoUpdateDto.updatedAt = Date.now();
+      const {updatedAt, createdAt, ...data } = userInfoUpdateDto;
 
-      try{
-        // { new: true } возвращает обновленный документ, а не старый
-        const updatedUserInfo = await UserInfoModel.findByIdAndUpdate(
+      try{        
+        const userInfoUpdated = await UserInfoModel.findByIdAndUpdate(
             id,
-            userInfoUpdateDto,
+            data,
             { new: true }
         );
-        res(updatedUserInfo);
+        res(userInfoUpdated);
       }catch(e){
-        console.log(`cant update userInfo, err:${e}`)
+        console.log(`cant update userInfo ${id}, err:${e}`)
         res(null);
       }        
     })    

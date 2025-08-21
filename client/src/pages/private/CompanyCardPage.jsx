@@ -45,8 +45,12 @@ export default function CompanyCardPage(){
                 
                 if(response.data.success){                    
                     const company = response.data.company;                    
+
+                    console.log('company = ', company);
+
                     if(company){
-                        const details = company.details;
+                        const details = company.details || {};                        
+
                         setLegalType(details.legalType || 'ИП');
                         setFullName(details.fullName || '');
                         setShortName(details.shortName || '');

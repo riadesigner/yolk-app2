@@ -79,7 +79,7 @@ export default function useFetchCompanyCard({setErrorMessage}) {
         if (response.data.success) {
             const company = response.data.company;
             setCompany(company);
-            const details = company.details;
+            const details = company.details || {};
             setLegalType(details.legalType || 'ИП');
             setFullName(details.fullName || '');
             setShortName(details.shortName || '');

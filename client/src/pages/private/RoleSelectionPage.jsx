@@ -2,18 +2,32 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import ErrorMessage from '../../components/ErrorMessage';
 import { useState } from 'react';
 import  api from '../../utils/api';
+import {getPayloads} from '../../utils/payloads'
 
 export default function AboutPage(){
 
 
+    const pl = getPayloads();
+    const userId = pl.id;
+    
+    console.log('pl', pl)
     const navigate = useNavigate();
 
     const [errorMessage, setErrorMessage] = useState(null);    
-
+    
     const hdlClick = async (role)=>{
 
+        if(!userId){ return; }
+
         try {
-            const response = await api.post('/user/select-role', {role:role});
+
+            const data = {
+                userData: {role},
+                infoData:null,
+            }
+
+            const response = await api.patch(`/users/${userId}`, data );
+            
             console.log('Успешно:', response.data);
 
             if(role==='designer'){
@@ -28,6 +42,9 @@ export default function AboutPage(){
             throw error; // Можно обработать ошибку в компоненте
         }
     }
+
+
+    
 
     return(
         <>

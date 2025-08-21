@@ -18,30 +18,21 @@ const userInfoService = require('../userinfo/userinfo.service')
   exports.update = function (id, userUpdateDto) {
     return new Promise(async (res,rej)=>{
 
+      console.log('userUpdateDto', userUpdateDto);
+
+      const {updatedAt, createdAt, ...data } = userUpdateDto;
+
       try{        
 
-        const updatedUser = await UsersModel.findByIdAndUpdate(
+        const userUpdated = await UsersModel.findByIdAndUpdate(
             id,
-            userUpdateDto,
+            data,
             { new: true }
         );                
-
-        // обновляем расширенную информацию
-        if(userUpdateDto.userInfo){
-
-          const { createdAt, updatedAt, id:userInfoId, ...userInfoUpdateDto } = userData;
-          const updatedUserInfo = await userInfoService.update(userInfoId, userInfoUpdateDto);  
-          if(!updatedUserInfo){
-            rej("не удалось сохранить расширенную информацию о пользователе")
-          }          
-        }
-
-        await updatedUser.populate('userInfo');
-        console.log('updatedUser ========= ', updatedUser)
-        res(updatedUser);
+        res(userUpdated);
 
       }catch(e){
-        console.log(`cant find user by id ${userId}, err: ${e.message || e}`)
+        console.log(`cant find user by id ${id}, err: ${e.message || e}`)
         res(null);
       }
     })
