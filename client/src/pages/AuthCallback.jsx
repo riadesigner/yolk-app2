@@ -13,7 +13,7 @@ export default function AuthCallback() {
   useEffect( () => {    
     const token = searchParams.get('token');     
     if (token) {      
-      login(token);      
+      login(token); 
       window.history.replaceState({}, '', '/'); // Очищаем URL
       console.log('token = ', token)
     

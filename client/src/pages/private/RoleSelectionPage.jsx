@@ -2,24 +2,50 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import ErrorMessage from '../../components/ErrorMessage';
 import { useState } from 'react';
 import  api from '../../utils/api';
+import { useAuth } from '../../contexts/AuthContext';
+import {getPayloads} from '../../utils/payloads'
+
+
 
 export default function AboutPage(){
 
+    const { login } = useAuth();
 
+    const pl = getPayloads();
+    const userId = pl.id;
+    
+    console.log('pl', pl)
     const navigate = useNavigate();
 
     const [errorMessage, setErrorMessage] = useState(null);    
-
+    
     const hdlClick = async (role)=>{
 
-        try {
-            const response = await api.post('/user/select-role', {role:role});
-            console.log('Успешно:', response.data);
+        if(!userId){ return; }
 
-            if(role==='designer'){
-                navigate('/cp/designer');
+        try {
+
+            const data = {
+                userData: {role},
+                infoData:null,
+            }
+
+            const response = await api.patch(`/users/${userId}`, data );
+            console.log('Успешно обновлен пользователь:', response.data);
+
+            // заново авторизируемся
+            const newTokenResponse = await api.get(`/auth/new-token` );
+            console.log('Успешно получен новый токен:', newTokenResponse.data);
+            const token = newTokenResponse.data.token;
+            if(token){
+                login(token);
+                if(role==='designer'){
+                    navigate('/cp/designer');
+                }else{
+                    navigate('/cp/company');
+                }                
             }else{
-                navigate('/cp/company');
+                setErrorMessage('Не удалось авторизоваться. Попробуйте позже')
             }
 
         } catch (error) {

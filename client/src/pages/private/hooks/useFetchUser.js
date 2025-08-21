@@ -27,14 +27,11 @@ export default function useFetchUser({setErrorMessage}) {
         
         setErrorMessage(null);
 
-        const userInput = { firstName, secondName, middleName, softSkills, hardSkills, schools, webSite, phone, specialization }
-        user.userInfo = {
-            ...user.userInfo,
-            ...userInput,
-        }
+        const userData = null
+        const userInfo = { id:user.userInfo.id, firstName, secondName, middleName, softSkills, hardSkills, schools, webSite, phone, specialization }
 
         try {
-            const response = await api.post('/user/save', user);
+            const response = await api.patch(`/users/${user.id}`, {userData, userInfo});
             console.log('Успешно:', response.data);
             navigate('/cp/designer/info');
 
@@ -50,7 +47,11 @@ export default function useFetchUser({setErrorMessage}) {
         try {
         const response = await api.get("/user/full");
         if (response.data.success) {
+            
             const user = response.data.user;
+
+            console.log('user', user);
+
             setUser(user);
             setAvatar(user.avatar);
             setSecondName(user?.userInfo?.secondName || "");
