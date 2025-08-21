@@ -5,6 +5,7 @@ const error404 = require('./middleware/error404')
 const session = require('express-session');
 const path = require('path')
 const mongoose = require('mongoose')
+const jwtUtils = require('./utils/jwtUtils')
 
 const cors = require('cors');
 const passport = require('passport');
@@ -106,7 +107,7 @@ app.use('/api',require('./orders/orders-api.routes'));
 app.get('/api/protected', (req, res) => {
   const token = req.headers.authorization?.split(' ')[1];  
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    jwtUtils.verifyToken(token);
     res.json({ secretData: 'Доступ разрешён' });
   } catch (err) {
     res.status(401).json({ error: 'Неверный токен' });

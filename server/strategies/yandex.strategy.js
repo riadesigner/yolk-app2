@@ -1,6 +1,7 @@
 const YandexStrategy = require('passport-yandex').Strategy;
-const jwt = require('jsonwebtoken');
 const usersService = require('../users/users.service');
+
+const JWTUtils = require('../utils/jwtUtils');
 
 module.exports = (passport) => {
   passport.use(new YandexStrategy({
@@ -45,8 +46,8 @@ module.exports = (passport) => {
         }
       }
 
-      const payload = { id: usr.id, email: usr.email, role:usr.role };
-      const token = jwt.sign( payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+      const payload = { id: usr.id, email: usr.email, role:usr.role };      
+      const token = JWTUtils.generateToken(payload, { expiresIn: '15m' });
 
       console.log('Yandex auth success for:', payload );
       return done(null, { ...usr, token, accessToken });

@@ -15,6 +15,8 @@ export default function SeconMenu(){
     
     const savedUser = getPayloads();    
     const userRole = savedUser ? savedUser.role : 'unknown'; 
+
+    console.log('savedUser', savedUser)
     
     const navTo = {
         'company':'/cp/company',

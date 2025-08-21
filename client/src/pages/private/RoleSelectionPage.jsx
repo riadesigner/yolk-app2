@@ -2,10 +2,14 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import ErrorMessage from '../../components/ErrorMessage';
 import { useState } from 'react';
 import  api from '../../utils/api';
+import { useAuth } from '../../contexts/AuthContext';
 import {getPayloads} from '../../utils/payloads'
+
+
 
 export default function AboutPage(){
 
+    const { login } = useAuth();
 
     const pl = getPayloads();
     const userId = pl.id;
@@ -27,13 +31,21 @@ export default function AboutPage(){
             }
 
             const response = await api.patch(`/users/${userId}`, data );
-            
-            console.log('Успешно:', response.data);
+            console.log('Успешно обновлен пользователь:', response.data);
 
-            if(role==='designer'){
-                navigate('/cp/designer');
+            // заново авторизируемся
+            const newTokenResponse = await api.get(`/auth/new-token` );
+            console.log('Успешно получен новый токен:', newTokenResponse.data);
+            const token = newTokenResponse.data.token;
+            if(token){
+                login(token);
+                if(role==='designer'){
+                    navigate('/cp/designer');
+                }else{
+                    navigate('/cp/company');
+                }                
             }else{
-                navigate('/cp/company');
+                setErrorMessage('Не удалось авторизоваться. Попробуйте позже')
             }
 
         } catch (error) {
@@ -42,9 +54,6 @@ export default function AboutPage(){
             throw error; // Можно обработать ошибку в компоненте
         }
     }
-
-
-    
 
     return(
         <>
