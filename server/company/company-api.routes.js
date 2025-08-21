@@ -81,7 +81,7 @@ router.put('/company',
             return sendError(res, `User ${user._id} not found`, 404);    
         }
         // creating userCompany
-        const companyData = req.body;
+        const { companyData } = req.body;
         console.log('Получены данные:', companyData);        
         const company = await CompanyService.create(companyData);                        
         if (!company) {

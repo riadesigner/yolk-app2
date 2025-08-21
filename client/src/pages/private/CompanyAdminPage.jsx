@@ -29,7 +29,7 @@ export default function CompanyAdminPage(){
 
     const hdlOpenOrder = (e, orderId)=>{
         e.preventDefault();
-        navigate(`/orders/${orderId}`);
+        navigate(`/cp/company/${companyId}/order-edit/${orderId}`);
     }        
 
     useEffect(() => {

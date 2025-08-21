@@ -4,20 +4,34 @@ import Field from '../../components/Field'
 import ErrorMessage from '../../components/ErrorMessage';
 import useFetchOrder from './hooks/useFetchOrder'
 import { useState } from 'react';
-import styles from './OrderNewPage.module.css'
 
 export default function OrderEditPage(){
-        const links = [
-            {link:'/', title:'Главная'},
-            {link:'/cp/company', title:'Панель управления'},            
-            {link:'#', title:'Добавление заказа', isActive:true},
-        ];
+    const links = [
+        {link:'/', title:'Главная'},
+        {link:'/cp/company', title:'Панель управления'},            
+        {link:'#', title:'Добавление заказа', isActive:true},
+    ];
+
+    const hdlCatClick = (e, catId)=>{
+        e.preventDefault();
+        const newCats = [...cats];
+        newCats.map((cat)=>{
+            if(cat.id===catId){
+                return cat.selected ? cat.selected = false :  cat.selected = true;
+            }else{
+                return cat;
+            }            
+        })        
+        setCats(newCats);
+    }
 
     const { companyId } = useParams();
     const [errorMessage, setErrorMessage] = useState(null);    
 
     const {
         order,
+        cats,
+        setCats,
         title,
         setTitle,
         description,
@@ -43,7 +57,7 @@ export default function OrderEditPage(){
                 
                 <div className="box">
                     
-                    <h3 >Краткое название</h3> 
+                    <h3 >Краткое название<small>*</small></h3> 
                     <Field 
                         placeHolder="Разработать фирменный стиль для магазина одежды"
                         value={title}
@@ -52,7 +66,7 @@ export default function OrderEditPage(){
                     
                     <br />
 
-                    <h3>Описание заказа</h3> 
+                    <h3>Описание заказа<small>*</small></h3> 
                     <Field 
                         sublabel="(до 1500 символов)" 
                         value={description}
@@ -61,25 +75,31 @@ export default function OrderEditPage(){
                     
                     <h3>Категории заказа:</h3> 
                     <div className="block">
-                        <button className="button is-small is-link m-2">
-                            <span>Графический дизайн</span>
-                            <span><i className="fa-solid fa-check"></i></span>
-                        </button>
-                        <button className="button is-small is-link m-2">
-                            <span>Motion дизайн</span>
-                            <span><i className="fa-solid fa-check"></i></span>
-                        </button>
-                        <button className="button is-small is-link m-2">
-                            <span>Веб-дизайн</span>
-                            <span><i className="fa-solid fa-check"></i></span>
-                        </button>
-                        <button className="button is-small is-link m-2">
-                            <span>3D-графика</span>
-                            <span><i className="fa-solid fa-check"></i></span>
-                        </button>
+                        {
+                            cats && cats.length>0 && (
+                                cats.map((cat)=>{
+                                    return (
+                                        cat.selected ? (
+                                            <button key={cat.id} className="button is-small is-link mr-2 mb-2" 
+                                                onClick={(e)=>hdlCatClick(e,cat.id)}>
+                                                <span>{cat.name}</span>
+                                                <span><i className="fa-solid fa-check"></i></span>                                            
+                                            </button>
+                                        ):(
+                                            <button key={cat.id} className="button is-small mr-2 mb-2" 
+                                                onClick={(e)=>hdlCatClick(e,cat.id)}>
+                                                <span>{cat.name}</span>                                                
+                                            </button>      
+                                        )
+                                    )
+                                })
+                            )
+                        }
                     </div>                   
                     <h3>Теги заказа:</h3>                    
                     <Field sublabel="Добавьте через запятую:"  placeHolder="реклама, верстка, полиграфия"/>
+                    <br />
+                    <p><small>Поля со звездочкой (*) обязательные</small></p>
                 </div>
                 
                 </div>

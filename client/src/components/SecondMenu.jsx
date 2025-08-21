@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { getPayloads } from '../utils/payloads'
 
 export default function SeconMenu(){
+    
     const dologout = () => {
         logout();
         navigate('/');

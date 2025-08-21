@@ -1,4 +1,4 @@
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation, useParams } from 'react-router-dom';
 
 import Breadcrumb from '../../components/Breadcrumb'
 import Field from '../../components/Field'
@@ -6,13 +6,15 @@ import ErrorMessage from '../../components/ErrorMessage';
 import useFetchOrder from './hooks/useFetchOrder'
 import { useState } from 'react';
 
-export default function OrderEditPage({companyId}){
+export default function OrderEditPage(){
         const links = [
             {link:'/', title:'Главная'},
             {link:'/cp/company', title:'Панель управления'},            
-            {link:'#', title:'Добавление заказа', isActive:true},
+            {link:'#', title:'Редактирование заказа', isActive:true},
         ];
 
+    const cats = [];
+    const { companyId, orderId } = useParams();
     const [errorMessage, setErrorMessage] = useState(null);
 
     const {
@@ -24,7 +26,7 @@ export default function OrderEditPage({companyId}){
         files,
         setFiles,        
         hdlSaveUser,        
-    } = useFetchOrder({errorMessage, setErrorMessage});
+    } = useFetchOrder({ orderId, companyId, errorMessage, setErrorMessage});
 
     return(
         <>
@@ -38,7 +40,7 @@ export default function OrderEditPage({companyId}){
                 
             <section className="container">
                 <div className="section ">                    
-                <h2 className="is-size-3 is-size-4-mobile mb-5">Новый заказ</h2>
+                <h2 className="is-size-3 is-size-4-mobile mb-5">Редактирование заказа</h2>
                 
                 <div className="box">
                     
@@ -58,12 +60,36 @@ export default function OrderEditPage({companyId}){
                         onChange={(val) => setDescription(val)}
                         type="textarea"/>
                     
-                    <h3>Особые требования к заказу:</h3>
-                    <ul>
-                        <li>Соблюдение сроков </li>
-                    </ul>
-                    <Field placeHolder="Оригинальность"/>
-                    <button className="button is-small is-link">Добавить требование</button>
+                    <h3>Категории заказа:</h3> 
+                    <div className="block">
+                        {
+                            cats && cats.length>0 && (
+                                cats.map((cat)=>{
+                                    return (
+                                        cat.selected ? (
+                                            <button key={cat.id} className="button is-small is-link mr-2 mb-2" 
+                                                onClick={(e)=>hdlCatClick(e,cat.id)}>
+                                                <span>{cat.name}</span>
+                                                <span><i className="fa-solid fa-check"></i></span>                                            
+                                            </button>
+                                        ):(
+                                            <button key={cat.id} className="button is-small mr-2 mb-2" 
+                                                onClick={(e)=>hdlCatClick(e,cat.id)}>
+                                                <span>{cat.name}</span>                                                
+                                            </button>      
+                                        )
+                                    )
+                                })
+                            )
+                        }
+                    </div>     
+
+                    <h3>Теги заказа:</h3>                    
+                    <Field sublabel="Добавьте через запятую:"  placeHolder="реклама, верстка, полиграфия"/>
+                    
+                    <br />
+                    <p><small>Поля со звездочкой (*) обязательные</small></p>
+
                 </div>
                 
                 </div>

@@ -69,7 +69,11 @@ export default function CompanyInfoEditPage(){
                         </div>
                     </div>
                     <div className="userFio box">
-                        <Field label="Название компании" value={companyName} onChange={setCompanyName} />
+                        
+                        <Field label="Название компании" 
+                            value={companyName} 
+                            onChange={setCompanyName} />
+
                         <Field label="Город" value={city} onChange={setCity} />                        
                     </div>
                 </div> 

@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../../../utils/api"; // Путь к вашему API
+import api from "../../../utils/api";
 import useGallery from './useGallery';
 
 export default function useFetchUserCompany({setErrorMessage}) {
@@ -22,20 +22,27 @@ export default function useFetchUserCompany({setErrorMessage}) {
 
         const userInput = { name:companyName, gallery, description, city, specialization }
         
-        const companyData = {
-            ...company,
-            ...userInput,
-        }
-
         console.log('companyId', companyId)
 
         try {
-            if(companyId){
+            if(company && companyId){
+                const companyData = {
+                    ...company,
+                    ...userInput,
+                }
+                console.log(`будем обновлять компанию ${companyId}`)
+                console.log(`companyData`, companyData)
                 const response = await api.patch(`/company/${company.id}`, {companyData});
-                console.log('Компания успешно обновлена:', response.data);                
-            }else{
+                console.log('Компания успешно обновлена:', response.data);      
+                            
+            }else{ 
+
+                const companyData = {                    
+                    ...userInput,
+                }                
+                console.log('неизвестная компания!')               
                 const response = await api.put(`/company`, {companyData} );
-                console.log('Компания успешно создана:', response.data);                
+                console.log('Компания успешно создана:', response.data);                                            
             }
 
             navigate('/cp/company/info');
@@ -50,25 +57,30 @@ export default function useFetchUserCompany({setErrorMessage}) {
     useEffect(() => {
     const fetchUserCompany = async () => {
         try {
-        const response = await api.get("/user/full");
-        if (response.data.success) {
-            const user = response.data.user;
-            setUser(user);
-            const userCompany = user.userCompany;
-            setCompany(userCompany);        
-            
-            if(userCompany){
-                setCompanyName(userCompany?.name || "");
-                setSpecialization(userCompany?.specialization || "");
-                setDescription(userCompany?.description || "");
-                setCity(userCompany?.city || "");
-                setGallery(userCompany?.gallery || []);                                
+        
+            const response = await api.get("/user/full");
+        
+            if (response.data.success) {
+                
+                const user = response.data.user;                
+                setUser(user);
+                const userCompany = user.userCompany;                
+                console.log('---- userCompany ------', userCompany)            
+                if(userCompany){
+                    setCompany(userCompany);
+                    setCompanyId(userCompany.id);
+                    setCompanyName(userCompany.name || '');
+                    setSpecialization(userCompany.specialization || '');
+                    setDescription(userCompany.description || '');
+                    setCity(userCompany.city || '');
+                    setGallery(userCompany.gallery || '');                                
+                }
+                
             }
-            
-        }
+
         } catch (err) {
-        console.error("Ошибка загрузки данных", err);
-        navigate("/");
+            console.error("Ошибка загрузки данных", err);
+            navigate("/");
         }
     };
     fetchUserCompany();

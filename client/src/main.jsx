@@ -74,9 +74,9 @@ const router = createBrowserRouter([
       { path: 'cp/company/info/edit', element: <CompanyInfoEditPage /> }, // /редактирование общей информации о компании      
       { path: 'cp/company/card', element: <CompanyCardPage /> }, // /карточка компании (реквизиты)      
       { path: 'cp/company/card/edit', element: <CompanyCardEditPage /> }, // /редактирование карточки компании 
-      { path: 'cp/company/order-edit', element: <OrderEditPage /> }, // /редактирование заказа
-      
+            
       { path: 'cp/company/:companyId/order-new', element: <OrderNewPage /> }, // /добавление заказа       
+      { path: 'cp/company/:companyId/order-edit/:orderId', element: <OrderEditPage /> }, // /редактирование заказа
 
       // Ленивая загрузка (опционально)
       // { 
