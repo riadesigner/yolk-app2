@@ -2,6 +2,7 @@ const express = require('express')
 const crypto = require('crypto');
 const UsersService = require('../users/users.service')
 const passport = require('passport');
+const rnd = require("randomstring");
 
 const router = express.Router();
 
@@ -36,6 +37,61 @@ router.get('/yandex/callback',
     res.redirect(`${process.env.FRONT_URL}/auth-callback?token=${encodeURIComponent(req.user.token)}`);    
   }
 );
+
+
+// --------------------------
+//         AUTH MAILRU
+// --------------------------
+// const MailruStrategy = require('passport-mailru-email').Strategy;
+// const SERCRET_RANDOM_STRING = rnd.generate(12);
+
+// passport.use(
+//     new MailruStrategy({
+//         clientID: process.env.MAILRU_CLIENT_ID,
+//         clientSecret: process.env.MAILRU_CLIENT_SECRET,
+//         callbackURL: "http://localhost:3000/auth/mailru/callback",
+//         state: SERCRET_RANDOM_STRING,
+//     },
+//     (accessToken, refreshToken, profile, done) => {
+//         process.nextTick(()=>{            
+//             return done(null, profile);            
+//         })
+//     })
+// );
+
+// Инициируем OAuth-поток в Mailru
+// router.get('/mailru', passport.authenticate('mailru'));
+
+
+// router.get('/mailru/callback', 
+//     passport.authenticate('mailru', {failureRedirect: '/555'}),
+//     (req, res)=>{
+//         res.redirect('/')
+//     }
+// );
+
+
+// Обработчик callback
+// router.get('/mailru/callback', 
+//   (req, res, next) => {    
+//     const errRedirect = `${process.env.FRONT_URL}/login`;
+//     passport.authenticate('mailru', { session: false, failureRedirect: `${errRedirect}?error=auth-failed` })(req, res, err => {
+//     // проверка на ошибку, когда jwt устарел 
+//       if (err) {
+//         if (err.message.includes('Code has expired')) {
+//           return res.redirect(`${errRedirect}?error=session_expired`);
+//         }
+//         return next(err);
+//       }
+//       // ошибок нет, идем дальше
+//       next();
+//     });
+//   },
+//   (req, res) => {
+//     // Успешная аутентификация     
+//     res.redirect(`${process.env.FRONT_URL}/auth-callback?token=${encodeURIComponent(req.user.token)}`);    
+//   }
+// );
 
 
 // ------------------------------------

@@ -50,7 +50,7 @@ app.use('/public',express.static(PUBLIC_PATH))
 
 const sessionMiddleware = session({
   secret: process.env.SESSION_SECRET,
-  resave: true,
+  resave: false,
   rolling: true,  
   saveUninitialized: false,
   cookie: {
@@ -96,8 +96,8 @@ app.get('/', (req, res)=>{
     res.render('index',{user});
 });
 
-app.use('/auth',require('./auth/auth.routes')); // auth через яндекс  
-app.use('/api',require('./auth/auth-api.routes')); // logout
+app.use('/auth',require('./auth/auth.routes')); // auth через яндекс и mailru  
+app.use('/api',require('./auth/auth-api.routes')); // logout jwt
 app.use('/api',require('./users/users-api.routes'));
 app.use('/api',require('./company/company-api.routes'));
 app.use('/api',require('./orders/orders-api.routes'));

@@ -4,9 +4,13 @@ import api from '../utils/api';
 
 export default function LoginPage(){
 
-    const handleLogin = () => {
+    const hdlYandexLogin = () => {
         window.location.href = 'http://localhost:3000/auth/yandex';
     };
+
+    const hdlMailruLogin = () => {
+        window.location.href = 'http://localhost:3000/auth/mailru';
+    };        
 
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
@@ -16,15 +20,15 @@ export default function LoginPage(){
         const checkAuth = async () => {
         try {
             // Используем настроенную копию axios (а не нативный fetch) как интерцептор
-            // Интерцептор созранит jwt токен и обработает ошибки
+            // Интерцептор сохранит jwt токен и обработает ошибки
             const response = await api.get('/auth/check-auth');
 
             console.log('response', response);
 
             if (response.data.isAuthenticated) {                
-                // navigate('/cp/designer');                
                 console.log(' готов перейти в личный кабинет')
             } 
+            
         } catch (err) {                
             console.log('Пользователь не аутентифицирован. Необходимо заново войти', err);
         }
@@ -59,8 +63,8 @@ export default function LoginPage(){
                         <div className="pages">
                             <div className="page is-centered">
                                 <div className="loggin-block">
-                                    <button className="button is-large is-regular-mobile is-link" onClick={handleLogin}>Войти через Яндекс</button><br />
-                                    <button className="button is-large is-regular-mobile is-link">Войти через Mail.ru</button>
+                                    <button className="button is-large is-regular-mobile is-link" onClick={hdlYandexLogin}>Войти через Яндекс</button><br />
+                                    <button className="button is-large is-regular-mobile is-link" onClick={hdlMailruLogin}>Войти через Mail.ru</button>
                                 </div>                    
                             </div>
                         </div>            

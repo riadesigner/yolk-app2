@@ -4,11 +4,9 @@ import { useNavigate } from "react-router-dom";
 import api from "../../../utils/api";
 import useFiles from './useFiles';
 
-export default function useFetchOrder({setErrorMessage}) {
+export default function useFetchOrder({orderId, companyId, setErrorMessage}) {
     
-    const navigate = useNavigate();
-
-    const orderId = null;
+    const navigate = useNavigate();    
 
     const [order, setOrder] = useState(null);
     const [title, setTitle] = useState("");
@@ -22,7 +20,7 @@ export default function useFetchOrder({setErrorMessage}) {
         const orderData = { title, description }        
         
         try {
-            const response = await api.put(`/orders/${companyId}`, orderData);
+            const response = await api.put(`/orders/${companyId}`, { orderData });
             console.log('Успешно:', response.data);
             navigate('/cp/company');
         } catch (error) {

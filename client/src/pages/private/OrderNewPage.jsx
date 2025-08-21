@@ -1,30 +1,31 @@
-import { Link, NavLink, useLocation } from 'react-router-dom';
-
+import { Link, NavLink, useLocation, useParams } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumb'
 import Field from '../../components/Field'
 import ErrorMessage from '../../components/ErrorMessage';
 import useFetchOrder from './hooks/useFetchOrder'
 import { useState } from 'react';
+import styles from './OrderNewPage.module.css'
 
-export default function OrderEditPage({companyId}){
+export default function OrderEditPage(){
         const links = [
             {link:'/', title:'Главная'},
             {link:'/cp/company', title:'Панель управления'},            
             {link:'#', title:'Добавление заказа', isActive:true},
         ];
 
+    const { companyId } = useParams();
     const [errorMessage, setErrorMessage] = useState(null);    
 
     const {
         order,
-        title,  
+        title,
         setTitle,
         description,
         setDescription,
         files,
         setFiles,        
         hdlSaveUser,        
-    } = useFetchOrder({ orderId:null, errorMessage, setErrorMessage});
+    } = useFetchOrder({ orderId:null, companyId, errorMessage, setErrorMessage});
 
     return(
         <>
@@ -58,12 +59,27 @@ export default function OrderEditPage({companyId}){
                         onChange={(val) => setDescription(val)}
                         type="textarea"/>
                     
-                    <h3>Особые требования к заказу:</h3>
-                    <ul>
-                        <li>Соблюдение сроков </li>
-                    </ul>
-                    <Field placeHolder="Оригинальность"/>
-                    <button className="button is-small is-link">Добавить требование</button>
+                    <h3>Категории заказа:</h3> 
+                    <div className="block">
+                        <button className="button is-small is-link m-2">
+                            <span>Графический дизайн</span>
+                            <span><i className="fa-solid fa-check"></i></span>
+                        </button>
+                        <button className="button is-small is-link m-2">
+                            <span>Motion дизайн</span>
+                            <span><i className="fa-solid fa-check"></i></span>
+                        </button>
+                        <button className="button is-small is-link m-2">
+                            <span>Веб-дизайн</span>
+                            <span><i className="fa-solid fa-check"></i></span>
+                        </button>
+                        <button className="button is-small is-link m-2">
+                            <span>3D-графика</span>
+                            <span><i className="fa-solid fa-check"></i></span>
+                        </button>
+                    </div>                   
+                    <h3>Теги заказа:</h3>                    
+                    <Field sublabel="Добавьте через запятую:"  placeHolder="реклама, верстка, полиграфия"/>
                 </div>
                 
                 </div>

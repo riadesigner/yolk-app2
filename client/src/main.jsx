@@ -52,9 +52,9 @@ const router = createBrowserRouter([
       { path: 'startup', element: <StartUpPage /> }, // 
       { path: 'useragree', element: <UserAgreePage /> }, // 
       { path: 'designers', element: <DesignersPage /> }, // 
-      { path: 'designers/123/portfolio', element: <PortfolioPage /> }, //       
-      { path: 'designers/123/info', element: <DesignerInfoPublicPage /> }, // 
-      { path: 'companies/123', element: <CompanyPublicPage /> }, // 
+      { path: 'designers/:id/portfolio', element: <PortfolioPage /> }, //       
+      { path: 'designers/:id/info', element: <DesignerInfoPublicPage /> }, // 
+      { path: 'companies/:id', element: <CompanyPublicPage /> }, // 
       { path: 'companies', element: <CompaniesPage /> }, // 
       { path: 'chats/123', element: <ChatPage /> }, //       
       { path: 'role-selection', element: <RoleSelectionPage /> }, //       
@@ -62,7 +62,7 @@ const router = createBrowserRouter([
       { path: 'auth-callback', element: <AuthCallback /> }, //             
 
       { path: 'orders', element: <OrdersPage /> }, // 
-      { path: 'orders/123', element: <OrderPage /> }, //       
+      { path: 'orders/:id', element: <OrderPage /> }, //       
 
       // private pages
       { path: 'cp/designer', element: <DesignerAdminPage /> }, // /личный кабинет менеджера
@@ -75,7 +75,8 @@ const router = createBrowserRouter([
       { path: 'cp/company/card', element: <CompanyCardPage /> }, // /карточка компании (реквизиты)      
       { path: 'cp/company/card/edit', element: <CompanyCardEditPage /> }, // /редактирование карточки компании 
       { path: 'cp/company/order-edit', element: <OrderEditPage /> }, // /редактирование заказа
-      { path: 'cp/company/order-new', element: <OrderNewPage /> }, // /добавление заказа
+      
+      { path: 'cp/company/:companyId/order-new', element: <OrderNewPage /> }, // /добавление заказа       
 
       // Ленивая загрузка (опционально)
       // { 
