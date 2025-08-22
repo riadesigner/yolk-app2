@@ -14,7 +14,9 @@ passportLocal.init(router,'email','password');
 // --------------------------
 
 // Инициируем OAuth-поток в Yandex
-router.get('/yandex', passport.authenticate('yandex'));
+router.get('/yandex', passport.authenticate('yandex', {
+  prompt: 'select_account'
+}));
 
 // Обработчик callback
 router.get('/yandex/callback', 

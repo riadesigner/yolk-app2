@@ -27,7 +27,7 @@ export default function AuthCallback() {
                   case 'designer': navigate('/cp/designer'); break;
                   case 'company': navigate('/cp/company'); break;
                   case 'manager': navigate('/cp/manager'); break;
-                  case 'admin': navigate('/cp/admin'); break;
+                  case 'administrator': navigate('/cp/yolk-admin'); break;
                   default:navigate('/role-selection');
                 }
                 

@@ -34,6 +34,12 @@ import CompanyCardEditPage from './pages/private/CompanyCardEditPage.jsx'
 import OrderEditPage from './pages/private/OrderEditPage.jsx'
 import OrderNewPage from './pages/private/OrderNewPage.jsx'
 
+import AdminPage from './pages/private/AdminPage.jsx'
+import AdminInfoPage from './pages/private/AdminInfoPage.jsx'
+import AdminOrdersPage from './pages/private/AdminOrdersPage.jsx'
+import AdminCompaniesPage from './pages/private/AdminCompaniesPage.jsx'
+import AdminDesignersPage from './pages/private/AdminDesignersPage.jsx'
+
 import { AuthProvider } from './contexts/AuthContext.jsx';
 
 import ErrorPage from './pages/ErrorPage.jsx'
@@ -77,6 +83,13 @@ const router = createBrowserRouter([
             
       { path: 'cp/company/:companyId/order-new', element: <OrderNewPage /> }, // /добавление заказа       
       { path: 'cp/company/:companyId/order-edit/:orderId', element: <OrderEditPage /> }, // /редактирование заказа
+
+      { path: 'cp/yolk-admin', element: <AdminPage /> }, // /личный кабинет администратора
+      { path: 'cp/yolk-admin/info', element: <AdminInfoPage /> }, // /сводная таблица (актуальные данные о проекте)      
+      { path: 'cp/yolk-admin/orders', element: <AdminOrdersPage /> }, // /данные о состоянии всех заказов на сайте      
+      { path: 'cp/yolk-admin/companies', element: <AdminCompaniesPage /> }, // /сводная таблица о компаниях на сайте      
+      { path: 'cp/yolk-admin/designers', element: <AdminDesignersPage /> }, // /сводная таблица о дизайнерах на сайте
+      
 
       // Ленивая загрузка (опционально)
       // { 

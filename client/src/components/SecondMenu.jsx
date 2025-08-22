@@ -22,9 +22,10 @@ export default function SeconMenu(){
     const navTo = {
         'company':'/cp/company',
         'designer':'/cp/designer',
+        'administrator':'/cp/yolk-admin',
         'unknown':'/',
     } 
-
+    
     return(
         <div className="second-menu">
 

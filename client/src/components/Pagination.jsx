@@ -35,11 +35,11 @@ export default function Pagination(){
         <div className="mobile-only">
         <div className={styles.pageLinks}>        
             {
-                linksMobile.map((el)=>{
+                linksMobile.map((el, index)=>{
                     return el.isActive ? (
-                        <span>{el.title}</span>
+                        <span key={index}>{el.title}</span>
                     ):(
-                        <a href={el.link}>{el.title}</a>
+                        <a key={index} href={el.link}>{el.title}</a>
                     )
                 })
             }        

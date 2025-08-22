@@ -95,11 +95,14 @@ export default function OrderEditPage(){
                                 })
                             )
                         }
-                    </div>                   
+                    </div>     
+
                     <h3>Теги заказа:</h3>                    
                     <Field sublabel="Добавьте через запятую:"  placeHolder="реклама, верстка, полиграфия"/>
+                    
                     <br />
                     <p><small>Поля со звездочкой (*) обязательные</small></p>
+                    
                 </div>
                 
                 </div>

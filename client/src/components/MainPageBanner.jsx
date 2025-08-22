@@ -13,6 +13,7 @@ export default function SiteBanner(){
     const navTo = {
         'company':'/cp/company',
         'designer':'/cp/designer',
+        'administrator':'/cp/yolk-admin',
         'unknown':'/login',
     }     
     
