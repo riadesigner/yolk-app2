@@ -38,6 +38,7 @@ exports.update = function (id, orderUpdateDto = {}) {
     return new Promise(async (res,rej)=>{             
 
       try{        
+        console.log(`обновляем заказ ${id}, данные:`, orderUpdateDto);
         const updatedOrder = await OrdersModel.findByIdAndUpdate(
             id,
             orderUpdateDto,

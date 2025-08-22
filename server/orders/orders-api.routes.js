@@ -30,14 +30,7 @@ router.get('/orders/by-company/:companyId',
     asyncHandler(async (req, res) => { 
         const { companyId } = req.params;
         const orders = await OrdersService.find({companyId:companyId});
-        console.log('companyId =', companyId);
-        console.log('orders ============= \n', orders);
-        // .toJSON()
         sendSuccess(res, { orders:orders });
-        // if (!orders ) {
-        //     return sendError(res, 'Order not found', 404);
-        // }
-        // sendSuccess(res, { order:order.toJSON() });        
     })
 );
 
@@ -80,11 +73,11 @@ router.patch('/orders/:orderId',
         if (!user) {  return sendError(res, 'Unknown user', 404); }        
         if (user.role !=='company') {  return sendError(res, 'User not autorized for this action', 403);}                
 
-
-
         const orderUpdateDto = {            
             ...orderData,
         }
+
+        console.log('orderUpdateDto', orderUpdateDto);
 
         const orderUpdated = await OrdersService.update(orderId, orderUpdateDto);
         

@@ -18,8 +18,11 @@ export default function useFetchOrder({orderId, companyId, setErrorMessage}) {
         e.preventDefault();
         setErrorMessage(null);                               
 
+        const catsSelected = [];
+        cats.map((cat)=>{cat.selected && catsSelected.push(cat.id)});
 
-        const orderData = { title, description } 
+        console.log('catsSelected', catsSelected);
+        const orderData = { title, description, categories:catsSelected } 
 
         // Проверка что хотя бы одно поле заполнено
         const hasContent = Object.values(orderData).some(
@@ -49,7 +52,7 @@ export default function useFetchOrder({orderId, companyId, setErrorMessage}) {
 
     useEffect(() => {
     
-        const fetchOrder = async () => {
+        const fetchOrder = async (allCats) => {
         
             try {
             const response = await api.get(`/orders/${orderId}`);
@@ -60,6 +63,20 @@ export default function useFetchOrder({orderId, companyId, setErrorMessage}) {
                     setOrder(order);
                     setTitle(order.title || '');
                     setDescription(order.description || '');
+                    
+                    const updatedCats = [...allCats];
+                    console.log('allCats', allCats)
+                    console.log('updatedCats', updatedCats)
+                    // выделяем выбранные категории
+                    console.log('order.categories', order.categories)
+                    console.log('order.categories.length > 0', order.categories.length > 0)
+                    if(order.categories.length > 0){
+                        updatedCats.map((cat)=>{ if(order.categories.includes(cat.id)){
+                            console.log('cat', cat)
+                            cat.selected = true;
+                        } })
+                    }
+
                 }
            
             }
@@ -70,20 +87,24 @@ export default function useFetchOrder({orderId, companyId, setErrorMessage}) {
 
         };
 
-        (orderId !== null) && fetchOrder();
-
-        const fetchCategories = async () => {
-            console.log('fetchCategories!')
+        const fetchCategories = async () => {                        
             try {        
                 const response = await api.get("/categories");        
                 if (response.data.success) {
                     const allCats = response.data.categories;
-                    allCats.map((cat)=>{cat.selected=true; return cat});
-                    setCats(allCats);                
-                    console.log('allCats', allCats);
+                    if(!orderId){
+                        // если новый заказ
+                        // выделяем все категории
+                        allCats.map((cat)=>{cat.selected=true; return cat});
+                    }                    
+                    setCats(allCats);                                    
+                    // если заказ существует
+                    // то загружаем его
+                    orderId && fetchOrder(allCats)
                 }
             } catch (err) {
-                console.error("Ошибка загрузки категорий", err);            
+                console.error("Ошибка загрузки категорий", err);
+                throw new Error("Ошибка загрузки категорий");
             }
         };
         fetchCategories();
