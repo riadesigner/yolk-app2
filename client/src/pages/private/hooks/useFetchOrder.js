@@ -31,6 +31,7 @@ export default function useFetchOrder({orderId, companyId, setErrorMessage}) {
         }        
 
         try {
+            //
             const response = await api.put(`/orders/${companyId}`, { orderData });
             console.log('Успешно:', response.data);
             navigate('/cp/company');
@@ -67,13 +68,14 @@ export default function useFetchOrder({orderId, companyId, setErrorMessage}) {
         (orderId !== null) && fetchOrder();
 
         const fetchCategories = async () => {
+            console.log('fetchCategories!')
             try {        
                 const response = await api.get("/categories");        
                 if (response.data.success) {
                     const allCats = response.data.categories;
                     allCats.map((cat)=>{cat.selected=true; return cat});
                     setCats(allCats);                
-
+                    console.log('allCats', allCats);
                 }
             } catch (err) {
                 console.error("Ошибка загрузки категорий", err);            

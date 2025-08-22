@@ -13,12 +13,26 @@ export default function OrderEditPage(){
             {link:'#', title:'Редактирование заказа', isActive:true},
         ];
 
-    const cats = [];
+    const hdlCatClick = (e, catId)=>{
+        e.preventDefault();
+        const newCats = [...cats];
+        newCats.map((cat)=>{
+            if(cat.id===catId){
+                return cat.selected ? cat.selected = false :  cat.selected = true;
+            }else{
+                return cat;
+            }            
+        })        
+        setCats(newCats);
+    }
+    
     const { companyId, orderId } = useParams();
     const [errorMessage, setErrorMessage] = useState(null);
 
     const {
         order,
+        cats,
+        setCats,
         title,  
         setTitle,
         description,

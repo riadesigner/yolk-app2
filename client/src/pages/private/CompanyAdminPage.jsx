@@ -110,7 +110,7 @@ export default function CompanyAdminPage(){
                             {
                                 orders && orders.length > 0 && orders.map((order)=>{
                                     return  (
-                                    <button className="button is-fluid is-medium is-regular-mobile is-primary is-left mb-3"
+                                    <button key={order.id} className="button is-fluid is-medium is-regular-mobile is-primary is-left mb-3"
                                     onClick={(e)=>hdlOpenOrder(e, order.id)}
                                     >
                                         <span>{order.title}</span>
