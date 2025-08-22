@@ -30,11 +30,16 @@ export default function useFetchOrder({orderId, companyId, setErrorMessage}) {
             return;
         }        
 
-        try {
-            //
-            const response = await api.put(`/orders/${companyId}`, { orderData });
-            console.log('Успешно:', response.data);
-            navigate('/cp/company');
+        try {            
+            if(orderId){
+                const response = await api.patch(`/orders/${orderId}`, { orderData });
+                console.log('Успешно обновлен заказ:', response.data);
+                navigate('/cp/company');                
+            }else{
+                const response = await api.put(`/orders/${companyId}`, { orderData });
+                console.log('Успешно добавлен заказ:', response.data);
+                navigate('/cp/company');     
+            }
         } catch (error) {
             console.error('Ошибка:', error.response?.data || error.message);            
             setErrorMessage('Не удалось сохранить')
