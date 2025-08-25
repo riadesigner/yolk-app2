@@ -69,6 +69,7 @@ const router = createBrowserRouter([
 
       { path: 'orders', element: <OrdersPage /> }, // 
       { path: 'orders/:id', element: <OrderPage /> }, //       
+      { path: 'orders/search/:userInput', element: <OrdersPage /> }, //       
 
       // private pages
       { path: 'cp/designer', element: <DesignerAdminPage /> }, // /личный кабинет менеджера

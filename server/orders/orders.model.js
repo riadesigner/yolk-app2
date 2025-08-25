@@ -6,9 +6,9 @@ const ordersSchema = new Schema({
     tags: { type: [String] },
     categories: { type: [String] },
     files: { type: [String] },
-    status: { type:String },
-    companyId: { type:String },
-    designerId: { type:String },
+    status: { type:String },    
+    company: { type: Schema.Types.ObjectId, ref: 'Company' },
+    contractor: { type: Schema.Types.ObjectId, ref: 'Users' },
     createdAt: { type:Date },
     updatedAt: { type:Date },
 }, {

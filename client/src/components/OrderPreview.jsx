@@ -2,20 +2,22 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 
 import styles from '../components/OrderPreview.module.css'
 
-export default function OrderPreview({title, price, company}){
+export default function OrderPreview({order}){
+    const companyId = order.company.id || null;
+    const companyName = order.company.name || 'не указано';
     return (
         <div className={styles.order}>
             <Link to="/orders/123">
-                <h2 className="subtitle is-size-6">{title}</h2>
+                <h2 className="subtitle is-size-6">{order.title || ''}</h2>
                 <p>
-                    {price}
+                    {order.price || '1000'}
                     &nbsp;<i className="fa-solid fa-ruble-sign is-size-6 is-primary" style={{opacity:.6}}></i>
                 </p>
             </Link>
             <hr />
             <div className={styles.company}>
                 <span>
-                    <a href="/companies/123">{company}</a>
+                    <a href={`/companies/${companyId}`}>{companyName}</a>
                 </span>                
                 <div className="level mt-4">
                     <div className="level-item ">

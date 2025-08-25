@@ -1,4 +1,4 @@
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation, useParams } from 'react-router-dom';
 
 import styles from './OrdersPage.module.css'
 import OrderPreview from '../components/OrderPreview.jsx'
@@ -6,14 +6,26 @@ import OrdersFilter from '../components/OrdersFilter.jsx'
 import Pagination from '../components/Pagination.jsx'
 import Breadcrumb from '../components/Breadcrumb.jsx'
 
+import useFetchOrders from './hooks/useFetchOrders.js'
+
+
 export default function PortfolioPage(){
+   
+    const params = useParams();
+    const {userInput} = params;
     
     const links = [
         {link:'/', title:'Главная'},
-        {link:'/orders', title:'Все заказы', isActive:true},        
+        {link:'/orders', title:'Все заказы',},        
+        {link:'', title:userInput, isActive:true},        
     ];
 
-    const orders = [
+    const {
+        orders,
+    } = useFetchOrders({ userInput });
+    
+
+    const test_orders = [
         {          
           title: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima nulla inventore quia aut modi laborum tenetur nihil, rerum recusandae ',
           id:'1',
@@ -65,6 +77,8 @@ export default function PortfolioPage(){
         }               
     ];
     
+    
+
     return(
         <>
         <section className="container desktop-only is-max-desktop">
@@ -83,9 +97,12 @@ export default function PortfolioPage(){
                         <div  className="block">
                             <div className = {styles.orders} >
                             {
-                                orders.map((ord, i)=>{
+                                orders && orders.map((order)=>{
+                                    console.log('order', order)
                                     return(
-                                        <OrderPreview orderId={ord.id} title={ord.title} price={ord.price} company={ord.company}/>
+                                        <OrderPreview 
+                                            key={order.id} 
+                                            order={order} />
                                     )
                                 })
                             }

@@ -1,7 +1,7 @@
 
 const OrdersModel = require('./orders.model');
 
-exports.create = function (companyId, orderCreateDto = {}) {  
+exports.create = function (orderCreateDto = {}) {  
     return new Promise(async (res,rej)=>{ 
       try{
         res(await OrdersModel.create(orderCreateDto));
@@ -11,6 +11,21 @@ exports.create = function (companyId, orderCreateDto = {}) {
       }        
     })    
 }  
+
+exports.findAll = function () {  
+    return new Promise(async (res,rej)=>{       
+      try{ 
+          const orders = await OrdersModel
+            .find({}).populate('company')
+            .sort({ name: 1 }) // сортировка по имени
+            .limit(10)
+          res(orders);
+      }catch(e){
+        console.log(`orders not found, err:${e}`);
+        res(null);
+      }        
+    })    
+} 
 
 exports.find = function (opt = {}) {  
     return new Promise(async (res,rej)=>{ 

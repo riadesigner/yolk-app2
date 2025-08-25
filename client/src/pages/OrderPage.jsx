@@ -64,7 +64,7 @@ export default function OrderPage(){
             } catch (err) {
                 console.error('Ошибка загрузки профиля', err);
                 // navigate('/login');
-                navigate('/');
+                // navigate('/');
             }
         };
         

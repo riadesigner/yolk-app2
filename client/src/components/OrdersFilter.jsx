@@ -1,8 +1,26 @@
+import { useParams } from 'react-router-dom'
 import styles from './OrdersFilter.module.css'
 
 export default function OrdersFilter(){
+
+    const params = useParams();
+    const {userInput} = params;
+
     return(
         <>
+
+        {
+            userInput && (
+                <>
+                <div className="block mt-0">
+                    <h2 className="subtitle is-size-6 mb-4">Найдено</h2>
+                    <p>По запросу: {userInput}</p>                    
+                </div>                
+                <hr />
+                </>
+            )
+        }
+
         <div className="block mt-0">
             <h2 className="subtitle is-size-6 mb-4">Сортировка</h2>
             <button className="button is-fluid mb-4 is-primary">

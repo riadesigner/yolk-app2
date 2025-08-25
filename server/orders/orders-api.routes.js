@@ -15,6 +15,15 @@ const router = express.Router();
 // PATCH /orders/:id – частично обновить заказ
 // DELETE /orders/:id – удалить заказ
 
+// Более специфичные роуты - выше
+
+router.get('/orders/by-company/:companyId',
+    asyncHandler(async (req, res) => { 
+        const { companyId } = req.params;
+        const orders = await OrdersService.find({company:companyId});
+        sendSuccess(res, { orders:orders });
+    })
+);
 router.get('/orders/:id',    
     asyncHandler(async (req, res) => { 
         const { id } = req.params;
@@ -25,40 +34,16 @@ router.get('/orders/:id',
         sendSuccess(res, { order:order.toJSON() });        
     })
 );
-
-router.get('/orders/by-company/:companyId',
-    asyncHandler(async (req, res) => { 
-        const { companyId } = req.params;
-        const orders = await OrdersService.find({companyId:companyId});
-        sendSuccess(res, { orders:orders });
-    })
-);
-
-
-router.put('/orders/:companyId',
-    passport.authenticate('jwt', { session: false }),
-    asyncHandler(async (req, res) => {        
-        const { companyId } = req.params;
-        const { orderData } = req.body;
-
-        const user = await UsersService.findByEmail(req.user.email);
-        if (!user) {  return sendError(res, 'Unknown user', 404); }        
-        if (user.role !=='company') {  return sendError(res, 'User not autorized for this action', 403);}                
-
-        const company = await CompanyService.findById(companyId);
-        if(!company){ return sendError(res, `Company with id ${companyId} not found`, 404); }
-
-        const orderCreateDto = {
-            companyId: companyId,
-            ...orderData,
+router.get('/orders',    
+    asyncHandler(async (req, res) => {         
+        const { mode } = req.params;        
+        const orders = await OrdersService.findAll();
+        console.log('orders', orders);
+        if (!orders) {
+            return sendError(res, 'Order not found', 404);
         }
-
-        const orderCreated = await OrdersService.create(companyId, orderCreateDto);
-        
-        sendSuccess(res, { 
-            order: orderCreated,
-            message: 'Заказ создан', 
-        });
+        const retOrders = orders.map(order=>order.toJSON());
+        sendSuccess(res, { orders:retOrders });        
     })
 );
 
@@ -87,5 +72,35 @@ router.patch('/orders/:orderId',
         });
     })
 );
+
+
+router.put('/orders/:companyId',
+    passport.authenticate('jwt', { session: false }),
+    asyncHandler(async (req, res) => {        
+        const { companyId } = req.params;
+        const { orderData } = req.body;
+
+        const user = await UsersService.findByEmail(req.user.email);
+        if (!user) {  return sendError(res, 'Unknown user', 404); }        
+        if (user.role !=='company') {  return sendError(res, 'User not autorized for this action', 403);}                
+
+        const company = await CompanyService.findById(companyId);
+        if(!company){ return sendError(res, `Company with id ${companyId} not found`, 404); }
+
+        const orderCreateDto = {
+            company: companyId,
+            ...orderData,
+        }
+
+        const orderCreated = await OrdersService.create(orderCreateDto);
+        
+        sendSuccess(res, { 
+            order: orderCreated,
+            message: 'Заказ создан', 
+        });
+    })
+);
+
+
 
 module.exports = router;
