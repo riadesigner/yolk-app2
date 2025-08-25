@@ -9,6 +9,8 @@ const ordersSchema = new Schema({
     status: { type:String },    
     company: { type: Schema.Types.ObjectId, ref: 'Company' },
     contractor: { type: Schema.Types.ObjectId, ref: 'Users' },
+    price: { type: Number },
+    dateTo: { type: Date },
     createdAt: { type:Date },
     updatedAt: { type:Date },
 }, {

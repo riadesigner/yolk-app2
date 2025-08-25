@@ -47,7 +47,7 @@ module.exports = (passport) => {
       }
 
       const payload = { id: usr.id, email: usr.email, role:usr.role };      
-      const token = JWTUtils.generateToken(payload, { expiresIn: '15m' });
+      const token = JWTUtils.generateToken(payload, { expiresIn: '2h' });
 
       console.log('Yandex auth success for:', payload );
       return done(null, { ...usr, token, accessToken });

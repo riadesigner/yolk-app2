@@ -8,20 +8,14 @@ export default function useFetchOrders({userInput=null}) {
 
     useEffect(() => {
     
-        const fetchOrders = async (userInput) => {
-        
-            console.log('userInput', userInput);
-
+        const fetchOrders = async (userInput) => {        
             try {
             const response = await api.get(`/orders`);
             if (response.data.success) {            
-                const orders = response.data.orders;                
-                console.log('orders', orders)
+                const orders = response.data.orders;                                
                 if(orders){
-                    setOrders(orders);
-                
-                }
-           
+                    setOrders(orders);                
+                }           
             }
             } catch (err) {
                 console.error("Ошибка загрузки заказов", err);                

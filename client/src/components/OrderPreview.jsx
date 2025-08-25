@@ -3,14 +3,17 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import styles from '../components/OrderPreview.module.css'
 
 export default function OrderPreview({order}){
+
     const companyId = order.company.id || null;
     const companyName = order.company.name || 'не указано';
+    const dateTo = order.dateTo ? order.dateTo.split('T')[0] : '';
+
     return (
         <div className={styles.order}>
             <Link to="/orders/123">
                 <h2 className="subtitle is-size-6">{order.title || ''}</h2>
                 <p>
-                    {order.price || '1000'}
+                    {order.price || 0 }
                     &nbsp;<i className="fa-solid fa-ruble-sign is-size-6 is-primary" style={{opacity:.6}}></i>
                 </p>
             </Link>
@@ -27,7 +30,7 @@ export default function OrderPreview({order}){
                     </div>
                     <div className="level-item is-right is-size-7">
                         <span style={{opacity:.4}}><i className="fa-regular fa-calendar-days"></i></span>
-                        <span>12-08-2025</span>
+                        <span>{dateTo}</span>
                     </div>
                 </div>
             </div>

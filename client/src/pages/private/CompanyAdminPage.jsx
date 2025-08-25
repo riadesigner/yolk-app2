@@ -87,16 +87,16 @@ export default function CompanyAdminPage(){
                 <article>
                     <div className="columns">
                         <div className="column is-6">
-                            <h2 className="is-size-5-mobile">Информация</h2> 
+                            
                             <div className="block">
+                            <h2 className="is-size-5-mobile">Информация</h2> 
                             <Link to="/cp/company/info">
-                            <button className="button is-fluid is-medium is-regular-mobile is-link ">
+                            <button className="button is-fluid is-medium is-regular-mobile is-link mb-3">
                                 <span>О компании</span>
                                 <span className="icon"><i className="fa fa-angle-right"></i></span>
                             </button>                                                            
                             </Link>
-                            </div> 
-                            <div className="block mb-6 mb-5-mobile">
+                                                        
                             <Link to="/cp/company/card">
                             <button className="button  is-fluid is-medium is-regular-mobile is-link ">
                                 <span>Реквизиты</span>    
@@ -105,8 +105,8 @@ export default function CompanyAdminPage(){
                             </Link>
                             </div>
 
+                            <div className="block">                            
                             <h2 className="is-size-5-mobile">Заказы</h2> 
-
                             {
                                 orders && orders.length > 0 && orders.map((order)=>{
                                     return  (
@@ -118,10 +118,11 @@ export default function CompanyAdminPage(){
                                     )
                                 })
                             }
+                            </div>
 
                             {
                                 companyId && (
-                                <div className="block mb-6 mb-5-mobile">
+                                <div className="block">
                                     <a href="#" onClick={(e)=>hdlNewOrder(e)}>
                                     <button className="button is-fluid is-medium is-regular-mobile is-white">
                                         <span>Создать новый</span>
@@ -132,10 +133,11 @@ export default function CompanyAdminPage(){
                                 )
                             }
 
+                            <div className="block">
                             <h2 className="is-size-5-mobile">Статистика</h2> 
-
                             <p className="subtitle is-size-7 m-0">Дата регистрации</p>
                             <p className="is-size-7">{regDate}</p>
+                            </div>
 
                         </div>
                         <div className="column is-6">

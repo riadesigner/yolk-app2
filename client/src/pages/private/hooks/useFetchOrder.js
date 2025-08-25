@@ -12,10 +12,12 @@ export default function useFetchOrder({orderId, companyId, setErrorMessage}) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [tags, setTags] = useState("");
-    const {files, setFiles, addFile, removeFile, handleFileChange } = useFiles([]);
+    const [price, setPrice] = useState(1000);
+    const [dateTo, setDateTo] = useState('');
     
+    const {files, setFiles, addFile, removeFile, handleFileChange } = useFiles([]);
 
-    const hdlSaveUser = async (e)=>{                   
+    const hdlSaveOrder = async (e)=>{                   
         e.preventDefault();
         setErrorMessage(null);                               
 
@@ -24,15 +26,17 @@ export default function useFetchOrder({orderId, companyId, setErrorMessage}) {
 
         const arrTags = tags.split(',');        
         const arrTrimmed = arrTags.map(el => el.trim()).filter(el => el !== '');
+        
+        const orderData = { 
+            title, 
+            description, 
+            categories:catsSelected, 
+            tags: arrTrimmed,
+            price,
+            dateTo,
+         } 
 
-        console.log('catsSelected', catsSelected);
-        const orderData = { title, description, categories:catsSelected, tags: arrTrimmed } 
-
-        // Проверка что хотя бы одно поле заполнено
-        const hasContent = Object.values(orderData).some(
-            value => value && value.trim() !== ''
-        );        
-        if (!hasContent) {
+        if (!title.trim() || !description.trim()) {
             setErrorMessage('Заполните обязательные поля перед сохранением')
             return;
         }        
@@ -62,23 +66,19 @@ export default function useFetchOrder({orderId, companyId, setErrorMessage}) {
             const response = await api.get(`/orders/${orderId}`);
             if (response.data.success) {            
                 const order = response.data.order;                
-                console.log('order', order)
+
                 if(order){
                     setOrder(order);
                     setTitle(order.title || '');
                     setDescription(order.description || '');
+                    setDateTo(order.dateTo ? order.dateTo.split('T')[0] : '');
+                    setPrice(order.price || 1000);
                     const arrTags = order.tags;
-                    setTags(arrTags ? arrTags.join(', ') : '');
-                    
+                    setTags(arrTags ? arrTags.join(', ') : '');                    
                     const updatedCats = [...allCats];
-                    console.log('allCats', allCats)
-                    console.log('updatedCats', updatedCats)
-                    // выделяем выбранные категории
-                    console.log('order.categories', order.categories)
-                    console.log('order.categories.length > 0', order.categories.length > 0)
+                    // выделяем выбранные категории                    
                     if(order.categories.length > 0){
-                        updatedCats.map((cat)=>{ if(order.categories.includes(cat.id)){
-                            console.log('cat', cat)
+                        updatedCats.map((cat)=>{ if(order.categories.includes(cat.id)){                            
                             cat.selected = true;
                         } })
                     }
@@ -127,8 +127,12 @@ export default function useFetchOrder({orderId, companyId, setErrorMessage}) {
         setDescription,
         tags,
         setTags,
+        price,
+        setPrice,
+        dateTo,
+        setDateTo,        
         files,
         setFiles,        
-        hdlSaveUser,        
+        hdlSaveOrder,        
     };
 }

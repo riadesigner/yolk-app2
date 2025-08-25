@@ -25,23 +25,31 @@ export default function OrderEditPage(){
         description,
         setDescription,
         tags,
-        setTags,        
+        setTags, 
+        price,
+        setPrice,
+        dateTo,
+        setDateTo,               
         files,
         setFiles,        
-        hdlSaveUser,        
+        hdlSaveOrder,        
     } = useFetchOrder({ orderId:null, companyId, errorMessage, setErrorMessage});
 
 
     const options = {
-                    title, 
-                    setTitle,
-                    description,
-                    setDescription,
-                    cats,
-                    setCats,
-                    tags,
-                    setTags,
-                };
+        title, 
+        setTitle,
+        description,
+        setDescription,
+        cats,
+        setCats,
+        tags,
+        setTags,
+        price,
+        setPrice,
+        dateTo,
+        setDateTo,                    
+    };
 
     return(
         <>
@@ -75,7 +83,7 @@ export default function OrderEditPage(){
             
             <section className="container">
                 <div className="section has-text-right"> 
-                    <button className="button is-primary is-medium is-regular-mobile" onClick={(e)=>hdlSaveUser(e)}>Сохранить</button>
+                    <button className="button is-primary is-medium is-regular-mobile" onClick={(e)=>hdlSaveOrder(e)}>Сохранить</button>
                 </div>
             </section>
 

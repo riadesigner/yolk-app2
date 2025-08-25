@@ -14,18 +14,18 @@ export default function OrderEditPage(){
             {link:'#', title:'Редактирование заказа', isActive:true},
         ];
 
-    const hdlCatClick = (e, catId)=>{
-        e.preventDefault();
-        const newCats = [...cats];
-        newCats.map((cat)=>{
-            if(cat.id===catId){
-                return cat.selected ? cat.selected = false :  cat.selected = true;
-            }else{
-                return cat;
-            }            
-        })        
-        setCats(newCats);
-    }
+    // const hdlCatClick = (e, catId)=>{
+    //     e.preventDefault();
+    //     const newCats = [...cats];
+    //     newCats.map((cat)=>{
+    //         if(cat.id===catId){
+    //             return cat.selected ? cat.selected = false :  cat.selected = true;
+    //         }else{
+    //             return cat;
+    //         }            
+    //     })        
+    //     setCats(newCats);
+    // }
     
     const { companyId, orderId } = useParams();
     const [errorMessage, setErrorMessage] = useState(null);
@@ -40,21 +40,29 @@ export default function OrderEditPage(){
         setDescription,
         tags,
         setTags,
+        price,
+        setPrice,
+        dateTo,
+        setDateTo,        
         files,
         setFiles,        
-        hdlSaveUser,        
+        hdlSaveOrder,        
     } = useFetchOrder({ orderId, companyId, errorMessage, setErrorMessage});
 
     const options = {
-                    title, 
-                    setTitle,
-                    description,
-                    setDescription,
-                    cats,
-                    setCats,
-                    tags,
-                    setTags,
-                };
+        title,
+        setTitle,
+        description,
+        setDescription,
+        cats,
+        setCats,
+        tags,
+        setTags,        
+        price,
+        setPrice,
+        dateTo,
+        setDateTo,
+    };
 
     return(
         <>
@@ -88,7 +96,7 @@ export default function OrderEditPage(){
             
             <section className="container">
                 <div className="section has-text-right"> 
-                    <button className="button is-primary is-medium is-regular-mobile" onClick={(e)=>hdlSaveUser(e)}>Сохранить</button>
+                    <button className="button is-primary is-medium is-regular-mobile" onClick={(e)=>hdlSaveOrder(e)}>Сохранить</button>
                 </div>
             </section>
 
