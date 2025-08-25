@@ -5,9 +5,9 @@ export default function CompanyGallery({images}){
     return(
         <div className={styles.gallery}>
             {
-                images.map((img)=>{
+                images.map((img, index)=>{
                     return(
-                        <div key={img.key} style={{
+                        <div key={img.key || index} style={{
                             background: `url(${img.url}) no-repeat center / cover`
                         }}></div>
                     )

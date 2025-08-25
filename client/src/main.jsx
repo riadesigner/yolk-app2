@@ -60,7 +60,7 @@ const router = createBrowserRouter([
       { path: 'designers', element: <DesignersPage /> }, // 
       { path: 'designers/:id/portfolio', element: <PortfolioPage /> }, //       
       { path: 'designers/:id/info', element: <DesignerInfoPublicPage /> }, // 
-      { path: 'companies/:id', element: <CompanyPublicPage /> }, // 
+      { path: 'companies/:companyId', element: <CompanyPublicPage /> }, // 
       { path: 'companies', element: <CompaniesPage /> }, // 
       { path: 'chats/123', element: <ChatPage /> }, //       
       { path: 'role-selection', element: <RoleSelectionPage /> }, //       
