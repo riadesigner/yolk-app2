@@ -9,7 +9,7 @@ export default function OrderPage(){
     const links = [
         {link:'/', title:'Главная'},
         {link:'/orders', title:'Все заказы'},
-        {link:'/orders/123', title:'Заказ 123', isActive:true},        
+        {link:'', title:'Заказ', isActive:true},        
     ];
 
     const { id } = useParams();
@@ -20,7 +20,6 @@ export default function OrderPage(){
         ]
 
     const [order, setOrder]= useState(null);
-    const [companyName, setCompanyName] = useState('');
     const [files, setfiles] = useState(filesInit)
 
     const order1 = {          
@@ -53,12 +52,8 @@ export default function OrderPage(){
                 if(response.data.success){    
                     console.log('response.data', response.data)
                     const foundOrder =  response.data.order;
-                    setOrder(foundOrder);        
-                    const resCompany = await api.get(`/company/${foundOrder.companyId}`);
-                    if(resCompany.data.success){
-                        console.log('resCompany = ', resCompany)
-                        setCompanyName(resCompany.data.company.name)
-                    }
+                    console.log('foundOrder.company', foundOrder.company)
+                    setOrder(foundOrder);
                 }
                 
             } catch (err) {
@@ -95,7 +90,7 @@ export default function OrderPage(){
                             {
                                 order && files && files.map((i, index)=>{
                                     return(
-                                        <div>
+                                        <div key={index}>
                                             <a href={i.link}><button className="button mb-2 mr-2">{i.title}</button></a>
                                         </div>
                                     )
@@ -109,17 +104,17 @@ export default function OrderPage(){
                                 <h3>Детали заказа</h3>
                                 <div className="block">
                                     <div className="mb-1">Стоимость</div>
-                                    <div>{order && order.price}</div>
+                                    <div className="is-primary is-size-5">{order && order.price} руб.</div>
                                 </div>
                                 <div className="block">
                                     <div className="mb-1">Выполнить до</div>
-                                    <div>{order && order.dateto}</div>
+                                    <div>{order && order.dateTo && order.dateTo.split('T')[0]}</div>
                                 </div>                                
                                 <div className="block">
                                     <div className="mb-1">Заказчик</div>
-                                    {order && companyName && (                                        
-                                        <Link to={'/companies/' + order.companyId}>{companyName}</Link>
-                                        )}                                    
+                                    {order && order.company && (                                        
+                                        <Link to={'/companies/' + order.company.id}>{order.company.name}</Link>
+                                        )}
                                 </div>
                                 <div className="block mt-6 mt-5-mobile">
                                     <button className="button is-link">Откликнуться</button>

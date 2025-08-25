@@ -41,7 +41,7 @@ exports.find = function (opt = {}) {
 exports.findById = function (id) {  
     return new Promise(async (res,rej)=>{ 
       try{
-        res(await OrdersModel.findById(id));
+        res(await OrdersModel.findById(id).populate('company'));
       }catch(e){
         console.log(`not found order ${id}, err:${e}`)
         res(null);

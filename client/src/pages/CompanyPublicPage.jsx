@@ -10,7 +10,7 @@ export default function CompanyPublicPage(){
 
     const company = {
         id:'123123',
-        title:'divan.ru',
+        name:'divan.ru',
         city:'г. Москва',
         specialization:'Мебельный магазин',
         description:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sunt nemo illo atque perspiciatis laudantium, deleniti ratione ex corrupti architecto suscipit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis accusamus earum suscipit corrupti reprehenderit impedit possimus velit dolorem at tempora fugit necessitatibus aliquam modi a, quidem soluta tempore aut, optio cum! Expedita alias exercitationem, molestiae ex debitis molestias architecto obcaecati in, aspernatur nostrum non incidunt dolores laboriosam! Atque, aperiam veritatis.'

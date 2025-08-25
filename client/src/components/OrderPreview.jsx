@@ -10,7 +10,7 @@ export default function OrderPreview({order}){
 
     return (
         <div className={styles.order}>
-            <Link to="/orders/123">
+            <Link to={`/orders/${order.id}`}>
                 <h2 className="subtitle is-size-6">{order.title || ''}</h2>
                 <p>
                     {order.price || 0 }
