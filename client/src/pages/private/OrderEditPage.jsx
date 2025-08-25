@@ -37,6 +37,8 @@ export default function OrderEditPage(){
         setTitle,
         description,
         setDescription,
+        tags,
+        setTags,
         files,
         setFiles,        
         hdlSaveUser,        
@@ -99,7 +101,12 @@ export default function OrderEditPage(){
                     </div>     
 
                     <h3>Теги заказа:</h3>                    
-                    <Field sublabel="Добавьте через запятую:"  placeHolder="реклама, верстка, полиграфия"/>
+                    <Field 
+                        sublabel="Добавьте через запятую:"  
+                        placeHolder="реклама, верстка, полиграфия"
+                        value={tags}
+                        onChange={(val) => setTags(val)}                        
+                        />
                     
                     <br />
                     <p><small>Поля со звездочкой (*) обязательные</small></p>

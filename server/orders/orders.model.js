@@ -3,8 +3,9 @@ const { Schema, model } = require('mongoose');
 const ordersSchema = new Schema({
     title: { type:String },  
     description: { type:String },
-    categories: { type:Array },
-    files: { type:Array },
+    tags: { type: [String] },
+    categories: { type: [String] },
+    files: { type: [String] },
     status: { type:String },
     companyId: { type:String },
     designerId: { type:String },

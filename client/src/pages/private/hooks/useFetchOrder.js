@@ -11,6 +11,7 @@ export default function useFetchOrder({orderId, companyId, setErrorMessage}) {
     const [order, setOrder] = useState(null);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [tags, setTags] = useState("");
     const {files, setFiles, addFile, removeFile, handleFileChange } = useFiles([]);
     
 
@@ -21,8 +22,11 @@ export default function useFetchOrder({orderId, companyId, setErrorMessage}) {
         const catsSelected = [];
         cats.map((cat)=>{cat.selected && catsSelected.push(cat.id)});
 
+        const arrTags = tags.split(',');        
+        const arrTrimmed = arrTags.map(el => el.trim()).filter(el => el !== '');
+
         console.log('catsSelected', catsSelected);
-        const orderData = { title, description, categories:catsSelected } 
+        const orderData = { title, description, categories:catsSelected, tags: arrTrimmed } 
 
         // Проверка что хотя бы одно поле заполнено
         const hasContent = Object.values(orderData).some(
@@ -63,6 +67,8 @@ export default function useFetchOrder({orderId, companyId, setErrorMessage}) {
                     setOrder(order);
                     setTitle(order.title || '');
                     setDescription(order.description || '');
+                    const arrTags = order.tags;
+                    setTags(arrTags ? arrTags.join(', ') : '');
                     
                     const updatedCats = [...allCats];
                     console.log('allCats', allCats)
@@ -119,6 +125,8 @@ export default function useFetchOrder({orderId, companyId, setErrorMessage}) {
         setTitle,
         description,
         setDescription,
+        tags,
+        setTags,
         files,
         setFiles,        
         hdlSaveUser,        
