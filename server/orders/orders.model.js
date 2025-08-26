@@ -5,7 +5,7 @@ const ordersSchema = new Schema({
     description: { type:String },
     tags: { type: [String] },
     categories: { type: [String] },
-    files: { type: [String] },
+    files: {type: Array},
     status: { type:String },    
     company: { type: Schema.Types.ObjectId, ref: 'Company' },
     contractor: { type: Schema.Types.ObjectId, ref: 'Users' },
@@ -25,5 +25,5 @@ const ordersSchema = new Schema({
   }
 });
 
-module.exports = model('Orders', ordersSchema);
 
+module.exports = model('Orders', ordersSchema);

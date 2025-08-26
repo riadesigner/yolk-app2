@@ -51,9 +51,7 @@ exports.findById = function (id) {
 
 exports.update = function (id, orderUpdateDto = {}) {  
     return new Promise(async (res,rej)=>{             
-
-      try{        
-        console.log(`обновляем заказ ${id}, данные:`, orderUpdateDto);
+      try{                
         const updatedOrder = await OrdersModel.findByIdAndUpdate(
             id,
             orderUpdateDto,
@@ -67,3 +65,23 @@ exports.update = function (id, orderUpdateDto = {}) {
     })    
 }  
 
+
+exports.deleteFromFiles = function(id, fileKey){
+    return new Promise(async (res,rej)=>{ 
+      try{ 
+        const order = await OrdersModel.findById(id);
+        const newFiles = (order.files || []).filter((i)=>i.key!==fileKey)
+        
+        const updatedOrder = await OrdersModel.findByIdAndUpdate(
+            id,
+            {files : newFiles},            
+            { new: true }
+        );
+        res(updatedOrder);
+
+      }catch(e){
+        console.log(`can not update order with id ${id}, err:${e}`);
+        res(null);
+      }        
+    })  
+}

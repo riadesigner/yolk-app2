@@ -3,9 +3,11 @@ import { Link, NavLink, useLocation, useParams } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumb'
 import Field from '../../components/Field'
 import OrderEditForm from '../../components/OrderEditForm'
+import FileUploader from '../../components/FileUploader'
 import ErrorMessage from '../../components/ErrorMessage';
 import useFetchOrder from './hooks/useFetchOrder'
 import { useState } from 'react';
+import styles from './OrderEditPage.module.css'
 
 export default function OrderEditPage(){
         const links = [
@@ -13,19 +15,6 @@ export default function OrderEditPage(){
             {link:'/cp/company', title:'Панель управления'},            
             {link:'#', title:'Редактирование заказа', isActive:true},
         ];
-
-    // const hdlCatClick = (e, catId)=>{
-    //     e.preventDefault();
-    //     const newCats = [...cats];
-    //     newCats.map((cat)=>{
-    //         if(cat.id===catId){
-    //             return cat.selected ? cat.selected = false :  cat.selected = true;
-    //         }else{
-    //             return cat;
-    //         }            
-    //     })        
-    //     setCats(newCats);
-    // }
     
     const { companyId, orderId } = useParams();
     const [errorMessage, setErrorMessage] = useState(null);
@@ -85,11 +74,32 @@ export default function OrderEditPage(){
 
             <section className="container">
                 <div className="section "> 
-                    <div className="box">
-                    <ul>
-                        <li>Название файла 1</li>
-                    </ul>                        
-                    <button className="button is-small is-link">Добавить файл</button>
+                    <div className={styles.files}>
+                        {/*-- order files --*/}
+                        {
+                                order && 
+                                files.length > 0 && 
+                                files.map((file, index) => (                                
+                                    <div key={file.key || index} className="box" style={{ display:'flex', alignItems:'center', justifyContent:'center',}}>
+                                        <FileUploader 
+                                            orderId={order.id}
+                                            setFiles={setFiles}
+                                            file={file}
+                                            />
+                                    </div>
+                                    ))                        
+                            } 
+
+                            {
+                                order && (
+                                        <div key={files.length} className="box" style={{ display:'flex', alignItems:'center', justifyContent:'center',}}>                                
+                                        <FileUploader 
+                                            orderId={order.id}
+                                            setFiles={setFiles}
+                                            />
+                                    </div>                        
+                                )                            
+                            }                            
                     </div>
                 </div>
             </section> 

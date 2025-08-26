@@ -82,6 +82,7 @@ export default function useFetchOrder({orderId, companyId, setErrorMessage}) {
                             cat.selected = true;
                         } })
                     }
+                    setFiles(order.files || [])
 
                 }
            

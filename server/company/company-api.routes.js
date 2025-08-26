@@ -135,7 +135,7 @@ router.post('/company/upload-image',
 
             const params = {
                 Bucket: process.env.YANDEX_BUCKET_NAME,
-                Key: `${Date.now()}_optimized_${req.file.originalname}`,
+                Key: `images/${Date.now()}_optimized_${req.file.originalname}`,
                 Body: optimizedImage,
                 ContentType: req.file.mimetype,
                 ACL: 'public-read',
