@@ -5,6 +5,7 @@ import OrderEditForm from '../../components/OrderEditForm'
 import ErrorMessage from '../../components/ErrorMessage';
 import useFetchOrder from './hooks/useFetchOrder'
 import { useState } from 'react';
+import styles from './OrderEditPage.module.css'
 
 export default function OrderEditPage(){
     const links = [
@@ -72,11 +73,11 @@ export default function OrderEditPage(){
 
             <section className="container">
                 <div className="section "> 
-                    <div className="box">
-                    <ul>
-                        <li>Название файла 1</li>
-                    </ul>                        
-                    <button className="button is-small is-link">Добавить файл</button>
+                    <div className="block">
+                        <div className="box">
+                            <h3>Дополнительные файлы:</h3> 
+                            <p>После сохранения заказа, вы сможете добавить к нему дополнительные файлы, при необходимости.</p>
+                        </div>
                     </div>
                 </div>
             </section> 

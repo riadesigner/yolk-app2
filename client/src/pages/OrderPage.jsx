@@ -22,27 +22,6 @@ export default function OrderPage(){
     const [order, setOrder]= useState(null);
     const [files, setfiles] = useState(filesInit)
 
-    const order1 = {          
-        id:'1',
-        title: 'Разработка фирменного стиля для Название компании',
-        description:'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque autem accusamus dolorum, quidem aspernatur quod, facilis quasi ex esse, suscipit nobis illo dolore molestias. Nobis, doloribus. Ipsum non, obcaecati repellendus deserunt fugit fugiat quis dicta aperiam id molestias totam debitis, quaerat, magni ex! Atque molestias nam amet sit vel non.',
-        requirements:[
-            'Atque autem accusamus dolorum, quidem aspernatur quod',
-            'facilis quasi ex esse, suscipit nobis illo dolore molestias. ',
-            'Nobis, doloribus. Ipsum non, obcaecati repellendus deserunt fugit',
-        ],          
-        price: 10000,
-        company:'Диван.ру',
-        companyId:'123',
-        dateto:'21-09-2025',
-        categories:[],
-        tags:'Веб-сайт, интерфейс, UI',
-        files:[
-            {title:'Название файла 1',link:''},
-            {title:'Название файла 2',link:''}
-        ]
-        };
-
     useEffect(() => {
 
         const fetchOrder = async () => {         
@@ -50,16 +29,16 @@ export default function OrderPage(){
                 const response = await api.get(`/orders/${id}`);
 
                 if(response.data.success){    
-                    console.log('response.data', response.data)
-                    const foundOrder =  response.data.order;
-                    console.log('foundOrder.company', foundOrder.company)
-                    setOrder(foundOrder);
+                    
+                    const foundOrder =  response.data.order;                    
+                    if(foundOrder){
+                        setOrder(foundOrder);
+                        setfiles(foundOrder.files)
+                    }
                 }
                 
             } catch (err) {
                 console.error('Ошибка загрузки профиля', err);
-                // navigate('/login');
-                // navigate('/');
             }
         };
         
@@ -84,14 +63,15 @@ export default function OrderPage(){
                     <div>
                         <h2>{ order ? (<>{order.title}</>):(<>–</>) }</h2>
                         <p>{ order ? (<>{order.description}</>):(<>–</>) }</p>                                                
-
+                        
+                        <br />
                         <h3 className="title mt-5 mb-5">Файлы:</h3>     
                         <div >
                             {
-                                order && files && files.map((i, index)=>{
+                                order && files && files.map((file, index)=>{
                                     return(
-                                        <div key={index}>
-                                            <a href={i.link}><button className="button mb-2 mr-2">{i.title}</button></a>
+                                        <div key={file.key || index}>
+                                            <a target="_blank" href={file.url}><button className="button mb-2 mr-2">{file.originalName}</button></a>
                                         </div>
                                     )
                                 })

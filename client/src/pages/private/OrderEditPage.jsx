@@ -75,7 +75,6 @@ export default function OrderEditPage(){
             <section className="container">
                 <div className="section "> 
                     <div className={styles.files}>
-                        {/*-- order files --*/}
                         {
                                 order && 
                                 files.length > 0 && 
