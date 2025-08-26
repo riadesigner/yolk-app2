@@ -4,7 +4,7 @@ import styles from '../../pages/private/CompanyInfoEditPage.module.css'
 import Field from '../../components/Field'
 import Breadcrumb from '../../components/Breadcrumb';
 import ErrorMessage from '../../components/ErrorMessage';
-import useFetchUserCompany from './hooks/useFetchCompany';
+import useFetchCreatingCompany from './hooks/useFetchCreatingCompany';
 import ImageUploader from '../../components/ImageUploader';
 
 const logoImage = '/company-logo.jpg'; 
@@ -37,7 +37,7 @@ export default function CompanyInfoEditPage(){
         // removeImage,
         // handleGalleryChange,
         hdlSaveAll,     
-    } = useFetchUserCompany({errorMessage, setErrorMessage});        
+    } = useFetchCreatingCompany({errorMessage, setErrorMessage});        
     
  return(
     <>

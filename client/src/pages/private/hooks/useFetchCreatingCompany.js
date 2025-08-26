@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../../utils/api";
 import useGallery from './useGallery';
 
-export default function useFetchUserCompany({setErrorMessage}) {
+export default function useFetchCreatingCompany({setErrorMessage}) {
     const [user, setUser] = useState(null);
     const [companyId, setCompanyId] = useState(null);
     const [company, setCompany] = useState(null);
@@ -55,7 +55,7 @@ export default function useFetchUserCompany({setErrorMessage}) {
     }
 
     useEffect(() => {
-    const fetchUserCompany = async () => {
+    const fetchCompanyByUser = async () => {
         try {
         
             const response = await api.get("/user/full");
@@ -65,7 +65,7 @@ export default function useFetchUserCompany({setErrorMessage}) {
                 const user = response.data.user;                
                 setUser(user);
                 const userCompany = user.userCompany;                
-                console.log('---- userCompany ------', userCompany)            
+                
                 if(userCompany){
                     setCompany(userCompany);
                     setCompanyId(userCompany.id);
@@ -83,7 +83,7 @@ export default function useFetchUserCompany({setErrorMessage}) {
             navigate("/");
         }
     };
-    fetchUserCompany();
+    fetchCompanyByUser();
     }, []);
 
     return {

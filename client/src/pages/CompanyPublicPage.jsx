@@ -18,37 +18,12 @@ export default function CompanyPublicPage(){
         {link:'/', title:'Главная'},
         {link:'/companies', title:'Все компании'},
         {link:'#', title:'О компании', isActive:true},
-    ];    
-    const images = [
-        '/company-gallery/gallery-1.jpg',
-        '/company-gallery/gallery-2.jpg',
-        '/company-gallery/gallery-3.jpg',
-    ];
-
-    const orders = [
-        {          
-        id:'123123',
-        title: 'Разработка фирменного стиля для Название компании',
-        description:'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque autem accusamus dolorum, quidem aspernatur quod, facilis quasi ex esse, suscipit nobis illo dolore molestias. Nobis, doloribus. Ipsum non, obcaecati repellendus deserunt fugit fugiat quis dicta aperiam id molestias totam debitis, quaerat, magni ex! Atque molestias nam amet sit vel non.',
-        requirements:[
-            'Atque autem accusamus dolorum, quidem aspernatur quod',
-            'facilis quasi ex esse, suscipit nobis illo dolore molestias. ',
-            'Nobis, doloribus. Ipsum non, obcaecati repellendus deserunt fugit',
-        ],          
-        price: 10000,
-        company:'Диван.ру',
-        companyId:'12312',
-        dateto:'21-09-2025',
-        tags:'Веб-сайт, интерфейс, UI',
-        files:[
-            {title:'Название файла',link:''},
-            {title:'Название файла',link:''}
-        ]
-        }
     ];
 
     const {
         company,
+        gallery,
+        orders,
     } = useFetchCompany({companyId});
 
     return (
@@ -60,19 +35,26 @@ export default function CompanyPublicPage(){
         </section>
             <article>
             
-            {company && <CompanyAboutHeader company={company} privateMode="false"/>} 
+            {company && <CompanyAboutHeader company={company} orders={orders} privateMode="false"/>} 
             
             <section className="container">                
                 <div className="section">
                     <h2>Кто мы</h2>                    
                     <p>{company && company.description}</p>
                 </div>
-                <div className="section">
-                    <CompanyGallery images={images} />
+                <div className="section">                    
+                    <CompanyGallery gallery={gallery} />
                 </div>                                
             </section>
+            
+            <br />
 
-            <CompanyAboutOrders orders={orders} />
+            <section className="container">                
+                <div className="section">
+                    <CompanyAboutOrders orders={orders} />
+                </div> 
+            </section>           
+                
             <CompanyAboutKeepInTouch />
 
         </article>

@@ -2,7 +2,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 
 const logoImage = '/company-logo.jpg'; 
 
-export default function CompanyAboutHeader({company, privateMode}){    
+export default function CompanyAboutHeader({company, orders=[], privateMode}){    
 
     console.log('company ====', company)
 
@@ -43,7 +43,7 @@ export default function CompanyAboutHeader({company, privateMode}){
                         <p className="is-size-7 mb-2 is-primary"><strong>Статистика</strong></p>
                         <div className="is-size-7">
                             <span style={{marginRight:'10px'}} className="is-primary"><i className="fa-regular fa-face-smile"></i></span>
-                            <span> Размещенных заказов: 1</span>
+                            <span> Размещенных заказов: {orders.length}</span>
                         </div>                    
                     </div>
                 </div>     
