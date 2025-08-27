@@ -7,9 +7,11 @@ export default function SearchAll(){
     const navigate = useNavigate()
 
     const hdlSearch = ((e)=>{
-        e.preventDefault();        
-        navigate(`orders/search/${userInput}`)        
-        setUserInput('')
+        e.preventDefault();  
+        if(userInput.trim().length > 0){
+            navigate(`orders/search/${userInput}`)        
+            setUserInput('')
+        }      
     })
 
     return(

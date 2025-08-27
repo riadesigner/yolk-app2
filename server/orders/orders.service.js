@@ -54,35 +54,6 @@ exports.findById = function (id) {
     })    
 }  
 
-// exports.findWithUserInput = function (userInput) {  
-//     return new Promise(async (res,rej)=>{ 
-//       try{
-//         console.log('userInput = ', userInput);
-
-//         const results = await OrdersModel
-//           .find(
-//             { 
-//               $text: { 
-//                 $search: userInput,
-//                 $caseSensitive: false,    // не учитывать регистр
-//                 $diacriticSensitive: false // не учитывать акценты
-//               } 
-//             },
-//             { 
-//               score: { $meta: "textScore" } // добавляем оценку релевантности
-//             }
-//           )
-//           .sort({ score: { $meta: "textScore" } }) // сортируем по релевантности
-//           .populate('company');
-
-//         res(results);
-//       }catch(e){
-//         console.log(`not found order for userInput, err:${e}`)
-//         res([]);
-//       }
-//     })    
-// } 
-
 exports.findWithUserInput = function (userInput) {  
     return new Promise(async (res, rej) => { 
       try {
