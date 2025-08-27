@@ -66,6 +66,21 @@ router.get('/orders/by-company/:companyId',
         sendSuccess(res, { orders:orders });
     })
 );
+
+router.get('/orders/search/:userInput',
+    asyncHandler(async (req, res) => { 
+        // Отключаем кэширование
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+                
+        const { userInput } = req.params;
+        console.log('--------- userInput ----------', userInput)
+        const orders = await OrdersService.findWithUserInput(userInput);
+        sendSuccess(res, { orders:orders });
+    })
+);
+
 router.get('/orders/:id',    
     asyncHandler(async (req, res) => { 
         const { id } = req.params;
@@ -86,31 +101,28 @@ router.get('/orders',
         res.setHeader('Pragma', 'no-cache');
         res.setHeader('Expires', '0');
 
-        const date = req.query.date; // "up | down"        
-        const price = req.query.price; // "up | down"        
-        
+        const date = req.query.date || null; // "up | down"        
+        const price = req.query.price || null; // "up | down"        
+        const cats = req.query.cats || null; // "up | down"        
+                
         let sort = null ;
 
-        if(date){
-
+        if(date!==null){
+            
             if(date === 'up'){
                 sort = {createdAt:1}; 
-            }else if(date === 'down'){
-                sort = {createdAt:-1}; 
             }else{
-                sort = null;
-            }      
+                sort = {createdAt:-1}; 
+            }  
 
-        }else if(price){
+        }else if(price!==null){        
 
             if(price === 'up'){
                 sort = {price:1}; 
-            }else if(price === 'down'){
-                sort = {price:-1}; 
             }else{
-                sort = null;
+                sort = {price:-1}; 
             }      
-            
+
         }else{
             sort = null;
         }

@@ -39,23 +39,32 @@ export default function PortfolioPage(){
                         <div>                            
                             <OrdersFilter />
                         </div>
-                        <div  className="block">
-                            <div className = {styles.orders} >
-                            {
-                                orders && orders.map((order)=>{
-                                    console.log('order', order)
-                                    return(
-                                        <OrderPreview 
-                                            key={order.id} 
-                                            order={order} />
-                                    )
-                                })
-                            }
-                            </div>                            
-                            <div className="block mt-6">
-                                <Pagination />
-                            </div>
-                        </div>
+                        {
+                            orders && orders.length>0 ? (
+                                <div  className="block">
+                                    <div className = {styles.orders} >
+                                    {
+                                        orders.length > 0 && orders.map((order)=>{
+                                            console.log('order', order)
+                                            return(
+                                                <OrderPreview 
+                                                    key={order.id} 
+                                                    order={order} />
+                                            )
+                                        })
+                                    }
+                                    </div>                            
+                                    <div className="block mt-6">
+                                        <Pagination />
+                                    </div>
+                                </div>
+                            ):(
+                                <div className="block">
+                                    <h3>Не найдены заказы</h3> 
+                                    <p>Попробуйте <a href="/orders">менее строгий поиск</a></p>
+                                </div>                                
+                            )
+                        }
                     </div>                    
                 </article>                            
             </div>

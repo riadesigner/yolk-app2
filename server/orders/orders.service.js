@@ -15,8 +15,8 @@ exports.create = function (orderCreateDto = {}) {
 exports.findAll = function (opt={}) {      
     return new Promise(async (res,rej)=>{       
     
-      // по умолчанию = сортировка по имени
-      const sort = opt.sort ? opt.sort : {name:1}      
+      // по умолчанию = сортировка по дате
+      const sort = opt.sort ? opt.sort : {createdAt:1}            
 
       try{ 
           const orders = await OrdersModel
@@ -27,7 +27,7 @@ exports.findAll = function (opt={}) {
           res(orders);
       }catch(e){
         console.log(`orders not found, err:${e}`);
-        res(null);
+        res([]);
       }        
     })    
 } 
@@ -53,6 +53,58 @@ exports.findById = function (id) {
       }
     })    
 }  
+
+// exports.findWithUserInput = function (userInput) {  
+//     return new Promise(async (res,rej)=>{ 
+//       try{
+//         console.log('userInput = ', userInput);
+
+//         const results = await OrdersModel
+//           .find(
+//             { 
+//               $text: { 
+//                 $search: userInput,
+//                 $caseSensitive: false,    // не учитывать регистр
+//                 $diacriticSensitive: false // не учитывать акценты
+//               } 
+//             },
+//             { 
+//               score: { $meta: "textScore" } // добавляем оценку релевантности
+//             }
+//           )
+//           .sort({ score: { $meta: "textScore" } }) // сортируем по релевантности
+//           .populate('company');
+
+//         res(results);
+//       }catch(e){
+//         console.log(`not found order for userInput, err:${e}`)
+//         res([]);
+//       }
+//     })    
+// } 
+
+exports.findWithUserInput = function (userInput) {  
+    return new Promise(async (res, rej) => { 
+      try {
+        const regex = new RegExp(userInput, 'i'); // 'i' - ignore case
+        
+        const results = await OrdersModel
+          .find({
+            $or: [
+              { title: { $regex: regex } },
+              { description: { $regex: regex } },
+              { tags: { $in: [regex] } }
+            ]
+          })
+          .populate('company');
+        
+        res(results);
+      } catch (e) {
+        console.log(`not found order for userInput, err:${e}`);
+        res([]);
+      }
+    });    
+}
 
 exports.update = function (id, orderUpdateDto = {}) {  
     return new Promise(async (res,rej)=>{             

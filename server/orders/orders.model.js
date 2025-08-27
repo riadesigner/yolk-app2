@@ -25,5 +25,10 @@ const ordersSchema = new Schema({
   }
 });
 
+ordersSchema.index({
+  title: 'text',
+  description: 'text', 
+  tags: 'text'
+});
 
 module.exports = model('Orders', ordersSchema);
