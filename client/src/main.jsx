@@ -40,7 +40,7 @@ import AdminOrdersPage from './pages/private/AdminOrdersPage.jsx'
 import AdminCompaniesPage from './pages/private/AdminCompaniesPage.jsx'
 import AdminDesignersPage from './pages/private/AdminDesignersPage.jsx'
 
-import { AuthProvider } from './contexts/AuthContext.jsx';
+import { AuthProvider } from './providers/AuthProvider.jsx';
 
 import ErrorPage from './pages/ErrorPage.jsx'
 

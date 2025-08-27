@@ -76,14 +76,51 @@ router.get('/orders/:id',
         sendSuccess(res, { order:order.toJSON() });        
     })
 );
+
+
 router.get('/orders',    
     asyncHandler(async (req, res) => {         
-        const { mode } = req.params;        
-        const orders = await OrdersService.findAll();
-        console.log('orders', orders);
+    
+        // Отключаем кэширование
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+
+        const date = req.query.date; // "up | down"        
+        const price = req.query.price; // "up | down"        
+        
+        let sort = null ;
+
+        if(date){
+
+            if(date === 'up'){
+                sort = {createdAt:1}; 
+            }else if(date === 'down'){
+                sort = {createdAt:-1}; 
+            }else{
+                sort = null;
+            }      
+
+        }else if(price){
+
+            if(price === 'up'){
+                sort = {price:1}; 
+            }else if(price === 'down'){
+                sort = {price:-1}; 
+            }else{
+                sort = null;
+            }      
+            
+        }else{
+            sort = null;
+        }
+        
+        const orders = await OrdersService.findAll({sort});
+            
         if (!orders) {
             return sendError(res, 'Order not found', 404);
         }
+        
         const retOrders = orders.map(order=>order.toJSON());
         sendSuccess(res, { orders:retOrders });        
     })

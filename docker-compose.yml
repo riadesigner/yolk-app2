@@ -48,7 +48,8 @@ services:
     depends_on:
       - mongo
     networks:
-      - yolk2-network
+      - yolk2-network    
+
   client:
     build:
       context: ./client

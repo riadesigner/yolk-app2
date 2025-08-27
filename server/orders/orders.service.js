@@ -12,12 +12,17 @@ exports.create = function (orderCreateDto = {}) {
     })    
 }  
 
-exports.findAll = function () {  
+exports.findAll = function (opt={}) {      
     return new Promise(async (res,rej)=>{       
+    
+      // по умолчанию = сортировка по имени
+      const sort = opt.sort ? opt.sort : {name:1}      
+
       try{ 
           const orders = await OrdersModel
-            .find({}).populate('company')
-            .sort({ name: 1 }) // сортировка по имени
+            .find({})
+            .populate('company')
+            .sort(sort)
             .limit(10)
           res(orders);
       }catch(e){

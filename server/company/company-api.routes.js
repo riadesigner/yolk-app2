@@ -33,8 +33,7 @@ const upload = multer({
 
 const router = express.Router();
 
-router.get('/company/:id',
-    passport.authenticate('jwt', { session: false }),
+router.get('/company/:id',    
     asyncHandler(async (req, res) => { 
         
         let { id: companyId  } =  req.params;
