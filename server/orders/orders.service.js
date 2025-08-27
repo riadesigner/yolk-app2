@@ -15,16 +15,26 @@ exports.create = function (orderCreateDto = {}) {
 exports.findAll = function (opt={}) {      
     return new Promise(async (res,rej)=>{       
     
+      console.log('opt = ', opt);
+
       // по умолчанию = сортировка по дате
-      const sort = opt.sort ? opt.sort : {createdAt:1}            
+      const sort = opt.sort ? opt.sort : {createdAt:-1}
+      const categories = opt.categories;
+
+      const query = {}  
+      if(categories.length>0){
+        query.categories = { $in: categories }
+      }
 
       try{ 
+        
           const orders = await OrdersModel
-            .find({})
+            .find(query)
             .populate('company')
             .sort(sort)
             .limit(10)
           res(orders);
+
       }catch(e){
         console.log(`orders not found, err:${e}`);
         res([]);

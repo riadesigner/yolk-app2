@@ -10,9 +10,10 @@ export default function OrdersFilter({userCategories, setUserCategories}){
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
 
-    const date = searchParams.get('date') || null;
-    const price = searchParams.get('price') || null;    
-    
+    const date = searchParams.get('date') || '';
+    const price = searchParams.get('price') || '';    
+    const defaultSort = !date && !price;
+
     const hdlCatClick = (e, catId)=>{
         console.log('catId', catId);
         const newSelections = [
@@ -51,9 +52,9 @@ export default function OrdersFilter({userCategories, setUserCategories}){
 
         <div className="block mt-0">
             <h2 className="subtitle is-size-6 mb-4">Сортировка</h2>
-            <button className={`button is-fluid mb-4 ${date && 'is-primary'}`} onClick={hdlDateFilter}>
+            <button className={`button is-fluid mb-4 ${defaultSort ? 'is-primary' : date && 'is-primary'}`} onClick={hdlDateFilter}>
                 <span>По дате</span>
-                <span><i className={`fa-solid ${date==='up' ? 'fa-angle-up' : 'fa-angle-down'}`}></i></span>
+                <span><i className={`fa-solid ${defaultSort ? 'fa-angle-down' : date==='up'? 'fa-angle-up' : 'fa-angle-down'}`}></i></span>
             </button>
             <button className={`button is-fluid mb-4 ${price && !date && 'is-primary'}`} onClick={hdlPriceFilter}>
                 <span>По стоимости</span>

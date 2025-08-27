@@ -7,6 +7,7 @@ import Pagination from '../components/Pagination.jsx'
 import Breadcrumb from '../components/Breadcrumb.jsx'
 
 import useFetchOrders from './hooks/useFetchOrders.js'
+import useFetchCategories from './hooks/useFetchCategories.js'
 
 
 export default function PortfolioPage(){
@@ -23,8 +24,11 @@ export default function PortfolioPage(){
     const {
         userCategories,
         setUserCategories,
+    } = useFetchCategories();    
+
+    const {
         orders,
-    } = useFetchOrders({ userInput });
+    } = useFetchOrders({ userInput, userCategories });
     
     return(
         <>

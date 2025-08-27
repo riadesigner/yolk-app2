@@ -73,7 +73,7 @@ router.get('/orders/search/:userInput',
         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
         res.setHeader('Pragma', 'no-cache');
         res.setHeader('Expires', '0');
-                
+
         const { userInput } = req.params;
         console.log('--------- userInput ----------', userInput)
         const orders = await OrdersService.findWithUserInput(userInput);
@@ -103,7 +103,10 @@ router.get('/orders',
 
         const date = req.query.date || null; // "up | down"        
         const price = req.query.price || null; // "up | down"        
-        const cats = req.query.cats || null; // "up | down"        
+        const cats = req.query.cats || null; // "...catId:catId:catId"        
+
+        const  categories = cats !==null ?  cats.split(':') : [];
+        console.log('categories = ',categories);
                 
         let sort = null ;
 
@@ -127,7 +130,7 @@ router.get('/orders',
             sort = null;
         }
         
-        const orders = await OrdersService.findAll({sort});
+        const orders = await OrdersService.findAll({sort, categories});
             
         if (!orders) {
             return sendError(res, 'Order not found', 404);
