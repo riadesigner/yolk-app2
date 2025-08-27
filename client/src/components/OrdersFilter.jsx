@@ -1,10 +1,8 @@
 import { useParams } from 'react-router-dom'
 import styles from './OrdersFilter.module.css'
 import { useLocation, Link } from 'react-router-dom';
-import { useState, useEffect } from "react";
-import api from "../utils/api"; 
 
-export default function OrdersFilter(){
+export default function OrdersFilter({userCategories, setUserCategories}){
 
     const params = useParams();
     const {userInput} = params;
@@ -14,10 +12,19 @@ export default function OrdersFilter(){
 
     const date = searchParams.get('date') || null;
     const price = searchParams.get('price') || null;    
-    const cats =  searchParams.get('cats') || null
-    const userCats = cats?cats.split(':'):[];    
-
-    const [categories, setCategories] = useState([]);    
+    
+    const hdlCatClick = (e, catId)=>{
+        console.log('catId', catId);
+        const newSelections = [
+            ...userCategories,
+        ]
+        newSelections.map((cat)=>{
+            if(cat.id===catId){
+                cat.selected = !cat.selected;
+            }
+        })        
+        setUserCategories(newSelections);
+    }
 
     const hdlDateFilter = ()=>{
         window.location.href = `/orders?date=${date==='up'?'down':'up'}`;
@@ -26,31 +33,6 @@ export default function OrdersFilter(){
     const hdlPriceFilter = ()=>{
         window.location.href = `/orders?price=${price==='up'?'down':'up'}`;
     }     
-
-    useEffect(() => {
-    
-        const fetchCats = async () => {        
-            try {
-            
-            const response = await api.get(`/categories`);            
-
-            if (response.data.success) {            
-                const all_categories = response.data.categories;                                
-                if(all_categories){
-                    setCategories(all_categories);                
-                }           
-            }
-            } catch (err) {
-                console.error("Ошибка загрузки заказов", err);                
-            }
-
-        };
-
-        fetchCats(userInput);
-
-    }, []);
-
-
 
     return(
         <>
@@ -82,16 +64,16 @@ export default function OrdersFilter(){
         <div className="block">
             <h2 className="subtitle is-size-6 mb-4">Категории</h2>
             {
-                categories.length > 0 &&                     
-                    categories.map((cat)=>{
+                userCategories.length > 0 &&                     
+                    userCategories.map((cat)=>{
                         return (                            
-                            userCats.includes(cat.id) ? (
-                            <button key={cat.id} className="button is-fluid mb-4 is-left is-link">
+                            cat.selected ? (
+                            <button key={cat.id} className="button is-fluid mb-4 is-left is-link" onClick={(e)=>{hdlCatClick(e, cat.id)}}>
                                 <span><i className="fa-regular fa-square-check"></i></span>
                                 <span>{cat.name}</span>                
                             </button>                            
                             ):(
-                            <button key={cat.id} className="button is-fluid mb-4 is-left">                                
+                            <button key={cat.id} className="button is-fluid mb-4 is-left" onClick={(e)=>{hdlCatClick(e, cat.id)}}>
                                 <span>{cat.name}</span>                
                             </button>
                             )

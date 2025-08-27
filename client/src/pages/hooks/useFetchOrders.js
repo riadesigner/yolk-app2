@@ -6,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 export default function useFetchOrders({userInput=null}) {             
       
     const [orders, setOrders] = useState(null);    
+    const [userCategories, setUserCategories] = useState([]);
 
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
@@ -43,11 +44,32 @@ export default function useFetchOrders({userInput=null}) {
 
         };
 
+        const fetchCats = async () => {        
+            try {
+            
+            const response = await api.get(`/categories`);            
+
+            if (response.data.success) {            
+                const all_categories = response.data.categories;                                
+                    if(all_categories){
+                        all_categories.map(cat=>cat.selected=true);
+                        setUserCategories(all_categories);
+                    }
+                }
+            } catch (err) {
+                console.error("Ошибка загрузки разделов каталога заказов", err);                
+            }
+
+        };        
+
+        fetchCats();                
         fetchOrders();
 
     }, [userInput, date, price]);
 
     return {
+        userCategories,
+        setUserCategories,
         orders,
     };
 }

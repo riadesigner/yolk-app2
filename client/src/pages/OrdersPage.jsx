@@ -21,6 +21,8 @@ export default function PortfolioPage(){
     ];
 
     const {
+        userCategories,
+        setUserCategories,
         orders,
     } = useFetchOrders({ userInput });
     
@@ -37,15 +39,17 @@ export default function PortfolioPage(){
                 <article>
                     <div className={styles.ordersPage}>
                         <div>                            
-                            <OrdersFilter />
+                            <OrdersFilter 
+                                userCategories={userCategories}
+                                setUserCategories={setUserCategories}
+                                />
                         </div>
                         {
                             orders && orders.length>0 ? (
                                 <div  className="block">
                                     <div className = {styles.orders} >
                                     {
-                                        orders.length > 0 && orders.map((order)=>{
-                                            console.log('order', order)
+                                        orders.length > 0 && orders.map((order)=>{                                            
                                             return(
                                                 <OrderPreview 
                                                     key={order.id} 
