@@ -7,14 +7,14 @@ export default function useFetchOrders({userInput=null}) {
       
     const [orders, setOrders] = useState(null);    
     const [userCategories, setUserCategories] = useState([]);
-
+    
     const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
-
-    const date = searchParams.get('date') || '';
-    const price = searchParams.get('price') || '';
 
     useEffect(() => {              
+        
+        const searchParams = new URLSearchParams(location.search);        
+        const date = searchParams.get('date') || '';
+        const price = searchParams.get('price') || '';        
     
         const fetchOrders = async () => {                    
 
@@ -62,10 +62,10 @@ export default function useFetchOrders({userInput=null}) {
 
         };        
 
-        fetchCats();                
+        fetchCats();
         fetchOrders();
 
-    }, [userInput, date, price]);
+    }, [userInput, location.search]);
 
     return {
         userCategories,
