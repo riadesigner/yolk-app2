@@ -113,33 +113,6 @@
 .loggin-block button:not(:last-child){margin-bottom:1rem;}
 
 
-.inbox-message{
-    border:1px solid var(--light-color);
-    margin-bottom:1rem;
-    position: relative;
-    padding:1.25rem 1.25rem 1.25rem 60px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-.inbox-message div{    
-    position: absolute;
-    left:0;top:0;width: 40px;
-    height: 100%;
-    background-color: var(--superlight-color);
-    border-radius: 6px 0 0 6px;
-    padding:10px 0 0 12px;
-    color:var(--light-color);
-}
-.inbox-message span i{position: absolute;right:1.25rem;bottom:1.25rem;}
-.inbox-message h3{line-height: 1.4;font-size: 1rem;}
-.inbox-message small{font-size: .7rem;}
-
-.inbox-message h3,
-.inbox-message small{color:var(--dark-color) !important;}
-.inbox-message span i{color:var(--light-color) !important;}
-.inbox-message.is-active div{background-color: var(--primary-color);}
-.inbox-message.is-active div i {color: white !important;}
-.inbox-message.is-active span i{ color:var(--primary-color) !important;}
 
 
 .stars-block-label{margin-bottom:.75rem;}
@@ -172,9 +145,6 @@
 .why-yolk-banner{height:40vh; width:100%;}
 
 .loggin-block{padding:1.5rem 0;}
-
-.inbox-message{margin-bottom:.75rem; padding:1rem 1rem 1rem 55px;}
-.inbox-message h3{font-size: .9rem;}
 
 }
 

@@ -84,7 +84,7 @@ export default function OrdersFilter({userCategories, setUserCategories}){
 
         </div>
 
-        <div className="block">
+        {/* <div className="block">
             <h2 className="subtitle is-size-6 mb-4">Теги</h2>
             <div className={styles.tags}>
             <button className="button is-small">Графический дизайн</button>
@@ -94,7 +94,7 @@ export default function OrdersFilter({userCategories, setUserCategories}){
             <button className="button is-small">UI Kit</button>
             <button className="button is-small">3D</button>
             </div> 
-        </div>
+        </div> */}
         
 
         </>

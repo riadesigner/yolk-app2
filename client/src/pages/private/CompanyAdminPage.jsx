@@ -6,6 +6,8 @@ import api from '../../utils/api';
 import {formatDate} from '../../utils/dateUtilits';
 
 import Breadcrumb from '../../components/Breadcrumb'
+import InboxMessage from '../../components/InboxMessage'
+
 
 export default function CompanyAdminPage(){
     const links = [
@@ -31,6 +33,43 @@ export default function CompanyAdminPage(){
         e.preventDefault();
         navigate(`/cp/company/${companyId}/order-edit/${orderId}`);
     }        
+
+
+    const inboxMessages = [
+        {
+            id:'inbox-message-1',
+            title:'Заполните общую информацию о компании',
+            readAt:'',
+            createdAt:'20-07-2025 22:10',
+            links:[
+                {name:'ok', url:''},
+            ],
+            receiver:'id-user-1'
+        },
+        {
+            id:'inbox-message-2',
+            title:'Заполните реквизиты компании',
+            readAt:'20-07-2025 22:20',
+            createdAt:'20-07-2025 22:20',
+            links:[
+                {name:'ok', url:''},
+            ],
+            receiver:'id-user-1'
+        },
+        {
+            id:'inbox-message-3',
+            title:'Дизайнер Евгений откликнулся на заказ',
+            readAt:'',
+            createdAt:'20-07-2025 22:20',
+            links:[
+                {name:'утвердить как исполнителя', url:'/new-contractor/123', bright:true},
+                {name:'заказ', url:'/orders/123'},
+                {name:'дизайнер', url:'/designers/123'},
+            ],
+            receiver:'id-user-1'
+        }              
+                
+    ];
 
     useEffect(() => {
 
@@ -141,40 +180,15 @@ export default function CompanyAdminPage(){
 
                         </div>
                         <div className="column is-6">
-                            <h2 className="is-size-5-mobile">Новые сообщения</h2> 
+                            <h2 className="is-size-5-mobile">Сообщения</h2>                             
                             <div className="inbox-messages" id="inbox-messages">
-                                <a href="#">
-                                <div className="inbox-message is-active" id="1">
-                                    <div><i className="fa-regular fa-bell"></i></div>
-                                    <h3>Заполните общую информацию о компании</h3>
-                                    <small>23 Июля 2025</small>
-                                    <span><i className="fa-solid fa-arrow-right"></i></span>
-                                </div>
-                                </a>
-                                <a href="#">
-                                <div className="inbox-message" id="1">
-                                    <div><i className="fa-regular fa-bell"></i></div>
-                                    <h3>Заполните реквизиты компании</h3>
-                                    <small>23 Июля 2025</small>
-                                    <span><i className="fa-solid fa-arrow-right"></i></span>
-                                </div>                                
-                                </a>
-                                <a href="#">
-                                <div className="inbox-message" id="1">
-                                    <div><i className="fa-regular fa-bell"></i></div>
-                                    <h3>Добавьте новый заказ</h3>
-                                    <small>23 Июля 2025</small>                                    
-                                    <span><i className="fa-solid fa-arrow-right"></i></span>
-                                </div>   
-                                </a>
-                                <a href="#">
-                                <div className="inbox-message" id="1">
-                                    <div><i className="fa-regular fa-bell"></i></div>
-                                    <h3>У вас есть 1 непрочтенное сообщение в чате заказа  №1231242345</h3>
-                                    <small>23 Июля 2025</small>
-                                    <span><i className="fa-solid fa-arrow-right"></i></span>
-                                </div> 
-                                </a>                                                                                               
+                                {
+                                    inboxMessages.length > 0 &&  inboxMessages.map((msg)=>{
+                                        return (
+                                            <InboxMessage key={msg.id} messageData={msg} />
+                                        )
+                                    })
+                                }                                                                                                                      
                             </div> 
                             <p className="block has-text-centered"><a href="#">еще сообщения</a></p>
                         </div>

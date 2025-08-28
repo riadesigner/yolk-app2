@@ -11,8 +11,6 @@ const ordersSchema = new Schema({
     contractor: { type: Schema.Types.ObjectId, ref: 'Users' },
     price: { type: Number },
     dateTo: { type: Date },
-    createdAt: { type:Date },
-    updatedAt: { type:Date },
 }, {
   timestamps: true,
   toJSON: {

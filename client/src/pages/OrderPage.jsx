@@ -3,8 +3,14 @@ import { useState, useEffect } from 'react'
 import Breadcrumb from '../components/Breadcrumb.jsx'
 import styles from './OrderPage.module.css'
 import api from '../utils/api.jsx'
+import { useAuth } from '../contexts/AuthContext';
+import { getPayloads } from '../utils/payloads'
 
 export default function OrderPage(){
+
+    const { isAuthenticated } = useAuth();
+    const savedUser = getPayloads();    
+    const userRole = savedUser ? savedUser.role : 'unknown';     
 
     const links = [
         {link:'/', title:'Главная'},
@@ -96,9 +102,20 @@ export default function OrderPage(){
                                         <Link to={'/companies/' + order.company.id}>{order.company.name}</Link>
                                         )}
                                 </div>
-                                <div className="block mt-6 mt-5-mobile">
-                                    <button className="button is-link">Откликнуться</button>
-                                </div>                                
+                                {
+                                    isAuthenticated && userRole==='designer'(
+                                        <div className="block mt-6 mt-5-mobile">
+                                            <button className="button is-link">Откликнуться</button>
+                                        </div>
+                                    )
+                                }
+                                {
+                                    !isAuthenticated && (
+                                        <span className="is-size-7">
+                                            Войдите как Дизайнер, чтобы откликнуться на заказ
+                                        </span>
+                                    )
+                                }
                             </div>
                         </div>
                     </div>
