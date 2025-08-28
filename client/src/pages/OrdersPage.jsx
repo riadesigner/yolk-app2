@@ -14,12 +14,7 @@ export default function PortfolioPage(){
    
     const params = useParams();
     const {userInput} = params;
-    
-    const links = [
-        {link:'/', title:'Главная'},
-        {link:'/orders', title:'Все заказы',},        
-        {link:'', title:userInput, isActive:true},        
-    ];
+
 
     const {
         userCategories,
@@ -28,8 +23,22 @@ export default function PortfolioPage(){
 
     const {
         orders,
+        currentPage, 
+        setCurrentPage,
+        paginationParams,
     } = useFetchOrders({ userInput, userCategories });
     
+
+    const links = userInput ? [
+        {link:'/', title:'Главная'},
+        {link:'/orders', title:'Все заказы',},                        
+        {link:'', title:userInput, isActive:true},
+    ]:[
+        {link:'/', title:'Главная'},
+        {link:'/orders', title:'Все заказы',},
+        {link:'', title:`всего найдено: ${paginationParams.totalItems}`, isActive:true},
+    ]
+
     return(
         <>
         <section className="container desktop-only is-max-desktop">
@@ -63,7 +72,11 @@ export default function PortfolioPage(){
                                     }
                                     </div>                            
                                     <div className="block mt-6">
-                                        <Pagination />
+                                        <Pagination 
+                                            paginationParams={paginationParams}
+                                            currentPage={currentPage} 
+                                            setCurrentPage={setCurrentPage} 
+                                        />
                                     </div>
                                 </div>
                             ):(

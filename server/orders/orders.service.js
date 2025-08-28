@@ -1,5 +1,6 @@
 
 const OrdersModel = require('./orders.model');
+const paginate = require('../utils/paginate')
 
 exports.create = function (orderCreateDto = {}) {  
     return new Promise(async (res,rej)=>{ 
@@ -12,34 +13,48 @@ exports.create = function (orderCreateDto = {}) {
     })    
 }  
 
+// ----------------------
+// search with pagination
+// ----------------------
 exports.findAll = function (opt={}) {      
     return new Promise(async (res,rej)=>{       
     
       console.log('opt = ', opt);
 
       // по умолчанию = сортировка по дате
-      const sort = opt.sort ? opt.sort : {createdAt:-1}
-      const categories = opt.categories;
+      const sort = opt.sort || {createdAt:-1};
+      const categories = opt.categories || [];
 
       const query = {}  
+
       if(categories.length>0){
         query.categories = { $in: categories }
       }
 
+      if(opt.userInput){
+        const regex = new RegExp(opt.userInput, 'i'); // 'i' - ignore case      
+          query.$or = [
+              { title: { $regex: regex } },
+              { description: { $regex: regex } },
+              { tags: { $in: [regex] } }
+            ];          
+      }
+      
       try{ 
         
-          const orders = await OrdersModel
-            .find(query)
-            .populate('company')
-            .sort(sort)
-            .limit(10)
-          res(orders);
+          const result = await paginate(OrdersModel, query, {
+              page: opt.page,
+              limit: opt.limit,
+              sort: sort,
+              populate: 'company'
+          });          
+          res(result);
 
       }catch(e){
         console.log(`orders not found, err:${e}`);
         res([]);
       }        
-    })    
+    })
 } 
 
 exports.find = function (opt = {}) {  
@@ -64,28 +79,28 @@ exports.findById = function (id) {
     })    
 }  
 
-exports.findWithUserInput = function (userInput) {  
-    return new Promise(async (res, rej) => { 
-      try {
-        const regex = new RegExp(userInput, 'i'); // 'i' - ignore case
+// exports.findWithUserInput = function (userInput) {  
+//     return new Promise(async (res, rej) => { 
+//       try {
+//         const regex = new RegExp(userInput, 'i'); // 'i' - ignore case
         
-        const results = await OrdersModel
-          .find({
-            $or: [
-              { title: { $regex: regex } },
-              { description: { $regex: regex } },
-              { tags: { $in: [regex] } }
-            ]
-          })
-          .populate('company');
+//         const results = await OrdersModel
+//           .find({
+//             $or: [
+//               { title: { $regex: regex } },
+//               { description: { $regex: regex } },
+//               { tags: { $in: [regex] } }
+//             ]
+//           })
+//           .populate('company');
         
-        res(results);
-      } catch (e) {
-        console.log(`not found order for userInput, err:${e}`);
-        res([]);
-      }
-    });    
-}
+//         res(results);
+//       } catch (e) {
+//         console.log(`not found order for userInput, err:${e}`);
+//         res([]);
+//       }
+//     });    
+// }
 
 exports.update = function (id, orderUpdateDto = {}) {  
     return new Promise(async (res,rej)=>{             

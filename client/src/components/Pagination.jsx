@@ -1,50 +1,33 @@
 import styles from './Pagination.module.css'
 
-export default function Pagination(){
+export default function Pagination({paginationParams, currentPage, setCurrentPage}){
 
-    const links = [
-        {link:'#page1', title:'Назад'},
-        {link:'#page1', title:'1'},
-        {link:'#page2', title:'2', isActive:true},
-        {link:'#page3', title:'3'},
-        {link:'#page4', title:'4'},
-        {link:'#page3', title:'Вперед',},
-    ]
+    console.log('paginationParams', paginationParams)
+    const {
+         totalPages,
+         hasNextPage,
+         hasPrevPage,
+         nextPage,
+         prevPage,
+    } = paginationParams;
 
-    const linksMobile = [
-        {link:'#page1', title:'Назад'},        
-        {link:'#page2', title:'1 / 12', isActive:true},        
-        {link:'#page3', title:'Вперед',},
-    ]    
+    const hdlClick = (page)=>{
+        setCurrentPage(page);
+    }
 
     return(
         <>
-        <div className="desktop-only">
         <div className={styles.pageLinks}>        
             {
-                links.map((el, index)=>{
-                    return el.isActive ? (
-                        <span key={index}>{el.title}</span>
-                    ):(
-                        <a key={index} href={el.link}>{el.title}</a>
-                    )
-                })
+                (
+                    <>
+                    {hasPrevPage && (<a href={`#page=${prevPage}`} onClick={()=>hdlClick(prevPage)}>Назад</a>)}
+                    <span>{`${currentPage} / ${totalPages||1}`}</span>
+                    {hasNextPage && (<a href={`#page=${nextPage}`} onClick={()=>hdlClick(nextPage)}>Вперед</a>)}
+                    </>
+                )
             }        
-        </div>         
-        </div>
-        <div className="mobile-only">
-        <div className={styles.pageLinks}>        
-            {
-                linksMobile.map((el, index)=>{
-                    return el.isActive ? (
-                        <span key={index}>{el.title}</span>
-                    ):(
-                        <a key={index} href={el.link}>{el.title}</a>
-                    )
-                })
-            }        
-        </div>       
-        </div>
+        </div> 
         </>
     )
 }

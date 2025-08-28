@@ -4,14 +4,27 @@ import api from "../../utils/api";
 import { useLocation } from 'react-router-dom';
 
 export default function useFetchOrders({userInput, userCategories}) {    
+          
+    const ITEMS_ON_PAGE = 3;
+    const [orders, setOrders] = useState(null);
     
-      
-    const [orders, setOrders] = useState(null);    
+    const [currentPage, setCurrentPage] = useState('1');    
+
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const date = searchParams.get('date') || '';
-    const price = searchParams.get('price') || '';           
+    const price = searchParams.get('price') || '';     
     
+    const [paginationParams, setPaginationParams] = useState({
+         "currentPage": 1, 
+         "totalPages": 1, 
+         "totalOrders": 1, 
+         "hasNext": false, 
+         "hasPrev": false, 
+         "nextPage": 2, 
+         "prevPage": 0
+        })
+
     const isFirstRender = useRef(true);    
 
     useEffect(() => {            
@@ -38,17 +51,29 @@ export default function useFetchOrders({userInput, userCategories}) {
             try {
                             
                 if(userInput){
-                    response = await api.get(`/orders/search/${userInput}`);
-                }else{
-                    response = await api.get(`/orders?date=${date}&price=${price}&cats=${calcCategories()}&rnd=${Date.now()}`);
+                    const query = [
+                        `/orders/search/${userInput}?`,
+                        `&page=${currentPage}&limit=${ITEMS_ON_PAGE}`,
+                    ].join('');
+                    response = await api.get(query);
+
+                }else{                    
+
+                    const query = [
+                        `/orders?date=${date}&price=${price}&cats=${calcCategories()}`,
+                        `&page=${currentPage}&limit=${ITEMS_ON_PAGE}`,
+                        `&rnd=${Date.now()}`
+                        ].join('');
+                        console.log('query', query)
+                    response = await api.get(query);
+
                 }
 
                 if (response && response.data.success) {            
-                    const foundOrders = response.data.orders;                                
-                    if(foundOrders){
-                        console.log('foundOrders',foundOrders)
-                        setOrders(foundOrders);
-                    }
+                    const foundOrders = response.data.orders;
+                    const pagination = response.data.pagination;
+                    foundOrders && setOrders(foundOrders);
+                    pagination && setPaginationParams(pagination);
                 }
 
             } catch (err) {
@@ -59,9 +84,12 @@ export default function useFetchOrders({userInput, userCategories}) {
 
         fetchOrders();
 
-    }, [userInput, date, price, userCategories]);    
+    }, [userInput, date, price, userCategories, currentPage]);    
 
     return {
         orders,
+        currentPage, 
+        setCurrentPage,
+        paginationParams,
     };
 }

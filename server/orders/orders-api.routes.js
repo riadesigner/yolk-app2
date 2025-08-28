@@ -49,7 +49,6 @@ const uploadDocuments = multer({
 });
 
 
-
 // GET /orders – получить список заказов
 // POST /orders – создать новый заказ
 // GET /orders/:id – получить один заказ
@@ -74,10 +73,19 @@ router.get('/orders/search/:userInput',
         res.setHeader('Pragma', 'no-cache');
         res.setHeader('Expires', '0');
 
-        const { userInput } = req.params;
-        console.log('--------- userInput ----------', userInput)
-        const orders = await OrdersService.findWithUserInput(userInput);
-        sendSuccess(res, { orders:orders });
+        const { userInput } = req.params;        
+        
+        const page = req.query.page || 1;
+        const limit = req.query.limit || 3;
+
+        const {
+            data:orders,
+            pagination,
+        } = await OrdersService.findAll({page, limit, userInput});
+
+        const retOrders = orders.map(order=>order.toJSON());
+        sendSuccess(res, { orders:retOrders, pagination }); 
+
     })
 );
 
@@ -129,15 +137,17 @@ router.get('/orders',
         }else{
             sort = null;
         }
-        
-        const orders = await OrdersService.findAll({sort, categories});
-            
-        if (!orders) {
-            return sendError(res, 'Order not found', 404);
-        }
-        
+
+        const page = req.query.page || 1;
+        const limit = req.query.limit || 3;
+
+        const {
+            data:orders,
+            pagination,
+        } = await OrdersService.findAll({sort, page, limit, categories});
+
         const retOrders = orders.map(order=>order.toJSON());
-        sendSuccess(res, { orders:retOrders });        
+        sendSuccess(res, { orders:retOrders, pagination });        
     })
 );
 
