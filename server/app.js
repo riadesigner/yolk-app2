@@ -103,6 +103,7 @@ app.use('/api',require('./users/users-api.routes'));
 app.use('/api',require('./company/company-api.routes'));
 app.use('/api',require('./orders/orders-api.routes'));
 app.use('/api',require('./categories/categories-api.routes'));
+app.use('/api',require('./notifications/notifications-api.routes'));
 
 // Защищённый роут
 app.get('/api/protected', (req, res) => {

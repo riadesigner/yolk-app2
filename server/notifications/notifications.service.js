@@ -8,6 +8,8 @@ exports.findByUserId = function (userId) {
           .find({receiver:userId})
           .sort({ createdAt: -1 })
           .limit(10)
+
+          console.log('notifs', notifs)
         res(notifs);
       }catch(e){
         console.log(`notifs not found, err:${e}`);

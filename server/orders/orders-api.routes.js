@@ -151,6 +151,30 @@ router.get('/orders',
     })
 );
 
+router.patch('/orders/:orderId/new-respond',
+    passport.authenticate('jwt', { session: false }),
+    asyncHandler(async (req, res) => {        
+        
+        const { orderId } = req.params;
+        const userId = req.user.id;
+        const userRole = req.user.role;
+
+        if(userRole!=='designer'){
+            return sendError(res, 'Откликнуться на заказ может только Дизайнер', 403);
+        }        
+                        
+        const orderUpdated = await OrdersService.addUserToResponded(orderId, userId);
+
+        if(!orderUpdated){
+            return sendError(res, 'Не удалось откликнуться на заказ', 500);
+        }
+        
+        sendSuccess(res, {             
+            responded: orderUpdated.responded,
+            message: 'ok', 
+        });
+    })
+);
 
 router.patch('/orders/:orderId',
     passport.authenticate('jwt', { session: false }),

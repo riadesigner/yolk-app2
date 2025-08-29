@@ -78,29 +78,30 @@ exports.findById = function (id) {
       }
     })    
 }  
+exports.addUserToResponded = function(orderId, userId){
+  return new Promise(async (res,rej)=>{
+      try{   
+        
+        const order = await OrdersModel.findById(orderId);
 
-// exports.findWithUserInput = function (userInput) {  
-//     return new Promise(async (res, rej) => { 
-//       try {
-//         const regex = new RegExp(userInput, 'i'); // 'i' - ignore case
-        
-//         const results = await OrdersModel
-//           .find({
-//             $or: [
-//               { title: { $regex: regex } },
-//               { description: { $regex: regex } },
-//               { tags: { $in: [regex] } }
-//             ]
-//           })
-//           .populate('company');
-        
-//         res(results);
-//       } catch (e) {
-//         console.log(`not found order for userInput, err:${e}`);
-//         res([]);
-//       }
-//     });    
-// }
+        if(order.responded.includes(userId)){          
+          res(null);
+        }
+
+        const updatedOrder = await OrdersModel.findByIdAndUpdate(
+            orderId,
+            {
+              responded: [...order.responded, userId],
+            },
+            { new: true }
+        );
+        res(updatedOrder);
+      }catch(e){
+        console.log(`cant update order, err:${e}`)
+        res(null);
+      }
+  })
+}
 
 exports.update = function (id, orderUpdateDto = {}) {  
     return new Promise(async (res,rej)=>{             

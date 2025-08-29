@@ -2,7 +2,7 @@ const { Schema, model } = require('mongoose');
 
 const notificationsSchema = new Schema({
     title: { type:String }, 
-    links: { type:String }, 
+    links: { type: Array }, 
     receiver: { type:String },
     readAt: { type: Date, default: null },    
 }, {

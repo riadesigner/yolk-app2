@@ -11,7 +11,7 @@ export default function InboxMessage({messageData}){
             <small>23 Июля 2025</small>
             <div className={styles.messageLinks}>
                 {
-                    messageData.links.length>0 && messageData.links.map((link, index)=>{
+                    messageData.links && messageData.links.length>0 && messageData.links.map((link, index)=>{
                         return (
                             <button key={index} className={`button ml-2 mt-2 is-small ${link.bright ? 'is-link' : 'is-primary'}`}>
                                 {link.name}

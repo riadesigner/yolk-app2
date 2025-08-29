@@ -1,4 +1,4 @@
-import { Link, NavLink, useLocation, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react'
 import Breadcrumb from '../components/Breadcrumb.jsx'
 import styles from './OrderPage.module.css'
@@ -20,13 +20,19 @@ export default function OrderPage(){
 
     const { id } = useParams();
 
-    const filesInit = [
-            {title:'Название файла 1',link:''},
-            {title:'Название файла 2',link:''}
-        ]
-
     const [order, setOrder]= useState(null);
-    const [files, setfiles] = useState(filesInit)
+    const [files, setfiles] = useState([])
+    const [responded, setResponded] = useState([]) 
+
+    const hdlRespondToOrder = async (e)=>{
+        e.preventDefault();        
+        console.log('откликнуться...!')
+        const response = await api.patch(`/orders/${id}/new-respond`);
+        if(response.data.success){
+            setResponded(response.data.responded);
+        }        
+        console.log('response', response)
+    }
 
     useEffect(() => {
 
@@ -39,6 +45,7 @@ export default function OrderPage(){
                     const foundOrder =  response.data.order;                    
                     if(foundOrder){
                         setOrder(foundOrder);
+                        setResponded(foundOrder.responded);
                         setfiles(foundOrder.files)
                     }
                 }
@@ -49,13 +56,11 @@ export default function OrderPage(){
         };
         
         fetchOrder();
-    }, []);    
-
-    // const linkToCompany = `/companies/${order.companyId}`
-    const linkToCompany = `/companies/123`
+    }, []); 
     
     return(
         <>
+        
         <section className="container desktop-only is-max-desktop">
         <div className="section">
             <Breadcrumb links={links}/>
@@ -103,10 +108,17 @@ export default function OrderPage(){
                                         )}
                                 </div>
                                 {
-                                    isAuthenticated && userRole==='designer'(
-                                        <div className="block mt-6 mt-5-mobile">
-                                            <button className="button is-link">Откликнуться</button>
-                                        </div>
+                                    isAuthenticated && userRole==='designer' && (
+                                        
+                                            responded.includes(savedUser.id) ? (
+                                                <span className="is-size-7">
+                                                    Вы откликнулись на данный заказ
+                                                </span>                                                                           
+                                            ):(
+                                                <div className="block mt-6 mt-5-mobile">
+                                                    <button className="button is-link" onClick={(e)=>hdlRespondToOrder(e)}>Откликнуться</button>
+                                                </div>
+                                            )                                        
                                     )
                                 }
                                 {

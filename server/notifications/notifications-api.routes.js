@@ -14,9 +14,8 @@ router.get('/notifications',
             sendSuccess(res, { notifications: notifs.map((n)=>n.toJSON()) })
         }catch(e){
             return sendError(res, `Notifications not found`, 404);
-        }
+        }        
     })
 );
-
 
 module.exports = router;
