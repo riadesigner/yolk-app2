@@ -1,6 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
 
-import api from '../../utils/api';
 import {formatDate} from '../../utils/dateUtilits';
 
 import Breadcrumb from '../../components/Breadcrumb'

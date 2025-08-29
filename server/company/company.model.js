@@ -1,12 +1,12 @@
 const { Schema, model } = require('mongoose');
 
 const companySchema = new Schema({
+    userId: { type: Schema.Types.ObjectId, ref: 'Users' },
     name: { type:String },  
     city: { type:String },
     specialization: { type:String },
     description: { type:String },
     gallery: { type:Array },    
-    orders: { type: Schema.Types.ObjectId, ref: 'Orders' },
     details: { type:Object },
     createdAt: { type:Date },
     updatedAt: { type:Date },

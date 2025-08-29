@@ -7,7 +7,6 @@ export default function useFetchCompanyAdmin(){
 
     const [user, setUser] = useState(null);
     const [orders, setOrders] = useState([]);    
-    const [company, setCompany] = useState(null);    
     const [notifications, setNotifications] = useState([]);    
     
     const navigate = useNavigate();        
@@ -23,23 +22,19 @@ export default function useFetchCompanyAdmin(){
             }            
         }
 
-        const fetchUserFull = async () => {         
+        const fetchUserFull = async () => {     
+            
+            
             try {
-                const response = await api.get('/users/me');
+
+                const response = await api.get('/users/me');                
 
                 if(response.data.success){    
                     const usr =  response.data.user;
-                    if(usr){
+                    if(usr){                        
                         setUser(usr);
-                        if(usr.userCompany){
-                            setCompany(usr.userCompany)
-                            const responseOrders = await api.get(`/orders/by-company/${usr.userCompany.id}`);
-                            if(responseOrders.data.success){
-                                setOrders(responseOrders.data.orders);
-                            }                                                    
-                        }
                         const arrNotifications = await fetchNotifications();
-                        arrNotifications.length>0 && setNotifications(arrNotifications);
+                        arrNotifications && arrNotifications.length>0 && setNotifications(arrNotifications);
                     }
                 }
                 
@@ -47,15 +42,14 @@ export default function useFetchCompanyAdmin(){
                 console.error('Ошибка загрузки профиля', err);
                 navigate('/');
             }
-        };
-        
+        };        
+
         fetchUserFull();
     },[]);
 
     return {
         user,
         orders,        
-        company,
         notifications,        
         }
 

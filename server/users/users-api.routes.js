@@ -8,30 +8,57 @@ const { asyncHandler, sendSuccess, sendError } = require('../middleware/utils');
 
 const router = express.Router();
 
-router.get('/user',
+// GET /api/users/me      - текущий пользователь (из сессии)
+// GET /api/users         - все пользователи  
+// GET /api/users/:id     - конкретный пользователь
+
+router.get('/users/me',
     passport.authenticate('jwt', { session: false }),
-    asyncHandler(async (req, res) => { 
-        const user = await UsersService.findByEmail(req.user.email);         
-        if (!user) {
-            return sendError(res, 'User not found', 404);
-        }
-        sendSuccess(res, { user:user.toJSON() });        
+    asyncHandler(async (req, res) => {         
+        const user = await UsersService.findByEmail(req.user.email);        
+        if (!user) { return sendError(res, 'User not found', 404); }        
+        sendSuccess(res, { user:user.toJSON() });
+
     })
 );
 
-router.get('/user/full',
+router.get('/users/:id',
     passport.authenticate('jwt', { session: false }),
-    asyncHandler(async (req, res) => { 
-        
-        const user = await UsersService.findByEmail(req.user.email, true);        
-        
-        if (!user) {
-            return sendError(res, 'User not found', 404);
-        }
-        
+    asyncHandler(async (req, res) => {         
+        const {id} = req.param;
+        const user = await UsersService.findById(id);
+        if (!user) { return sendError(res, 'User not found', 404); }        
         sendSuccess(res, { user:user.toJSON() });        
+
     })
 );
+
+router.patch('/users/me/select-role',
+    passport.authenticate('jwt', { session: false }),
+    asyncHandler(async (req, res) => {        
+
+        const {role} = req.body;
+        const userId = req.user.id;
+
+        const userData = {            
+            role:role,
+        }
+
+        const user = await UsersService.update(userId, userData);
+
+        if(userData.role === 'company' && !user.userCompany){
+            const newUserCompany = await CompanyService.create({userId});
+            user.userCompany = newUserCompany._id;            
+            await user.save();
+        }
+
+        if (!user) {
+            return sendError(res, 'Не удалось обоновить данные пользователя', 404);
+        }                
+        sendSuccess(res, { message: 'Данные сохранены' });        
+    })
+);
+
 
 router.patch('/users/:id',
     passport.authenticate('jwt', { session: false }),
@@ -67,32 +94,6 @@ router.patch('/users/:id',
 );
 
 
-router.post('/user/select-role',
-    passport.authenticate('jwt', { session: false }),
-    asyncHandler(async (req, res) => {        
-
-        const {role} = req.body;
-        const id = req.user.id;
-
-        const userData = {            
-            role:role,
-        }
-
-        const user = await UsersService.update(id, userData);
-
-        if(userData.role === 'company' && !user.userCompany){
-            const newUserCompany = await CompanyService.create();
-            user.userCompany = newUserCompany._id;            
-            await user.save();
-        }
-
-        if (!user) {
-            return sendError(res, 'Не удалось обоновить данные пользователя', 404);
-        }        
-        console.log('saved user', user);
-        sendSuccess(res, { message: 'Данные сохранены' });        
-    })
-);
 
 
 

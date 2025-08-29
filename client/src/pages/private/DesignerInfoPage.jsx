@@ -17,13 +17,12 @@ export default function DesignerInfoPage(){
     const [schools, setSchools] = useState([]);
     const [specialization, setSpecialization] = useState('');
     const navigate = useNavigate();
-    const { isAuthenticated } = useAuth();
 
     useEffect(() => {
 
         const fetchUser = async () => {          
             try {
-                const response = await api.get('/user/full');
+                const response = await api.get('/users/me');
                 console.log('response', response);
                 
                 if(response.data.success){

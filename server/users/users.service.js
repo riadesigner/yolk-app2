@@ -59,14 +59,13 @@ const userInfoService = require('../userinfo/userinfo.service')
       })    
   }  
   
-  exports.findByEmail = function (email, fullMode) {
+  exports.findByEmail = function (email) {
     return new Promise(async (res,rej)=>{
       try{
-        const user = await UsersModel.findOne({email:email});
-        if(fullMode){          
-          await user.populate('userInfo');
-          user.role==='company' && await user.populate('userCompany');
-        }
+        const user = await UsersModel
+          .findOne({email:email})
+          .populate('userInfo')
+          .populate('userCompany')          
         res(user);
       }catch(e){
         console.log(`cant find user by id ${email}, err:${e.message || e}`)

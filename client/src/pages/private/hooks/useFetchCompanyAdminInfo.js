@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import api from '../../../utils/api'
 
-export default function useFetchCompanyByUser(){
+export default function useFetchCompanyAdminInfo(){
 
     const [company, setCompany] = useState(null)
     const [gallery, setGallery] = useState([])
@@ -24,7 +24,7 @@ export default function useFetchCompanyByUser(){
 
         const fetchCompanyByUser = async () => {          
             try {
-                const response = await api.get('/user/full');                                
+                const response = await api.get('/users/me');                                
                 if(response.data.success){
                     const user = response.data.user;                    
                     const company = user.userCompany;                    

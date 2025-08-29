@@ -12,7 +12,10 @@ const userSchema = new Schema({
     name: { type:String },
     avatar: { type:String },    
     role: { type:String },    
-    userInfo: { type: Schema.Types.ObjectId, ref: 'UserInfo' },
+    userInfo: { 
+      type: Schema.Types.ObjectId, 
+      ref: 'UserInfo' 
+    },
     userCompany: { 
       type: Schema.Types.ObjectId, 
       ref: 'Company',

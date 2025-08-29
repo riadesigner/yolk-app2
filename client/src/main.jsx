@@ -59,7 +59,7 @@ const router = createBrowserRouter([
       { path: 'useragree', element: <UserAgreePage /> }, // 
       { path: 'designers', element: <DesignersPage /> }, // 
       { path: 'designers/:id/portfolio', element: <PortfolioPage /> }, //       
-      { path: 'designers/:id/info', element: <DesignerInfoPublicPage /> }, // 
+      { path: 'designers/:id', element: <DesignerInfoPublicPage /> }, // 
       { path: 'companies/:companyId', element: <CompanyPublicPage /> }, // 
       { path: 'companies', element: <CompaniesPage /> }, // 
       { path: 'chats/123', element: <ChatPage /> }, //       

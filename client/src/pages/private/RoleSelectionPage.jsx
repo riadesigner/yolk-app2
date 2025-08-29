@@ -1,4 +1,4 @@
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ErrorMessage from '../../components/ErrorMessage';
 import { useState } from 'react';
 import  api from '../../utils/api';
@@ -24,14 +24,11 @@ export default function AboutPage(){
         if(!userId){ return; }
 
         try {
-
-            const data = {
-                userData: {role},
-                infoData:null,
+            
+            const response = await api.patch(`/users/me/select-role`, {role} );                    
+            if(!response.data.success){
+                setErrorMessage('Не удалось обновить данные. Попробуйте позже')
             }
-
-            const response = await api.patch(`/users/${userId}`, data );
-            console.log('Успешно обновлен пользователь:', response.data);
 
             // заново авторизируемся
             const newTokenResponse = await api.get(`/auth/new-token` );

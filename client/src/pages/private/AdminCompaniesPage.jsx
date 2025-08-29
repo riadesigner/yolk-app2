@@ -39,7 +39,7 @@ export default function CompanyInfoPage(){
 
         const fetchUser = async () => {          
             // try {
-            //     const response = await api.get('/user/full');
+            //     const response = await api.get('/users/me');
             //     console.log('response', response);
                 
             //     if(response.data.success){

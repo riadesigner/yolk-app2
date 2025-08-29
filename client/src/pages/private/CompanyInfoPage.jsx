@@ -5,7 +5,7 @@ import CompanyAboutHeader from '../../components/CompanyAboutHeader';
 import CompanyAboutKeepInTouch from '../../components/CompanyAboutKeepInTouch';
 import CompanyAboutOrders from '../../components/CompanyAboutOrders';
 
-import useFetchCompanyByUser from './hooks/useFetchCompanyByUser'
+import useFetchCompanyAdminInfo from './hooks/useFetchCompanyAdminInfo'
 
 export default function CompanyInfoPage(){ 
 
@@ -19,7 +19,7 @@ export default function CompanyInfoPage(){
         company,
         gallery,
         orders,
-    } = useFetchCompanyByUser();   
+    } = useFetchCompanyAdminInfo();   
 
     return (
         <>

@@ -81,17 +81,24 @@ router.put('/company',
         }
         // creating userCompany
         const { companyData } = req.body;
-        console.log('Получены данные:', companyData);        
+        companyData.userId = req.user.id;
+
+        console.log('Получены данные:', companyData);
         const company = await CompanyService.create(companyData);                        
+
         if (!company) {
             return sendError(res, `Не удалось создать компанию для пользователя ${user._id}`, 404);
         }        
+
         // updating the User
         const userUpdated = await UsersService.update(req.user.id, {userCompany:company._id});
+        
         if(!userUpdated){
             return sendError(res, `Не удалось привязать компанию ${company._id} к пользователю ${user._id}`, 404);
         }        
+
         sendSuccess(res, { message: 'Компания создана, к пользователю привязана' });        
+        
     })
 );
 

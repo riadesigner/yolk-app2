@@ -91,7 +91,7 @@ export default function Designer(){
                         }
                     </div>                    
                     <div className="block mt-6">
-                        <Pagination />
+                        {/* <Pagination /> */}
                     </div>
                 </article>                            
             </div>

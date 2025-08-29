@@ -2,6 +2,7 @@ const express = require('express')
 const UsersService = require('../users/users.service')
 const CompanyService = require('../company/company.service')
 const OrdersService = require('./orders.service')
+const NotificationsService = require('../notifications/notifications.service')
 const multer = require('multer');
 const AWS = require('aws-sdk');
 
@@ -162,10 +163,17 @@ router.patch('/orders/:orderId/new-respond',
         if(userRole!=='designer'){
             return sendError(res, 'Откликнуться на заказ может только Дизайнер', 403);
         }        
-                        
+
         const orderUpdated = await OrdersService.addUserToResponded(orderId, userId);
 
         if(!orderUpdated){
+            return sendError(res, 'Не удалось откликнуться на заказ', 500);
+        }
+
+        const companyId = orderUpdated.company;
+        
+        // send notifications
+        if (!await NotificationsService.sendAboutNewRespond( userId, orderId, companyId)){
             return sendError(res, 'Не удалось откликнуться на заказ', 500);
         }
         
@@ -173,6 +181,7 @@ router.patch('/orders/:orderId/new-respond',
             responded: orderUpdated.responded,
             message: 'ok', 
         });
+
     })
 );
 

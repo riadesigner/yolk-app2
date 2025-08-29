@@ -84,30 +84,33 @@ export default function useFetchCompanyCard({setErrorMessage}) {
 
     useEffect(() => {
     const fetchCompanyCard = async () => {
-        try {
-        const response = await api.get("/company/by-user");
+        try {                    
+            const response = await api.get("/users/me");
         if (response.data.success) {
-            const company = response.data.company;
-            setCompany(company);
-            const details = company.details || {};
-            setLegalType(details.legalType || 'ИП');
-            setFullName(details.fullName || '');
-            setShortName(details.shortName || '');
-            setFullAddress(details.fullAddress || '');
-            setCompanyPhone(details.companyPhone || '');
-            setWebSite(details.webSite || '');
-            setCodeINN(details.codeINN || '');
-            setCodeKPP(details.codeKPP || '');
-            setCodeOGRN(details.codeOGRN || '');
-            setCodeOKPO(details.codeOKPO || '');
-            setBankName(details.bankName || '');
-            setBankRS(details.bankRS || '');
-            setBankKS(details.bankKS || '');
-            setBankBIK(details.bankBIK || '');
-            setContactFIO(details.contactFIO || '');
-            setContactPhone(details.contactPhone || '');
-            setContactJobTitle(details.contactJobTitle || '');
-            setContactEmail(details.contactEmail || '');
+            const user = response.data.user;
+            const company = user.userCompany;
+            if(company){
+                setCompany(company);
+                const details = company.details || {};
+                setLegalType(details.legalType || 'ИП');
+                setFullName(details.fullName || '');
+                setShortName(details.shortName || '');
+                setFullAddress(details.fullAddress || '');
+                setCompanyPhone(details.companyPhone || '');
+                setWebSite(details.webSite || '');
+                setCodeINN(details.codeINN || '');
+                setCodeKPP(details.codeKPP || '');
+                setCodeOGRN(details.codeOGRN || '');
+                setCodeOKPO(details.codeOKPO || '');
+                setBankName(details.bankName || '');
+                setBankRS(details.bankRS || '');
+                setBankKS(details.bankKS || '');
+                setBankBIK(details.bankBIK || '');
+                setContactFIO(details.contactFIO || '');
+                setContactPhone(details.contactPhone || '');
+                setContactJobTitle(details.contactJobTitle || '');
+                setContactEmail(details.contactEmail || '');
+            }
         }
         } catch (err) {
         console.error("Ошибка загрузки данных", err);

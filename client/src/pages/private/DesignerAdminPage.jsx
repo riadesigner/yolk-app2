@@ -1,10 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 
-import { useAuth } from '../../contexts/AuthContext';
-import api from '../../utils/api';
+import useFetchDesignerAdmin from './hooks/useFetchDesignerAdmin'
 
 import Breadcrumb from '../../components/Breadcrumb'
+import InboxMessage from '../../components/InboxMessage'
+
 
 export default function DesignerAdminPage(){
     const links = [
@@ -12,31 +12,12 @@ export default function DesignerAdminPage(){
         {link:'#', title:'Панель управления', isActive:true},
     ];
 
-    const [user, setUser] = useState(null);
-    const navigate = useNavigate();
-    const { isAuthenticated } = useAuth();
 
-    useEffect(() => {
-
-        console.log('Auth status:', isAuthenticated);
-
-        const fetchUser = async () => {         
-            try {
-                const response = await api.get('/user');
-
-                if(response.data.success){                    
-                    setUser(response.data.user);
-                }
-                
-            } catch (err) {
-                console.error('Ошибка загрузки профиля', err);
-                // navigate('/login');
-                navigate('/');
-            }
-        };
-        
-        fetchUser();
-    }, []);
+    const {
+        user,
+        orders,
+        notifications,
+    } = useFetchDesignerAdmin();
 
     return (
         <>
@@ -62,16 +43,15 @@ export default function DesignerAdminPage(){
                     <div className="columns">
                         <div className="column is-6">
 
-                            <h2 className="is-size-5-mobile">Резюме</h2> 
                             <div className="block">
+                            <h2 className="is-size-5-mobile">Резюме</h2>                             
                             <Link to="/cp/designer/info">
-                            <button className="button is-fluid is-medium is-regular-mobile  is-link ">
+                            <button className="button is-fluid is-medium is-regular-mobile is-link mb-3">
                                 <span>Анкета</span>
                                 <span className="icon"><i className="fa fa-angle-right"></i></span>
                             </button>                                                            
                             </Link>
-                            </div> 
-                            <div className="block mb-6 mb-5-mobile">
+
                             <Link to="/designers/123/portfolio">
                             <button className="button  is-fluid is-medium is-regular-mobile is-link ">
                                 <span>Портфолио</span>    
@@ -98,42 +78,18 @@ export default function DesignerAdminPage(){
                             </div>
                         </div>
                         <div className="column is-6">
-                            <h2 className="is-size-5-mobile">Новые сообщения</h2> 
+                            <h2 className="is-size-5-mobile">Сообщения</h2>                             
                             <div className="inbox-messages" id="inbox-messages">
-                                <a href="#">
-                                <div className="inbox-message is-active" id="1">
-                                    <div><i className="fa-regular fa-bell"></i></div>
-                                    <h3>Заполни свой профиль полностью и получи 10 баллов!</h3>
-                                    <small>23 Июля 2025</small>
-                                    <span><i className="fa-solid fa-arrow-right"></i></span>
-                                </div>
-                                </a>
-                                <a href="#">
-                                <div className="inbox-message" id="1">
-                                    <div><i className="fa-regular fa-bell"></i></div>
-                                    <h3>Вы выбраны в качестве исполнителя в заказе “Заказ №120931801”</h3>
-                                    <small>23 Июля 2025</small>
-                                    <span><i className="fa-solid fa-arrow-right"></i></span>
-                                </div>                                
-                                </a>
-                                <a href="#">
-                                <div className="inbox-message" id="1">
-                                    <div><i className="fa-regular fa-bell"></i></div>
-                                    <h3>У вас есть 3 непрочтенных сообщения в чате с менеджером YOLK</h3>
-                                    <small>23 Июля 2025</small>                                    
-                                    <span><i className="fa-solid fa-arrow-right"></i></span>
-                                </div>   
-                                </a>
-                                <a href="#">
-                                <div className="inbox-message" id="1">
-                                    <div><i className="fa-regular fa-bell"></i></div>
-                                    <h3>У вас есть 1 непрочтенное сообщение в чате заказа  №1231242345</h3>
-                                    <small>23 Июля 2025</small>
-                                    <span><i className="fa-solid fa-arrow-right"></i></span>
-                                </div> 
-                                </a>                                                                                               
+                                {
+                                    notifications.length > 0 ? notifications.map((msg)=>{
+                                        return (
+                                            <InboxMessage key={msg.id} messageData={msg} />
+                                        )
+                                    }):(
+                                        <p className="block has-text-centered">Сообщений нет</p>
+                                    )
+                                }                                                                                                                      
                             </div> 
-                            <p className="block has-text-centered"><a href="#">еще сообщения</a></p>
                         </div>
                     </div>
                 
