@@ -101,7 +101,6 @@ router.get('/orders/:id',
     })
 );
 
-
 router.get('/orders',    
     asyncHandler(async (req, res) => {         
     
@@ -152,6 +151,39 @@ router.get('/orders',
     })
 );
 
+router.patch('/orders/:orderId/new-contractor/:contractorId',
+    passport.authenticate('jwt', { session: false }),
+    asyncHandler(async (req, res) => {        
+        
+        const { orderId, contractorId } = req.params;
+        const userId = req.user.id;
+        const userRole = req.user.role;
+
+        if(userRole!=='company'){
+            return sendError(res, 'Назначить Исполнителя может только Компания (Заказчик)', 403);
+        }        
+
+        const orderUpdated = await OrdersService.setContractor(orderId, contractorId);
+
+        if(!orderUpdated){
+            return sendError(res, `Не удалось назначить Исполнителя заказу ${orderId}`, 500);
+        }
+
+        const companyId = orderUpdated.company;
+        
+        // send notifications
+        if (!await NotificationsService.sendAboutNewContractor( {customerId:userId, contractorId, orderId})){
+            return sendError(res, `Не удалось отправить сообщение о назначени Исполнителя ${contractorId} для заказа ${orderId}`, 500);
+        }
+        
+        sendSuccess(res, {             
+            responded: orderUpdated.responded,
+            message: 'ok', 
+        });
+
+    })
+);
+
 router.patch('/orders/:orderId/new-respond',
     passport.authenticate('jwt', { session: false }),
     asyncHandler(async (req, res) => {        
@@ -164,17 +196,22 @@ router.patch('/orders/:orderId/new-respond',
             return sendError(res, 'Откликнуться на заказ может только Дизайнер', 403);
         }        
 
-        const orderUpdated = await OrdersService.addUserToResponded(orderId, userId);
+        const orderUpdated = await OrdersService.addRespond(orderId, userId);
 
         if(!orderUpdated){
-            return sendError(res, 'Не удалось откликнуться на заказ', 500);
+            return sendError(res, `Не удалось откликнуться на заказ ${orderId}`, 500);
         }
 
         const companyId = orderUpdated.company;
         
-        // send notifications
-        if (!await NotificationsService.sendAboutNewRespond( userId, orderId, companyId)){
-            return sendError(res, 'Не удалось откликнуться на заказ', 500);
+        // send notifications          
+        const company = await CompanyService.findById(companyId);
+        if(!company){
+            return sendError(res, `Не удалось загрузить информацию о компании ${companyId}`, 404);
+        }   
+
+        if (!await NotificationsService.sendAboutNewRespond( {designerId:userId, orderId, customerId:company.userId} )){
+            return sendError(res, 'Не удалось отправить сообщение', 500);
         }
         
         sendSuccess(res, {             

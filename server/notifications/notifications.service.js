@@ -21,21 +21,20 @@ exports.findByUserId = function (userId) {
     })    
 } 
 
-exports.sendAboutNewRespond = function (userId, orderId, companyId) {  
+exports.sendAboutNewRespond = function ({designerId, orderId, customerId}) {  
     return new Promise(async (res,rej)=>{ 
       try{ 
 
-          const user = await UsersService.findById(userId); // designer
-          const company = await CompanyService.findById(companyId);
-
+          const designer = await UsersService.findById(designerId);
+          
           // сообщение заказчику
           const notifToCompany = {
-              title: `Дизайнер ${user.name} откликнулся на заказ ${orderId}`,
+              title: `Дизайнер ${designer.name} откликнулся на заказ ${orderId}`,
               readAt: '',            
               links: [
                   {
                       name: 'утвердить как исполнителя',
-                      url: `/orders/new-contractor/${userId}`,
+                      url: `/cp/company/set-contractor/${designerId}/order/${orderId}`,                      
                       bright: true
                   },
                   {
@@ -44,14 +43,14 @@ exports.sendAboutNewRespond = function (userId, orderId, companyId) {
                   },
                   {
                       name: 'дизайнер',
-                      url: `/designers/${userId}`
+                      url: `/designers/${designerId}`
                   }
               ],
-              receiver: `${company.userId}` //  заказчик
+              receiver: `${customerId}` //  заказчик
           }        
           // сообщение дизайнеру
           const notifToDesigner = {
-              title: `${user.name}, вы откликнулись на заказ ${orderId}`,
+              title: `${designer.name}, вы откликнулись на заказ ${orderId}`,
               readAt: '',
               links: [
                   {
@@ -59,7 +58,7 @@ exports.sendAboutNewRespond = function (userId, orderId, companyId) {
                       url: `/orders/${orderId}`
                   },
               ],
-              receiver: `${userId}` // дизайнер
+              receiver: `${designerId}` 
           }
 
           const newNotifsToCompany = await NotificationsModel.create(notifToCompany)
@@ -78,6 +77,75 @@ exports.sendAboutNewRespond = function (userId, orderId, companyId) {
     })    
 } 
 
+exports.sendAboutNewContractor = function ({customerId, contractorId, orderId}) {  
+    return new Promise(async (res,rej)=>{ 
+      try{ 
+
+          const customer = await UsersService.findById(customerId); // заказчик
+          const contractor = await UsersService.findById(contractorId); // исполнитель
+
+          // сообщение заказчику
+          const notifToCustomer = {
+              title: [
+                `${customer.name}, вы назначили Исполнителя для заказа ${orderId} `,
+                `Переведите на Счет Закза предоплату, чтобы Дизайнер смог начать работу. `,
+                `Теперь Вам доступен Чат с Дизайнером, где вы можете обсудить детали Заказа.`
+              ].join(''),
+              readAt: '',
+              links: [
+                  {
+                      name: 'Заказ',
+                      url: `/orders/${orderId}`
+                  },
+                  {
+                      name: 'Исполнитель',
+                      url: `/designers/${userId}`
+                  },
+                  {
+                      name: 'Чат с исполнителем',
+                      url: `/chats/${orderId}`
+                  },    
+              ],
+              receiver: `${customer.id}`
+          }        
+          // сообщение исполнителю
+          const notifToContractor = {
+              title: [
+                `${contractor.name}, вам подтвердили запрос на выполнение заказа ${orderId}. `,
+                `Вы назначены Исполнителем. `,
+                `Дожитесь, когда Заказчик переведет Предоплату на Счет Заказа `,
+                `Вам доступен Чат для общения с Заказчиком `,
+              ].join(''),
+              readAt: '',
+              links: [
+                  {
+                      name: 'заказ',
+                      url: `/orders/${orderId}`
+                  },
+                  {
+                      name: 'чат с Заказчиком',
+                      url: `/chats/${orderId}`,
+                      bright: true
+                  },
+              ],
+              receiver: `${contractor.id}`
+          }
+
+          const newNotifToCustomer = await NotificationsModel.create(notifToCustomer)
+          const newNotifToContractor = await NotificationsModel.create(notifToContractor)          
+          
+          if(!newNotifToCustomer || !newNotifToContractor) { 
+            res(false) 
+          }else{
+            res(true);
+          }
+
+      }catch(e){
+        console.log(`cant send notification, err:${e}`);
+        res(false);
+      }        
+    })    
+} 
 
 // Найти все непрочитанные уведомления
 // const unreadNotifications = await Notifications.find({ readAt: null });

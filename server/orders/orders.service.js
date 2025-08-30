@@ -78,7 +78,7 @@ exports.findById = function (id) {
       }
     })    
 }  
-exports.addUserToResponded = function(orderId, userId){
+exports.addRespond = function(orderId, userId){
   return new Promise(async (res,rej)=>{
       try{   
         
@@ -92,6 +92,32 @@ exports.addUserToResponded = function(orderId, userId){
             orderId,
             {
               responded: [...order.responded, userId],
+            },
+            { new: true }
+        );
+        res(updatedOrder);
+      }catch(e){
+        console.log(`cant update order, err:${e}`)
+        res(null);
+      }
+  })
+}
+
+exports.setContractor = function(orderId, contractorId){
+  return new Promise(async (res,rej)=>{
+      try{   
+        
+        const order = await OrdersModel.findById(orderId);
+
+        if(!order.responded.includes(contractorId)){
+          console.log(`нельзя назначить исполнителем пользователя ${contractorId}, который не откликался на заказ ${orderId}` )
+          res(null);
+        }
+
+        const updatedOrder = await OrdersModel.findByIdAndUpdate(
+            orderId,
+            {
+              contractor: contractorId,
             },
             { new: true }
         );

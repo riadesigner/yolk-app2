@@ -19,14 +19,13 @@ import DesignersPage from './pages/DesignersPage.jsx';
 import CompaniesPage from './pages/CompaniesPage.jsx';
 import ChatPage from './pages/ChatPage.jsx';
 
-
-
 import AuthCallback from './pages/AuthCallback.jsx';
 import RoleSelectionPage from './pages/private/RoleSelectionPage.jsx';
 import DesignerAdminPage from './pages/private/DesignerAdminPage.jsx'
 import DesignerInfoPage from './pages/private/DesignerInfoPage.jsx'
 import DesignerInfoEditPage from './pages/private/DesignerInfoEditPage.jsx'
 import CompanyAdminPage from './pages/private/CompanyAdminPage.jsx'
+import CompanySetContractorPage from './pages/private/CompanySetContractorPage.jsx'
 import CompanyInfoPage from './pages/private/CompanyInfoPage.jsx'
 import CompanyInfoEditPage from './pages/private/CompanyInfoEditPage.jsx'
 import CompanyCardPage from './pages/private/CompanyCardPage.jsx'
@@ -71,7 +70,8 @@ const router = createBrowserRouter([
       { path: 'orders/:id', element: <OrderPage /> }, //       
       { path: 'orders/search/:userInput', element: <OrdersPage /> }, //       
 
-      // private pages
+      // private pages      
+
       { path: 'cp/designer', element: <DesignerAdminPage /> }, // /личный кабинет менеджера
       { path: 'cp/designer/info', element: <DesignerInfoPage /> }, // /анкета дизайнера      
       { path: 'cp/designer/info/edit', element: <DesignerInfoEditPage /> }, // /редактирование анкеты дизайнера      
@@ -81,6 +81,7 @@ const router = createBrowserRouter([
       { path: 'cp/company/info/edit', element: <CompanyInfoEditPage /> }, // /редактирование общей информации о компании      
       { path: 'cp/company/card', element: <CompanyCardPage /> }, // /карточка компании (реквизиты)      
       { path: 'cp/company/card/edit', element: <CompanyCardEditPage /> }, // /редактирование карточки компании 
+      { path: 'cp/company/set-contractor/:contractorId/order/:orderId', element: <CompanySetContractorPage /> }, // /назначение исполнителя для Заказа      
             
       { path: 'cp/company/:companyId/order-new', element: <OrderNewPage /> }, // /добавление заказа       
       { path: 'cp/company/:companyId/order-edit/:orderId', element: <OrderEditPage /> }, // /редактирование заказа

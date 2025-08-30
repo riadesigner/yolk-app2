@@ -1,8 +1,9 @@
 const requestLogger = (req, res, next) => {
-  console.log('\n=== Новый запрос ===');
+  console.log('=== Новый запрос ===');
 //   console.log('Session ID:', req.sessionID);
-  console.log('Headers / referer:', req.headers.referer, '\n');
+  // console.log('Headers / referer:', req.headers.referer);
   //console.log('Cookies:', req.cookies);
+  console.log(req.url, req.method, req.params, req.query, req.body)
   next();
 };
 
