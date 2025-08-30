@@ -1,5 +1,6 @@
 
 const CompanyModel = require('./company.model');
+const paginate = require('../utils/paginate')
 
 exports.create = function (companyCreateDto = {}) {  
     return new Promise(async (res,rej)=>{ 
@@ -43,6 +44,41 @@ exports.findById = function (id) {
       }        
     })    
 } 
+
+// ----------------------
+// search with pagination
+// ----------------------
+exports.findAll = function (opt={}) {      
+    return new Promise(async (res,rej)=>{       
+    
+      // по умолчанию = сортировка по дате
+      const sort = opt.sort || {createdAt:-1};      
+      const query = {}  
+
+      if(opt.userInput){
+        const regex = new RegExp(opt.userInput, 'i'); // 'i' - ignore case      
+          query.$or = [
+              { name: { $regex: regex } },
+              { description: { $regex: regex } },
+            ];          
+      }
+      
+      try{ 
+        
+          const result = await paginate(CompanyModel, query, {
+              page: opt.page || 1,
+              limit: opt.limit || 10,
+              sort: sort,
+          });          
+          res(result);
+
+      }catch(e){
+        console.log(`companies not found, err:${e}`);
+        res({data:[],pagination:null});
+      }        
+    })
+} 
+
 
 exports.deleteFromGallery = function(id, imageKey){
     return new Promise(async (res,rej)=>{ 

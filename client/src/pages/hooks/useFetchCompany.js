@@ -24,7 +24,7 @@ export default function useFetchCompany({companyId}) {
         const fetchCompany = async (companyId) => {                              
             
             try {
-            const response = await api.get(`/company/${companyId}`);
+            const response = await api.get(`/companies/${companyId}`);
             if (response.data.success) {            
                 const company = response.data.company;                
                 if(company){

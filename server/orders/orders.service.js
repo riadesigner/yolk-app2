@@ -52,7 +52,7 @@ exports.findAll = function (opt={}) {
 
       }catch(e){
         console.log(`orders not found, err:${e}`);
-        res([]);
+        res({data:[],pagination:null});
       }        
     })
 } 

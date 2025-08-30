@@ -33,7 +33,7 @@ const upload = multer({
 
 const router = express.Router();
 
-router.get('/company/:id',    
+router.get('/companies/:id',    
     asyncHandler(async (req, res) => { 
         
         let { id: companyId  } =  req.params;
@@ -56,7 +56,27 @@ router.get('/company/:id',
     })
 );
 
-router.patch('/company/:id',
+router.get('/companies',    
+    asyncHandler(async (req, res) => {         
+        // Отключаем кэширование
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+        
+        const page = req.query.page || 1;
+        const limit = req.query.limit || 3;
+
+        const {
+            data:companies,
+            pagination,
+        } = await CompanyService.findAll({page, limit});
+
+        const retCompanies = companies.map(co=>co.toJSON());
+        sendSuccess(res, { companies:retCompanies, pagination }); 
+    })
+);
+
+router.patch('/companies/:id',
     passport.authenticate('jwt', { session: false }),
     asyncHandler(async (req, res) => {                
         const { id }= req.params; 
@@ -70,7 +90,7 @@ router.patch('/company/:id',
     })
 );
 
-router.put('/company',
+router.put('/companies',
     passport.authenticate('jwt', { session: false }),
     asyncHandler(async (req, res) => {        
         
@@ -102,7 +122,7 @@ router.put('/company',
     })
 );
 
-router.post('/company/upload-image',
+router.post('/companies/upload-image',
     passport.authenticate('jwt', { session: false }),
     upload.single('image'),
     asyncHandler(async (req, res) => {        
@@ -178,7 +198,7 @@ router.post('/company/upload-image',
     })
 );
 
-router.delete('/company/delete-image',
+router.delete('/companies/delete-image',
     passport.authenticate('jwt', { session: false }),
     asyncHandler(async (req, res) => {        
 

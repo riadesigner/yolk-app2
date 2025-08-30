@@ -32,7 +32,7 @@ export default function useFetchCreatingCompany({setErrorMessage}) {
                 }
                 console.log(`будем обновлять компанию ${companyId}`)
                 console.log(`companyData`, companyData)
-                const response = await api.patch(`/company/${company.id}`, {companyData});
+                const response = await api.patch(`/companies/${company.id}`, {companyData});
                 console.log('Компания успешно обновлена:', response.data);      
                             
             }else{ 
@@ -41,7 +41,7 @@ export default function useFetchCreatingCompany({setErrorMessage}) {
                     ...userInput,
                 }                
                 console.log('неизвестная компания!')               
-                const response = await api.put(`/company`, {companyData} );
+                const response = await api.put(`/companies`, {companyData} );
                 console.log('Компания успешно создана:', response.data);                                            
             }
 
