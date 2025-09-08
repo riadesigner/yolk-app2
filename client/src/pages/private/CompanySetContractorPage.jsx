@@ -12,10 +12,6 @@ export default function CompanySetContractorPage(){
         {link:'#', title:'Назначение исполнителя', isActive:true},
     ];    
 
-    const hdlClickAction = (e)=>{
-        e.preventDefault();
-        console.log('Утверждаю!');
-    }
 
     const {
         user,
@@ -23,7 +19,14 @@ export default function CompanySetContractorPage(){
         contractor,
         hasContractor,
         errorMessage,
+        setNewContractor,
     } = useFetchCompanySetContractor();   
+
+    const hdlClickAction = async (e)=>{
+        e.preventDefault();
+        console.log('Утверждаю!');
+        await setNewContractor();        
+    }
 
     return (
         <>
@@ -60,9 +63,19 @@ export default function CompanySetContractorPage(){
                                 )
                             }
                         </div>
-                        <div className="block" style={{textAlign:'right'}}>
-                            <button className="button is-large is-link" onClick={(e)=>{hdlClickAction(e)}}>Утвердить</button>
-                        </div>                        
+                        {
+                            order && (
+                                hasContractor ? (
+                                    <>
+                                        <h2 className="title is-size-5 mt-5">У данного заказа уже назначен <a target="_blank" href={`/designers/${order.contractor.id}`}>исполнитель</a></h2>
+                                    </>
+                                ):(
+                                    <div className="block" style={{textAlign:'right'}}>
+                                        <button className="button is-large is-link" onClick={(e)=>{hdlClickAction(e)}}>Утвердить</button>
+                                    </div>                        
+                                )
+                            )
+                        }
                     </div>                
                 </div>            
             </section>

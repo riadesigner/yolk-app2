@@ -16,16 +16,38 @@ export default function useFetchCompanySetContractor(){
             
     const navigate = useNavigate();        
 
+    const setNewContractor = async ()=>{
+        try{
+            const response = await api.patch(`/orders/${orderId}/new-contractor/${contractorId}`);
+            if(response.data.success){
+                const order = response.data.order;
+                setOrder(order);
+                if(order.contractor){
+                    setHasContractor(true)
+                }
+            }
+        }catch(err){
+            setErrorMessage('Не удалось установить исполнителя')
+            console.error('Ошибка установки исполнителя', err);
+        }        
+    }
+
+
     useEffect(() => {
 
         const fetchOrder = async ()=>{
             try{
                 const orderResponse = await api.get(`/orders/${orderId}`);
                 if(orderResponse.data.success){
-                    const order = orderResponse.data.order;
-                    setOrder(order);
-                    if(order.contractor && order.contractor.id === contractorId){
+                    const retOrder = orderResponse.data.order;
+                    console.log('retOrder = ', retOrder)
+                    setOrder(retOrder);
+                    if(retOrder.contractor){
+                        console.log('order.contractor = ', retOrder.contractor)                        
                         setHasContractor(true)
+                        if(retOrder.contractor.id !== contractorId) {
+                            setErrorMessage('У данного заказа уже есть назначенный исполнитель')
+                        }
                     }
                 }
             }catch(err){
@@ -78,6 +100,7 @@ export default function useFetchCompanySetContractor(){
         contractor,
         hasContractor,
         errorMessage,
+        setNewContractor,
         }
 
 }
