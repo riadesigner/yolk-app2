@@ -6,7 +6,10 @@ const userInfoService = require('../userinfo/userinfo.service')
   exports.findById = function (id) {
     return new Promise(async (res,rej)=>{
       try{
-        const user = await UsersModel.findById(id);
+        const user = await UsersModel
+          .findById(id)
+          .populate('userInfo')
+          .populate('userCompany');
         res(user); 
       }catch(e){
         console.log(`cant find user by id ${id}, err: ${e.message || e}`)

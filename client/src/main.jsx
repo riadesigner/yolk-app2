@@ -57,8 +57,8 @@ const router = createBrowserRouter([
       { path: 'startup', element: <StartUpPage /> }, // 
       { path: 'useragree', element: <UserAgreePage /> }, // 
       { path: 'designers', element: <DesignersPage /> }, // 
-      { path: 'designers/:id/portfolio', element: <PortfolioPage /> }, //       
-      { path: 'designers/:id', element: <DesignerInfoPublicPage /> }, // 
+      { path: 'designers/:designerId/portfolio', element: <PortfolioPage /> }, //       
+      { path: 'designers/:designerId', element: <DesignerInfoPublicPage /> }, // 
       { path: 'companies/:companyId', element: <CompanyPublicPage /> }, // 
       { path: 'companies', element: <CompaniesPage /> }, // 
       { path: 'chats/123', element: <ChatPage /> }, //       

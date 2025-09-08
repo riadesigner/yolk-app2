@@ -8,7 +8,7 @@ import img1 from "/portf/p-1.jpg"
 import img2 from "/portf/p-2.jpg"
 import img3 from "/portf/p-3.jpg"
 
-export default function Portfolio(props){
+export default function Portfolio({items=[], publicMode}){
 
     const portfolioItems = [
         {id:'1', title:'Проект с длинным названием, 2025', img:img1, linkTo:''},
@@ -18,8 +18,9 @@ export default function Portfolio(props){
         {id:'5', title:'Разработка иллюстраций для книги Сказки волщебного лотоса, Владивосток, 2016', img:'', linkTo:''},
         {id:'6', title:'Разработка оформления праздничного городского трамвая, 2001', img:'', linkTo:''},
     ]
-    
-    const items = portfolioItems.slice(0, 4);
+    console.log('publicMode', publicMode);
+
+    const pItems = portfolioItems.slice(0, 4);
 
 
 
@@ -30,7 +31,7 @@ export default function Portfolio(props){
                 <div className={styles.portfolio}>                    
                     <div className="columns">
                     {
-                        items.map((p, i)=>{
+                        pItems.map((p, i)=>{
                             return(
                                 <PortfolioItem 
                                     key={i}
@@ -47,10 +48,10 @@ export default function Portfolio(props){
             <div className="column is-4 is-right">
                     <div className="has-text-right ">
                         {                         
-                        props.publicMode ? (               
+                        publicMode ? (               
                             <>
                             <Link to="/designers/123/portfolio">
-                            <button class="button is-link">
+                            <button className="button is-link">
                                  <span>Смотреть</span>
                                 <span><i className="fa-solid fa-arrow-right"></i></span>                 
                             </button>                            

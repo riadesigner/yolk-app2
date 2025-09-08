@@ -23,14 +23,18 @@ router.get('/users/me',
 );
 
 router.get('/users/:id',
-    passport.authenticate('jwt', { session: false }),
     asyncHandler(async (req, res) => {         
         const {id} = req.params;
         console.log(`search user ${id}`);
         const user = await UsersService.findById(id);
-        if (!user) { return sendError(res, 'User not found', 404); }        
-        sendSuccess(res, { user:user.toJSON() });        
-
+        if (!user) { return sendError(res, 'User not found', 404); }
+        //------------------------------------
+        //     hidding private information
+        //------------------------------------
+        const { userCompany, ...userWithoutCompany } = user.toJSON();        
+        userWithoutCompany.userInfo.phone='';
+        //------------------------------------
+        sendSuccess(res, { user:userWithoutCompany });
     })
 );
 

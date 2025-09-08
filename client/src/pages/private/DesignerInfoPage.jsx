@@ -144,8 +144,7 @@ export default function DesignerInfoPage(){
                                 )}
                             </div>                            
                             <div className="column is-5">
-                                <h2 className="is-size-6 subtitle">Hard skills</h2>
-                                <div className="block">
+                                <h2 className="is-size-6 subtitle">Hard skills</h2>                                
                                 { (user?.userInfo?.hardSkills 
                                     && user.userInfo.hardSkills.length > 0 
                                     && user.userInfo.hardSkills[0].title!=='' ) ? (
@@ -156,8 +155,7 @@ export default function DesignerInfoPage(){
                                     })
                                 ):(
                                     <>Не указано</>
-                                )}   
-                                </div>
+                                )}                                   
                             </div>
                             <div className="column  desktop-only"></div>                            
                         </div>
