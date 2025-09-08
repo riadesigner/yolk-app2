@@ -7,7 +7,7 @@ import useSoftSkills from './useSoftSkills';
 import useHardSkills from './useHardSkills';
 
 
-export default function useFetchUser({setErrorMessage}) {
+export default function useFetchDesigner({setErrorMessage}) {
     const [user, setUser] = useState(null);
     const [avatar, setAvatar] = useState(null);
     const [firstName, setFirstName] = useState("");

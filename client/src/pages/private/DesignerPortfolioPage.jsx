@@ -34,6 +34,12 @@ export default function DesignerInfoPage(){
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
+    const hdlAddToPortfolio = ()=>{        
+        console.log('add new portfolio')
+        // window.location.href = '/cp/designer/portfolio/new';
+    }
+
+
     console.log('portfolios', portfolios);
 
     useEffect(() => {
@@ -112,7 +118,7 @@ export default function DesignerInfoPage(){
                         <div style={{marginTop:'2vw'}}>
                             <p>Добавьте в портфолио проекты с примерами ваших работ.</p>
                             <br />
-                            <AddButton label="Добавить проект"/>                            
+                            <AddButton label="Добавить проект" onClick={hdlAddToPortfolio}/>                            
                         </div>                        
                     )
                 }

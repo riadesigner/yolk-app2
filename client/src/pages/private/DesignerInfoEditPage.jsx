@@ -3,7 +3,7 @@ import styles from '../../pages/private/DesignerInfoEditPage.module.css'
 import Field from '../../components/Field'
 import Breadcrumb from '../../components/Breadcrumb';
 import ErrorMessage from '../../components/ErrorMessage';
-import useFetchUser from './hooks/useFetchUser';
+import useFetchDesigner from './hooks/useFetchDesigner';
 import { useState } from 'react';
 
 export default function DesignerEditInfoPage(){
@@ -45,7 +45,7 @@ export default function DesignerEditInfoPage(){
         specialization,
         setSpecialization,
         hdlSaveUser,        
-    } = useFetchUser({errorMessage, setErrorMessage});
+    } = useFetchDesigner({errorMessage, setErrorMessage});
 
     return (
         <>
