@@ -19,11 +19,17 @@ import DesignersPage from './pages/DesignersPage.jsx';
 import CompaniesPage from './pages/CompaniesPage.jsx';
 import ChatPage from './pages/ChatPage.jsx';
 
+// --------------------
+//    PRIVATE PAGES
+// --------------------
 import AuthCallback from './pages/AuthCallback.jsx';
 import RoleSelectionPage from './pages/private/RoleSelectionPage.jsx';
 import DesignerAdminPage from './pages/private/DesignerAdminPage.jsx'
 import DesignerInfoPage from './pages/private/DesignerInfoPage.jsx'
 import DesignerInfoEditPage from './pages/private/DesignerInfoEditPage.jsx'
+import DesignerPortfolioPage from './pages/private/DesignerPortfolioPage.jsx'
+import DesignerPortfolioEditPage from './pages/private/DesignerPortfolioEditPage.jsx'
+import DesignerPortfolioAddPage from './pages/private/DesignerPortfolioAddPage.jsx'
 import CompanyAdminPage from './pages/private/CompanyAdminPage.jsx'
 import CompanySetContractorPage from './pages/private/CompanySetContractorPage.jsx'
 import CompanyInfoPage from './pages/private/CompanyInfoPage.jsx'
@@ -74,8 +80,11 @@ const router = createBrowserRouter([
 
       { path: 'cp/designer', element: <DesignerAdminPage /> }, // /личный кабинет менеджера
       { path: 'cp/designer/info', element: <DesignerInfoPage /> }, // /анкета дизайнера      
-      { path: 'cp/designer/info/edit', element: <DesignerInfoEditPage /> }, // /редактирование анкеты дизайнера      
-
+      { path: 'cp/designer/info/edit', element: <DesignerInfoEditPage /> }, // /редактирование анкеты дизайнера            
+      { path: 'cp/designer/portfolio/edit', element: <DesignerPortfolioEditPage /> }, // /редактирование портфолио дизайнера            
+      { path: 'cp/designer/portfolio/add', element: <DesignerPortfolioAddPage /> }, // /добавление проекта в портфолио дизайнера      
+      { path: 'cp/designer/portfolio', element: <DesignerPortfolioPage /> }, // /портфолио дизайнера      
+      
       { path: 'cp/company', element: <CompanyAdminPage /> }, // /личный кабинет компании
       { path: 'cp/company/info', element: <CompanyInfoPage /> }, // /общая информация о компании      
       { path: 'cp/company/info/edit', element: <CompanyInfoEditPage /> }, // /редактирование общей информации о компании      

@@ -74,7 +74,7 @@ export default function CompanyInfoEditPage(){
                             value={companyName} 
                             onChange={setCompanyName} />
 
-                        <Field label="Город" value={city} onChange={setCity} />                        
+                        <Field label="Город" value={city} onChange={setCity} />
                     </div>
                 </div> 
             </div>
@@ -95,8 +95,8 @@ export default function CompanyInfoEditPage(){
                         onChange={setDescription}
                         />                    
                 </div>               
-            </div>                
-                     
+            </div>                    
+
             <div className="block mb-6">
                 <h2 className="subtitle is-size-7"><strong>Галерея изображений</strong></h2>
                 <div className={styles.gallery}>

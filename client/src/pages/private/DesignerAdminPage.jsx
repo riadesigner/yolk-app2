@@ -52,7 +52,7 @@ export default function DesignerAdminPage(){
                             </button>                                                            
                             </Link>
 
-                            <Link to="/designers/123/portfolio">
+                            <Link to="/cp/designer/portfolio">
                             <button className="button  is-fluid is-medium is-regular-mobile is-link ">
                                 <span>Портфолио</span>    
                                 <span className="icon"><i className="fa fa-angle-right"></i></span>

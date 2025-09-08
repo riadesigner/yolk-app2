@@ -1,15 +1,16 @@
 
-.portItem{cursor: pointer;}
-.portItem > div{
-  padding:.5rem;
-  background-color: var(--superlight-color);
+.portItem{
+  cursor: pointer;
+}
+
+.imagesBlock{
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap:.5rem;
   border-radius: 10px;  
 }
-.portItem div span{
-  background-color: white;
+.imagesBlock span{
+  background-color: rgb(197, 197, 197);
   border-radius: 6px;
   height: 150px;
 }
@@ -23,10 +24,10 @@
 
 @media (max-width: 1023px) {
  
-  .portItem > div{
+  .imagesBlock{
     grid-template-columns: repeat(4, 1fr);
   }
-  .portItem div span{
+  .imagesBlock span{
     height: 50px;
   }
 
