@@ -1,6 +1,6 @@
-export default function AddButton(props){
-    const {label, onClick} = props;
-    console.log('onClick = ', onClick)
+
+export default function AddButton({label, onClick}){
+    
     return (
         <div style={{
             display:'flex',

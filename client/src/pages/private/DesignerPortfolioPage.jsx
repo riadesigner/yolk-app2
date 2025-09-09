@@ -1,69 +1,25 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 // import { useAuth } from '../../contexts/AuthContext';
 // import api from '../../utils/api';
 
 import AddButton from '../../components/AddButton'
 import PublicPortfolioItem from '../../components/PublicPortfolioItem'
+import ErrorMessage from '../../components/ErrorMessage'
 import styles from '../private/DesignerPortfolioPage.module.css'
-
-const portfolios = [
-    {
-        id:'1',
-        images: [], 
-        title: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima nulla inventore quia aut modi laborum tenetur nihil, rerum recusandae ',
-        url:''
-    },
-    // {
-    //     id:'2',
-    //     images: [], 
-    //     title: 'Проект 2',
-    //     url:''
-    // },
-    // {
-    //     id:'3',
-    //     images: [], 
-    //     title: 'Smagnam, reprehenderit officiis corrupti veritatis',
-    //     url:'',
-    // }        
-];
+import useFetchDesignerPortfolio from './hooks/useFetchDesignerPortfolio'
 
 export default function DesignerInfoPage(){
+    
+    // const navigate = useNavigate();
 
-    const [user, setUser] = useState(null);
-    const navigate = useNavigate();
-
-    const hdlAddToPortfolio = ()=>{        
-        console.log('add new portfolio')
-        // window.location.href = '/cp/designer/portfolio/new';
-    }
-
-
-    console.log('portfolios', portfolios);
-
-    useEffect(() => {
-
-        // const fetchUser = async () => {          
-        //     try {
-        //         const response = await api.get('/users/me');
-        //         console.log('response', response);
-                
-        //         if(response.data.success){
-        //             const user = response.data.user;
-        //             setUser(user);  
-
-        //         }
-
-        //     } catch (err) {
-        //         console.error('Ошибка загрузки анкеты', err);
-        //         // navigate('/login');
-        //         navigate('/');
-        //     }
-        // };
+    const [errorMessage, setErrorMessage] = useState('');
         
-        // fetchUser();
-    }, []);
+    const {
+        hdlAddToPortfolio,
+        portfolios,
+    } = useFetchDesignerPortfolio(setErrorMessage);
     
     return (
         <>
@@ -111,17 +67,24 @@ export default function DesignerInfoPage(){
                                     )
                                 })
                             }
-                            <AddButton label="Добавить проект"/>
+                            <AddButton label="Добавить проект" onClick={(val)=>hdlAddToPortfolio(val)}/>
                         </div>
 
                     ):(
                         <div style={{marginTop:'2vw'}}>
                             <p>Добавьте в портфолио проекты с примерами ваших работ.</p>
                             <br />
-                            <AddButton label="Добавить проект" onClick={hdlAddToPortfolio}/>                            
+                            <AddButton label="Добавить проект" onClick={(val)=>hdlAddToPortfolio(val)}/>
                         </div>                        
                     )
                 }
+
+            {
+                errorMessage && (
+                    <ErrorMessage message={errorMessage} />
+                )
+            }
+
             </article>
             </div>                
         </section>

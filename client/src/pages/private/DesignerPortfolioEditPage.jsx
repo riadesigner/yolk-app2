@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Field from '../../components/Field';
 import ImageUploader from '../../components/ImageUploader';
 import styles from '../../pages/private/DesignerPortfolioEditPage.module.css'
+import ErrorMessage from '../../components/ErrorMessage';
 
 import { useAuth } from '../../contexts/AuthContext';
 import api from '../../utils/api';

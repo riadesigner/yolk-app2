@@ -1,47 +1,24 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-
+import { useState } from 'react';
 import Field from '../../components/Field';
+import ErrorMessage from '../../components/ErrorMessage';
 
-import { useAuth } from '../../contexts/AuthContext';
-import api from '../../utils/api';
+import useFetchDesignerPortfolioAdd from './hooks/useFetchDesignerPortfolioAdd'
+
 
 export default function DesignerPortfolioAddPage(){
-
-    const [user, setUser] = useState(null);
-    const [description, setDescription] = useState('');
-    const [title, setTitle] = useState('');
-    const [portfolioItem, setPortfolioItem] = useState(null);
+    
     const [errorMessage, setErrorMessage] = useState('');
-    
-    const hdlSaveAll = ()=>{
 
-    }
+    const {
+        portfolioItem,
+        title, 
+        setTitle,
+        description, 
+        setDescription,
+        hdlSavePortfolio,
+    } = useFetchDesignerPortfolioAdd(setErrorMessage)
 
-    const navigate = useNavigate();
-
-    // useEffect(() => {
-
-    //     const fetchUser = async () => {          
-    //         try {
-    //             const response = await api.get('/users/me');
-    //             console.log('response', response);
-                
-    //             if(response.data.success){
-    //                 const user = response.data.user;
-    //                 setUser(user);  
-
-    //             }
-
-    //         } catch (err) {
-    //             console.error('Ошибка загрузки портфолио', err);
-    //             navigate('/');
-    //         }
-    //     };
-        
-    //     fetchUser();
-    // }, []);    
-    
     return (
         <>
         <section className="container is-max-desktop desktop-only">
@@ -89,7 +66,7 @@ export default function DesignerPortfolioAddPage(){
             </div>         
 
             <div className="block has-text-right">                
-                <button className="button is-primary is-medium is-regular-mobile" onClick={hdlSaveAll}>Сохранить</button>                            
+                <button className="button is-primary is-medium is-regular-mobile" onClick={(val)=>hdlSavePortfolio(val)}>Сохранить</button>                            
             </div>
 
             {

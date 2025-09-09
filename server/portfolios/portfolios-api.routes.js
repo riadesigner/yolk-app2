@@ -1,6 +1,6 @@
 const express = require('express')
 const UsersService = require('../users/users.service')
-const OrdersService = require('./portfolios.service')
+const PortfoliosService = require('./portfolios.service')
 const multer = require('multer');
 const AWS = require('aws-sdk');
 
@@ -36,8 +36,10 @@ const upload = multer({
 });
 
 // GET /portfolios – получить список всех 
+// GET /portfolios/me – получить список всех для пользователя, который авторизировался 
+// GET /portfolios/by/:designerId – получить одно для дизайнера 
 // GET /portfolios/:portfolioId – получить одно 
-// PUT /portfolios/:designerId – добавить одно портфолио для дизайнера
+// PUT /portfolios/for/me – добавить одно портфолио для пользователя, который авторизировался 
 // PATCH /portfolios/:portfolioId – частично обновить одно
 // DELETE /portfolios/:portfolioId – удалить одно
 
@@ -47,65 +49,64 @@ const upload = multer({
 // Более специфичные роуты - выше
 
 
-router.patch('/portfolios/:portfolioId',
+router.get('/portfolios/me',
     passport.authenticate('jwt', { session: false }),
     asyncHandler(async (req, res) => {        
-        
-        // const { orderId, contractorId } = req.params;
-        // const userId = req.user.id;
-        // const userRole = req.user.role;
+                
+        const userId = req.user.id;
+        const userRole = req.user.role;
 
-        // if(userRole!=='company'){
-        //     return sendError(res, 'Назначить Исполнителя может только Компания (Заказчик)', 403);
-        // }        
-
-        // const orderUpdated = await OrdersService.setContractor(orderId, contractorId);
-
-        // if(!orderUpdated){
-        //     return sendError(res, `Не удалось назначить Исполнителя заказу ${orderId}`, 500);
-        // }
-
-        // const companyId = orderUpdated.company;
-        
-        // // send notifications
-        // if (!await NotificationsService.sendAboutNewContractor( {customerId:userId, contractorId, orderId})){
-        //     return sendError(res, `Не удалось отправить сообщение о назначени Исполнителя ${contractorId} для заказа ${orderId}`, 500);
-        // }
-        
-        // sendSuccess(res, {             
-        //     responded: orderUpdated.responded,
-        //     message: 'ok', 
-        // });
-
-    })
-);
-
-router.put('/portfolios/:designerId',
-    passport.authenticate('jwt', { session: false }),
-    asyncHandler(async (req, res) => {        
-        const { designerId } = req.params;
-        const { portfolioData } = req.body;
-
-        const user = await UsersService.findByEmail(req.user.email);
-        if (!user) {  return sendError(res, 'Unknown user', 404); }        
-        if (user.role !=='company') {  return sendError(res, 'User not autorized for this action', 403);}                
-
-        const company = await CompanyService.findById(companyId);
-        if(!company){ return sendError(res, `Company with id ${companyId} not found`, 404); }
-
-        const orderCreateDto = {
-            designer: designerId,
-            ...portfolioData,
+        if(userRole!=='designer'){
+            return sendError(res, 'Портфолио есть только у дизайнера', 403);
         }
 
-        const orderCreated = await OrdersService.create(orderCreateDto);
+        const allPortfolios = await PortfoliosService.findByUserId(userId);
+        const retPortfolios = allPortfolios.map((p)=>p.toJSON())
         
-        sendSuccess(res, { 
-            order: orderCreated,
-            message: 'Заказ создан', 
+        sendSuccess(res, {             
+            portfolios: retPortfolios,            
         });
+
     })
 );
+
+router.put('/portfolios/for/me',
+    passport.authenticate('jwt', { session: false }),
+    asyncHandler(async (req, res) => {        
+                
+        const userId = req.user.id;
+        const userRole = req.user.role;
+        const {title, description} = req.body;
+
+        if(userRole!=='designer'){
+            return sendError(res, 'Портфолио есть только у дизайнера', 403);
+        }
+
+        if(title.trim()===''){
+            return sendError(res, 'Название проекта не может быть пустым', 400);
+        }
+
+        const portfolioCreateDto = {
+            designer:userId,
+            title,
+            description,
+        }
+
+        const createdPortfolio = await PortfoliosService.create(portfolioCreateDto);
+        console.log('==== createdPortfolio ======', createdPortfolio);
+        
+        if(!createdPortfolio){
+            return sendError(res, 'Не удалось сохраниеть проект в портфолио', 500);
+        }
+        
+        sendSuccess(res, {
+            portfolio: createdPortfolio.toJSON(),            
+        });
+
+    })
+);
+
+
 
 
 router.post('/portfolios/upload-image',
