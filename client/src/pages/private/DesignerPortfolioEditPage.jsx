@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import Field from '../../components/Field';
 import ImageUploader from '../../components/ImageUploader';
+import Breadcrumb from '../../components/Breadcrumb';
 import styles from '../../pages/private/DesignerPortfolioEditPage.module.css'
 import ErrorMessage from '../../components/ErrorMessage';
 
@@ -10,10 +11,7 @@ import useFetchDesignerPortfolioEdit from './hooks/useFetchDesignerPortfolioEdit
 
 export default function DesignerPortfolioEditPage(){
 
-    
-
     const [errorMessage, setErrorMessage] = useState('');
-    const [gallery, setGallery] = useState([]);
 
     const {
         portfolioItem,
@@ -21,22 +19,27 @@ export default function DesignerPortfolioEditPage(){
         setTitle,
         description, 
         setDescription,
+        gallery, 
+        setGallery,
         hdlSavePortfolio,
     } = useFetchDesignerPortfolioEdit(setErrorMessage);
 
+    const links = [
+        {link:'/', title:'Главная'},
+        {link:'/cp/designer', title:'Панель управления'},            
+        {link:'/cp/designer/portfolio', title:'Портфолио'},
+        {link:'#', title:'Редактирование', isActive:true},
+    ];
+
     return (
         <>
+            
         <section className="container is-max-desktop desktop-only">
         <div className="section">
-            <nav className="breadcrumb" aria-label="breadcrumbs">
-            <ul>
-                <li><NavLink to="/">Главная</NavLink></li>
-                <li ><NavLink to="/cp/designer">Панель управления</NavLink></li>
-                <li className="is-active"><a href="#">Редактирование портфолио</a></li>
-            </ul>
-            </nav>
+            <Breadcrumb links={links}/>
         </div>
         </section>
+
         <article>
         <section className="container">            
             <div className="section ">

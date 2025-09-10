@@ -72,6 +72,22 @@ router.get('/portfolios/me',
     })
 );
 
+router.get('/portfolios/:portfolioId',    
+    asyncHandler(async (req, res) => {        
+        
+        const {portfolioId} = req.params;
+        const portfolio = await PortfoliosService.findById(portfolioId);
+        if(!portfolio){
+            throw new AppError(`Не найден проект в портфолио с id ${portfolioId}`, 404);
+        }
+        
+        sendSuccess(res, {             
+            portfolio: portfolio.toJSON(),            
+        });
+
+    })
+);
+
 router.put('/portfolios/for/me',
     passport.authenticate('jwt', { session: false }),
     asyncHandler(async (req, res) => {        
@@ -103,6 +119,36 @@ router.put('/portfolios/for/me',
         
         sendSuccess(res, {
             portfolio: createdPortfolio.toJSON(),            
+        });
+
+    })
+);
+
+router.patch('/portfolios/for/me',
+    passport.authenticate('jwt', { session: false }),
+    asyncHandler(async (req, res) => {        
+                
+        const userId = req.user.id;
+        const userRole = req.user.role;
+        const {portfolioId, title, description} = req.body;
+
+        if(userRole!=='designer'){
+            throw new AppError('Портфолио есть только у дизайнера', 403)            
+        }
+
+        if(title.trim()===''){
+            throw new AppError('Название проекта не может быть пустым', 400)                        
+        }
+
+        const portfolioUpdateDto = {
+            title,
+            description,
+        }
+
+        const updatedPortfolio = await PortfoliosService.update(portfolioId, portfolioUpdateDto);        
+        
+        sendSuccess(res, {
+            portfolio: updatedPortfolio.toJSON(),            
         });
 
     })

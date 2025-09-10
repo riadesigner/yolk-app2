@@ -2,6 +2,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Field from '../../components/Field';
 import ErrorMessage from '../../components/ErrorMessage';
+import Breadcrumb from '../../components/Breadcrumb';
 
 import useFetchDesignerPortfolioAdd from './hooks/useFetchDesignerPortfolioAdd'
 
@@ -19,19 +20,22 @@ export default function DesignerPortfolioAddPage(){
         hdlSavePortfolio,
     } = useFetchDesignerPortfolioAdd(setErrorMessage)
 
+    const links = [
+        {link:'/', title:'Главная'},
+        {link:'/cp/designer', title:'Панель управления'},            
+        {link:'/cp/designer/portfolio', title:'Портфолио'},
+        {link:'#', title:'Добавление проекта', isActive:true},
+    ];
+
     return (
         <>
+
         <section className="container is-max-desktop desktop-only">
         <div className="section">
-            <nav className="breadcrumb" aria-label="breadcrumbs">
-            <ul>
-                <li><NavLink to="/">Главная</NavLink></li>
-                <li ><NavLink to="/cp/designer">Панель управления</NavLink></li>
-                <li className="is-active"><a href="#">Добавление проекта в портфолио</a></li>
-            </ul>
-            </nav>
+            <Breadcrumb links={links}/>
         </div>
         </section>
+
         <article>
         <section className="container">            
             <div className="section ">

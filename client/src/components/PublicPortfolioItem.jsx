@@ -4,7 +4,7 @@ import styles from '../components/PublicPortfolioItem.module.css'
 
 export default function PublicPortfolioItem(props){
 
-    const {id, images, title, forEdit, hdlDelete, hdlEdit} = props;        
+    const {id, images, title, forEdit, hdlDelete, hdlEdit} = props;
 
     const [showConfirm, setShowConfirm] = useState(false);
     const hdlConfirmShow = (e)=>{

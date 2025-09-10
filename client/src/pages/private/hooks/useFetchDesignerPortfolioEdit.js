@@ -1,41 +1,43 @@
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import api from '../../../utils/api'
 
 export default function useFetchDesignerPortfolioEdit(setErrorMessage){
-    
+
+    const { portfolioId } = useParams();
+
     const [description, setDescription] = useState('');
     const [title, setTitle] = useState('');
     const [portfolioItem, setPortfolioItem] = useState(null);
-    const navigate = useNavigate();
-    const portfolioId = '';
+    const [gallery, setGallery] = useState([]);
+    
+    const navigate = useNavigate();    
 
-    // const hdlSavePortfolio = async (e)=>{    
-    //     e.preventDefault();        
+    const hdlSavePortfolio = async (e)=>{    
+        e.preventDefault();        
         
-    //     setErrorMessage('');
+        setErrorMessage('');
 
-    //     if(title.trim()===''){
-    //         setErrorMessage('Название проекта не может быть пустым!');
-    //         return;
-    //     }
+        if(title.trim()===''){
+            setErrorMessage('Название проекта не может быть пустым!');
+            return;
+        }
 
-    //     try {
-    //         const response = await api.patch('/portfolios/for/me', {title, description});
+        try {
+            const response = await api.patch('/portfolios/for/me', {portfolioId, title, description});
 
-    //         if(response.data.success){    
-    //             const resPortfolioItem = response.data.portfolio;
-    //             setErrorMessage('');
-    //             setPortfolioItem(resPortfolioItem);
-    //             navigate('/cp/designer/portfolio');
-    //         }
+            if(response.data.success){    
+                const resPortfolioItem = response.data.portfolio;                
+                setPortfolioItem(resPortfolioItem);
+                navigate('/cp/designer/portfolio');
+            }
             
-    //     } catch (err) {
-    //         console.error('Ошибка сохранения портфолио', err);
-    //         setErrorMessage('Ошибка сохранения портфолио');
-    //     }
-    // }    
+        } catch (err) {
+            console.error('Ошибка сохранения портфолио', err);
+            setErrorMessage('Ошибка сохранения портфолио');
+        }
+    }    
 
     useEffect(() => {        
         const fetchPortfolioItem = async () => {
@@ -44,9 +46,11 @@ export default function useFetchDesignerPortfolioEdit(setErrorMessage){
                 const response = await api.get(`/portfolios/${portfolioId}`);
 
                 if(response.data.success){    
-                    const portfolioItem = response.data.portfolio;
-                    console.log('portfolioItem', portfolioItem);
+                    const portfolioItem = response.data.portfolio;                    
                     setPortfolioItem(portfolioItem);
+                    setDescription(portfolioItem.description)
+                    setTitle(portfolioItem.title)
+                    setGallery(portfolioItem.images)
                 }
                 
             } catch (err) {
@@ -64,6 +68,8 @@ export default function useFetchDesignerPortfolioEdit(setErrorMessage){
         setTitle,
         description, 
         setDescription,
+        gallery, 
+        setGallery,
         hdlSavePortfolio,
         }
 

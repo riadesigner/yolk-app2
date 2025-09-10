@@ -25,17 +25,27 @@ exports.create = function (portfolioCreateDto = {}) {
     })    
 }  
 
-exports.findByUserId = function (userId) {  
-    return new Promise(async (res,rej)=>{ 
-      try{
-        res(await PortfoliosModel.find({designer:userId}));
-      }catch(e){
-        console.log(`not found portfolio by designer ${userId}, err:${e}`)
-        res([]);
-      }
-    })    
-} 
+exports.update = async function (portfolioId, portfolioUpdateDto = {}) {    
+    const {updatedAt, createdAt, ...data } = portfolioUpdateDto;
+    try{        
+      const portfolioUpdated = await PortfoliosModel.findByIdAndUpdate(
+          portfolioId,
+          data,
+          { new: true }
+      );
+      return portfolioUpdated;
+    }catch(err){
+      throw new AppError(`cant update portfolio ${err}`, 500);      
+    }    
+}
 
+exports.findByUserId = async function (userId) {      
+    try{
+      return await PortfoliosModel.find({designer:userId});
+    }catch(err){        
+      return [];
+    }
+} 
 
 exports.findById = function (portfolioId) {  
     return new Promise(async (res,rej)=>{ 
@@ -44,14 +54,12 @@ exports.findById = function (portfolioId) {
           .findById(portfolioId)
           .populate('designer');
         res(p);
-      }catch(e){
-        console.log(`not found portfolio with id ${portfolioId}, err:${e}`)
+      }catch(err){
+        console.log(`not found portfolio with id ${portfolioId}, err:${err}`)
         res(null);
       }
     })    
 } 
-
-
 
 exports.deleteById = async function(portfolioId) {      
     try {
