@@ -40,7 +40,7 @@ function apiErrorHandler(sendError) {
 
     sendError(
       res,
-      status >= 500 ? 'Internal server error' : err.message || 'Error',
+      status >= 500 ? 'Internal server error' : err.message || 'Error',      
       status,
       process.env.NODE_ENV === 'development' ? err.stack : null
     );

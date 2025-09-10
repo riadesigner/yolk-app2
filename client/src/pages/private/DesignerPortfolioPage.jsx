@@ -18,7 +18,8 @@ export default function DesignerInfoPage(){
         
     const {
         hdlAddToPortfolio,
-        portfolios,
+        hdlDelete,
+        portfolios,        
     } = useFetchDesignerPortfolio(setErrorMessage);
     
     return (
@@ -63,7 +64,15 @@ export default function DesignerInfoPage(){
                             {
                                 portfolios.map((i)=>{
                                     return(
-                                        <PublicPortfolioItem key={i.id} images={i.images} title={i.title} url={i.url} forEdit/>
+                                        <PublicPortfolioItem 
+                                            key={i.id} 
+                                            id={i.id}
+                                            images={i.images} 
+                                            title={i.title} 
+                                            description={i.description} 
+                                            hdlDelete={hdlDelete}
+                                            forEdit
+                                            />
                                     )
                                 })
                             }

@@ -4,6 +4,8 @@ const PortfoliosService = require('./portfolios.service')
 const multer = require('multer');
 const AWS = require('aws-sdk');
 
+const AppError = require('../middleware/AppError')
+
 const passport = require('passport');
 const { asyncHandler, sendSuccess, sendError } = require('../middleware/utils');
 
@@ -105,6 +107,64 @@ router.put('/portfolios/for/me',
 
     })
 );
+
+router.delete('/portfolios/:portfolioId',
+    passport.authenticate('jwt', { session: false }),
+    asyncHandler(async (req, res) => {        
+                
+        const userId = req.user.id;
+        const userRole = req.user.role;
+        const {portfolioId} = req.params;
+    
+        if(userRole!=='designer'){            
+            throw new AppError('Роль не соответствует', 403);
+        }
+
+        const portfolio = await PortfoliosService.findById(portfolioId);
+        
+        if(!portfolio){            
+            throw new AppError('Портфолио не найдено', 404);
+        }
+
+        if(portfolio.designer.id !== userId){            
+            throw new AppError('Не хватает прав на удаление', 403);
+        }
+
+        const result = await PortfoliosService.deleteById(portfolioId)
+        if(!result){            
+            throw new AppError('Не удалось удалить портфолио', 500);
+        }
+
+        const allPortfolios = await PortfoliosService.findByUserId(userId);
+        const retPortfolios = allPortfolios.map((p)=>p.toJSON())
+        
+        sendSuccess(res, {             
+            portfolios: retPortfolios,            
+        });
+
+    })
+);
+
+// router.get('/portfolios/me',
+//     passport.authenticate('jwt', { session: false }),
+//     asyncHandler(async (req, res) => {        
+                
+//         const userId = req.user.id;
+//         const userRole = req.user.role;
+
+//         if(userRole!=='designer'){
+//             return sendError(res, 'Портфолио есть только у дизайнера', 403);
+//         }
+
+//         const allPortfolios = await PortfoliosService.findByUserId(userId);
+//         const retPortfolios = allPortfolios.map((p)=>p.toJSON())
+        
+//         sendSuccess(res, {             
+//             portfolios: retPortfolios,            
+//         });
+
+//     })
+// );
 
 
 

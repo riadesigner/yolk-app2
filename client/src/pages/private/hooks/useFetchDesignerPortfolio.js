@@ -10,6 +10,24 @@ export default function useFetchDesignerPortfolio(setErrorMessage){
         window.location.href = '/cp/designer/portfolio/add';
     }
 
+    const hdlDelete = async (e, idPortfolio)=>{    
+        e.preventDefault();        
+        try {
+            console.log('idPortfolio', idPortfolio)
+            const response = await api.delete(`/portfolios/${idPortfolio}`);
+
+            if(response.data.success){    
+                const arrPortfolios = response.data.portfolios;
+                setPortfolios(arrPortfolios);
+            }
+            
+        } catch (err) {
+            console.error('Ошибка удаления портфолио', err);
+            setErrorMessage('Ошибка удаления портфолио');
+        }
+    };
+    
+
     const [portfolios, setPortfolios] = useState([]);            
 
     useEffect(() => {
@@ -34,6 +52,7 @@ export default function useFetchDesignerPortfolio(setErrorMessage){
 
     return {
         hdlAddToPortfolio,
+        hdlDelete,
         portfolios,
         }
 

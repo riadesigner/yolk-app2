@@ -1,6 +1,7 @@
 
 const PortfoliosModel = require('./portfolios.model');
 const paginate = require('../utils/paginate')
+const AppError = require('../middleware/AppError')
 
 exports.create = function (portfolioCreateDto = {}) {  
     return new Promise(async (res,rej)=>{ 
@@ -35,6 +36,32 @@ exports.findByUserId = function (userId) {
     })    
 } 
 
+
+exports.findById = function (portfolioId) {  
+    return new Promise(async (res,rej)=>{ 
+      try{
+        const p = await PortfoliosModel
+          .findById(portfolioId)
+          .populate('designer');
+        res(p);
+      }catch(e){
+        console.log(`not found portfolio with id ${portfolioId}, err:${e}`)
+        res(null);
+      }
+    })    
+} 
+
+
+
+exports.deleteById = async function(portfolioId) {      
+    try {
+      const result = await PortfoliosModel.findByIdAndDelete(portfolioId);      
+      if (!result) { throw new AppError('Портфолио не найдено', 404) }            
+      return result;
+    } catch (err) {      
+      throw new AppError(err, 500)      
+    }
+}
 
 
 
