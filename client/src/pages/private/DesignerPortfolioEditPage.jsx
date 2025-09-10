@@ -1,52 +1,29 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import Field from '../../components/Field';
 import ImageUploader from '../../components/ImageUploader';
 import styles from '../../pages/private/DesignerPortfolioEditPage.module.css'
 import ErrorMessage from '../../components/ErrorMessage';
 
-import { useAuth } from '../../contexts/AuthContext';
-import api from '../../utils/api';
+import useFetchDesignerPortfolioEdit from './hooks/useFetchDesignerPortfolioEdit';
 
 export default function DesignerPortfolioEditPage(){
 
-    const [user, setUser] = useState(null);
-    const [description, setDescription] = useState('');
-    const [title, setTitle] = useState('');
-    const [portfolioItem, setPortfolioItem] = useState({});
+    
+
     const [errorMessage, setErrorMessage] = useState('');
-    
     const [gallery, setGallery] = useState([]);
-    
-    const hdlSaveAll = ()=>{
 
-    }
+    const {
+        portfolioItem,
+        title, 
+        setTitle,
+        description, 
+        setDescription,
+        hdlSavePortfolio,
+    } = useFetchDesignerPortfolioEdit(setErrorMessage);
 
-    const navigate = useNavigate();
-
-    // useEffect(() => {
-
-    //     const fetchUser = async () => {          
-    //         try {
-    //             const response = await api.get('/users/me');
-    //             console.log('response', response);
-                
-    //             if(response.data.success){
-    //                 const user = response.data.user;
-    //                 setUser(user);  
-
-    //             }
-
-    //         } catch (err) {
-    //             console.error('Ошибка загрузки портфолио', err);
-    //             navigate('/');
-    //         }
-    //     };
-        
-    //     fetchUser();
-    // }, []);    
-    
     return (
         <>
         <section className="container is-max-desktop desktop-only">
@@ -131,7 +108,7 @@ export default function DesignerPortfolioEditPage(){
             }            
 
             <div className="block has-text-right">                
-                <button className="button is-primary is-medium is-regular-mobile" onClick={hdlSaveAll}>Сохранить</button>                            
+                <button className="button is-primary is-medium is-regular-mobile" onClick={hdlSavePortfolio}>Сохранить</button>                            
             </div>
 
             {

@@ -4,7 +4,7 @@ import styles from '../components/PublicPortfolioItem.module.css'
 
 export default function PublicPortfolioItem(props){
 
-    const {id, images, title, forEdit, hdlDelete} = props;        
+    const {id, images, title, forEdit, hdlDelete, hdlEdit} = props;        
 
     const [showConfirm, setShowConfirm] = useState(false);
     const hdlConfirmShow = (e)=>{
@@ -14,7 +14,7 @@ export default function PublicPortfolioItem(props){
     const hdlConfirmHide = (e)=>{
         e.preventDefault();
         setShowConfirm(false);
-    }    
+    }        
 
     return (               
         <div className="box p-5">
@@ -33,7 +33,7 @@ export default function PublicPortfolioItem(props){
                             <button onClick={(e)=>hdlConfirmShow(e)} className="button is-small">X</button>
                         </div>
                         <div className="level-item is-right">
-                            <button className="button is-primary is-small">Редактировать</button>
+                            <button className="button is-primary is-small" onClick={(e)=>hdlEdit(e, id)}>Редактировать</button>
                         </div>
                     </div>
                 )

@@ -81,7 +81,7 @@ const router = createBrowserRouter([
       { path: 'cp/designer', element: <DesignerAdminPage /> }, // /личный кабинет менеджера
       { path: 'cp/designer/info', element: <DesignerInfoPage /> }, // /анкета дизайнера      
       { path: 'cp/designer/info/edit', element: <DesignerInfoEditPage /> }, // /редактирование анкеты дизайнера            
-      { path: 'cp/designer/portfolio/edit', element: <DesignerPortfolioEditPage /> }, // /редактирование портфолио дизайнера            
+      { path: 'cp/designer/portfolio/:portfolioId/edit', element: <DesignerPortfolioEditPage /> }, // /редактирование портфолио дизайнера            
       { path: 'cp/designer/portfolio/add', element: <DesignerPortfolioAddPage /> }, // /добавление проекта в портфолио дизайнера      
       { path: 'cp/designer/portfolio', element: <DesignerPortfolioPage /> }, // /портфолио дизайнера      
       

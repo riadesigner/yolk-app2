@@ -10,6 +10,11 @@ export default function useFetchDesignerPortfolio(setErrorMessage){
         window.location.href = '/cp/designer/portfolio/add';
     }
 
+    const hdlEdit = (e, id)=>{    
+        e.preventDefault();        
+        window.location.href = `/cp/designer/portfolio/${id}/edit`;
+    }
+
     const hdlDelete = async (e, idPortfolio)=>{    
         e.preventDefault();        
         try {
@@ -53,6 +58,7 @@ export default function useFetchDesignerPortfolio(setErrorMessage){
     return {
         hdlAddToPortfolio,
         hdlDelete,
+        hdlEdit,
         portfolios,
         }
 

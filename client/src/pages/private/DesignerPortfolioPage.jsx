@@ -19,6 +19,7 @@ export default function DesignerInfoPage(){
     const {
         hdlAddToPortfolio,
         hdlDelete,
+        hdlEdit,
         portfolios,        
     } = useFetchDesignerPortfolio(setErrorMessage);
     
@@ -71,6 +72,7 @@ export default function DesignerInfoPage(){
                                             title={i.title} 
                                             description={i.description} 
                                             hdlDelete={hdlDelete}
+                                            hdlEdit={hdlEdit}
                                             forEdit
                                             />
                                     )
