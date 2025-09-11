@@ -3,6 +3,16 @@ const PortfoliosModel = require('./portfolios.model');
 const paginate = require('../utils/paginate')
 const AppError = require('../middleware/AppError')
 
+const AWS = require('aws-sdk');
+
+// Настройка S3 клиента для Yandex Cloud
+const s3 = new AWS.S3({
+  endpoint: process.env.YANDEX_ENDPOINT,
+  region: process.env.YANDEX_REGION,
+  accessKeyId: process.env.YANDEX_ACCESS_KEY_ID,
+  secretAccessKey: process.env.YANDEX_SECRET_ACCESS_KEY,
+});
+
 exports.create = function (portfolioCreateDto = {}) {  
     return new Promise(async (res,rej)=>{ 
 
@@ -73,6 +83,15 @@ exports.deleteById = async function(portfolioId) {
 
 exports.deleteFromImages = async function(portfolioId, imageKey) {      
       try{ 
+        
+        // delete from cloud
+        const params = {
+          Bucket: process.env.YANDEX_BUCKET_NAME,
+          Key: imageKey,
+        };
+        await s3.deleteObject(params).promise();
+
+        // delete from db
         const portfolio = await PortfoliosModel.findById(portfolioId);
         const newImages = (portfolio.images || []).filter((i)=>i.key!==imageKey)
         

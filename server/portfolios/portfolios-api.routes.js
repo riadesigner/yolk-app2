@@ -258,18 +258,12 @@ router.delete('/portfolios/:portfolioId/image',
         const { imageKey } = req.body;
 
         try {
-            const params = {
-            Bucket: process.env.YANDEX_BUCKET_NAME,
-            Key: imageKey,
-            };
-
-            await s3.deleteObject(params).promise();
-
-            // обновляем галерею компании
+            
             const updatedPortfolio = await PortfoliosService.deleteFromImages(portfolioId, imageKey);
+
             if (!updatedPortfolio) {
-                return sendError(res, 'Не удалось обоновить данные компании', 500);
-            }            
+                throw new AppError('Не удалось обоновить данные компании', 500);                
+            }
 
             sendSuccess(res, { 
                 message: 'Данные удалены',
@@ -306,6 +300,18 @@ router.delete('/portfolios/:portfolioId',
             throw new AppError('Не хватает прав на удаление', 403);
         }
 
+        try{
+            // delete all images from portfolio
+            const images = portfolio.images;
+            images.map(async (im)=>{
+                console.log(`trying delete image ${im.key}`)    
+                await PortfoliosService.deleteFromImages(portfolioId, im.key);
+            })
+        }catch(err){
+            throw new AppError(err, 500);
+        }
+
+        // delete portfolio
         const result = await PortfoliosService.deleteById(portfolioId)
         if(!result){            
             throw new AppError('Не удалось удалить портфолио', 500);

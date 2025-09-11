@@ -21,7 +21,7 @@ export default function useFetchDesignerPortfolio(setErrorMessage){
         }
 
         try {
-            const response = await api.put('/portfolios/for/me', {title, description});
+            const response = await api.put('/portfolios/me', {title, description});
 
             if(response.data.success){    
                 const resPortfolioItem = response.data.portfolio;

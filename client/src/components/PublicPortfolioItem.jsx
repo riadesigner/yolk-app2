@@ -16,14 +16,28 @@ export default function PublicPortfolioItem(props){
         setShowConfirm(false);
     }        
 
+    let imageToShow = ['','','','']
+    imageToShow = imageToShow.map((im,i)=>{
+        return images[i]?images[i]:im;        
+    })
+
     return (               
         <div className="box p-5">
         <div className={styles.portItem}>
             <div className={styles.imagesBlock}>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
+                {
+                    imageToShow && (
+                        imageToShow.map((im, i)=>{                            
+                            return im ? (
+                                <span key={im.key} style={{
+                                    background:`url(${im.url}) no-repeat center/100%`
+                                }}></span>
+                            ):(
+                                <span key={i} ></span>
+                            )
+                        })
+                    )
+                }
             </div>
             <h1 className='title is-size-5 is-size-6-mobile mb-0 mt-3'>{title}</h1>            
             {
