@@ -6,6 +6,7 @@ const { asyncHandler, sendSuccess, sendError } = require('../middleware/utils');
 const multer = require('multer');
 const AWS = require('aws-sdk');
 const sharp = require('sharp')
+const AppError = require('../middleware/AppError')
 
 // Настройка S3 клиента для Yandex Cloud
 const s3 = new AWS.S3({
@@ -102,19 +103,18 @@ router.put('/companies',
         // creating userCompany
         const { companyData } = req.body;
         companyData.userId = req.user.id;
+        
+        const company = await CompanyService.create(companyData);
 
-        console.log('Получены данные:', companyData);
-        const company = await CompanyService.create(companyData);                        
-
-        if (!company) {
-            return sendError(res, `Не удалось создать компанию для пользователя ${user._id}`, 404);
+        if (!company) {            
+            throw new AppError(`Не удалось создать компанию для пользователя ${user._id}`, 500);
         }        
 
         // updating the User
         const userUpdated = await UsersService.update(req.user.id, {userCompany:company._id});
         
         if(!userUpdated){
-            return sendError(res, `Не удалось привязать компанию ${company._id} к пользователю ${user._id}`, 404);
+            throw new AppError(`Не удалось привязать компанию ${company._id} к пользователю ${user._id}`, 500);
         }        
 
         sendSuccess(res, { message: 'Компания создана, к пользователю привязана' });        
@@ -128,12 +128,12 @@ router.post('/companies/upload-image',
     asyncHandler(async (req, res) => {        
         try {
             if (!req.file) {
-                return res.status(400).json({ error: 'No file uploaded' });
+                throw new AppError(`it needs file to upload`,400)                
             }
             
             const companyId = req.body.companyId;
             if (!companyId) {
-                return res.status(400).json({ error: `Not found company ${companyId}` });
+                throw new AppError(`Not found company ${companyId}`,404)
             }
             
             // Оптимизация изображения с помощью sharp
@@ -156,7 +156,7 @@ router.post('/companies/upload-image',
 
             // Проверяем размер после оптимизации
             if (optimizedImage.length > 5 * 1024 * 1024) {
-                return res.status(400).json({ error: 'Image is still too large after optimization' });
+                throw new AppError('Image is still too large after optimization', 400)                
             }
 
             const params = {
@@ -179,9 +179,8 @@ router.post('/companies/upload-image',
             }
             const updatedCompany = await CompanyService.update(companyId, companyUpdateDto);
             if (!updatedCompany) {
-                return sendError(res, 'Не удалось обоновить данные компании', 500);
-            }
-            console.log('saved company', companyId);
+                throw new AppError('Не удалось обоновить данные компании', 500)                
+            }            
 
             sendSuccess(res, {
                 message: 'File uploaded successfully',
@@ -191,16 +190,15 @@ router.post('/companies/upload-image',
                 gallery: updatedCompany.gallery,
             });
 
-        } catch (error) {
-            console.error('Upload error:', error);
-            res.status(500).json({ error: 'Failed to upload file' });
-        }     
+        } catch (err) {            
+            throw new AppError(err, 500)            
+        }
     })
 );
 
 router.delete('/companies/delete-image',
     passport.authenticate('jwt', { session: false }),
-    asyncHandler(async (req, res) => {        
+    asyncHandler(async (req, res) => {                
 
         const { imageKey, companyId } = req.body; // Всё из тела
 
@@ -224,9 +222,8 @@ router.delete('/companies/delete-image',
                 gallery: updatedCompany.gallery,
             });
             
-        } catch (error) {
-            console.error('Delete error:', error);
-            res.status(500).json({ error: 'Failed to delete file' });
+        } catch (err) {            
+            throw new AppError(err, 500)            
         }
         
     })

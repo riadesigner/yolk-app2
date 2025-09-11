@@ -32,11 +32,9 @@ function authErrorHandler(err, req, res, next) {
 function apiErrorHandler(sendError) {
   // sendError — функция, которая форматирует ответ (подключаем из index.js или другого места)
   return (err, req, res, next) => {
-    console.error('API error:', err.stack);
 
-    const status = res.statusCode && res.statusCode !== 200
-      ? res.statusCode
-      : (err.status || 500);
+    const status = err.status || (res.statusCode !== 200 ? res.statusCode : 500);
+    console.log('status',status)
 
     sendError(
       res,

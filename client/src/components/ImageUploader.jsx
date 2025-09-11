@@ -1,126 +1,23 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import api from '../utils/api'
+import useImageUploaderForCompany from '../hooks/useImageUploaderForCompany';
 
-const ImageUploader = ({ companyId, setGallery, image = null }) => {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState('');
-  const [uploadedImage, setUploadedImage] = useState(image);  
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
 
-    const fileInputRef = useRef(null);
-
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        // Проверка типа файла
-        if (!file.type.match('image.*')) {
-        setError('Пожалуйста, выберите файл изображения');
-        return;
-        }
-
-        setSelectedFile(file);
-        setError('');
-
-        // Создание превью
-        const reader = new FileReader();
-        reader.onload = () => {
-            setPreviewUrl(reader.result);
-            setUploadedImage(null)
-        };
-        reader.readAsDataURL(file);
-    };
-
-    const handleButtonClick = () => {
-        fileInputRef.current.click(); // Программно вызываем клик по скрытому input
-    };
-
-  const handleUpload = async () => {
-    if (!selectedFile) {
-      setError('Пожалуйста, выберите файл');
-      return;
-    }
-
-    setIsLoading(true);
-    setError('');
-
-    try {
-      const formData = new FormData();
-
-      const newFileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}${selectedFile.name.substring(selectedFile.name.lastIndexOf('.'))}`;
-
-        // Создаем новый File объект с измененным именем
-        const renamedFile = new File([selectedFile], newFileName, {
-            type: selectedFile.type,
-            lastModified: selectedFile.lastModified
-        });
-
-      formData.append('image', renamedFile);
-      formData.append('companyId', companyId);      
-
-      const response = await api.post('/company/upload-image', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      console.log('response', response);
-
-      const uploaded_image = response.data.uploaded_image;
-      const gallery = response.data.gallery;
-      setUploadedImage(uploaded_image);
-      setSelectedFile(null);
-      setPreviewUrl('');
-
-      setTimeout(()=>{
-        setGallery(gallery);
-      },1000);      
-
-    } catch (err) {
-      console.error('Upload error:', err);
-      let showMessage = 'Ошибка при загрузке файла';
-      const errMessage= err.response?.data?.error.details;
-        if (errMessage.toLowerCase().includes('too large')) {
-            showMessage += '. Слишком большой файл. Ограничение - 5 мб.'
-        }
-      setError(showMessage);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleDelete = async () => {
-
-    if (!uploadedImage?.key) return;
-
-    setIsLoading(true);
-
-    try {
-      
-        const response = await api.delete('/company/delete-image', {
-        data: {
-            imageKey: uploadedImage.key,
-            companyId: companyId,
-            }
-        });
-
-        console.log('response after deleting', response)
-        
-        setUploadedImage(null);
-
-        setTimeout(()=>{
-            setGallery(response.data.gallery);
-        },500);        
-
-    } catch (err) {
-      console.error('Delete error:', err);
-      setError('Ошибка при удалении файла');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+export default function ImageUploader({ companyId, setGallery, image = null }){
+  
+  const {
+    selectedFile, 
+    previewUrl,
+    uploadedImage,
+    isLoading,
+    error, 
+    fileInputRef,
+    handleButtonClick,
+    handleFileChange,
+    handleUpload,
+    handleDelete,
+  } = useImageUploaderForCompany(setGallery, companyId, image);
 
   return (
     <div style={{maxWidth:'600px'}}>
@@ -183,5 +80,3 @@ const ImageUploader = ({ companyId, setGallery, image = null }) => {
     </div>
   );
 };
-
-export default ImageUploader;
