@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import api from '../utils/api'
-import docIcon from '../../public/document.png'
+// import docIcon from '../../public/document.png'
+const docIcon='';
 
 const FileUploader = ({ orderId, setFiles, file = null }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -56,9 +57,8 @@ const FileUploader = ({ orderId, setFiles, file = null }) => {
 
         setSelectedFile(file);
         setError('');
-
-        // Для документов превью не создается через FileReader
-        setPreviewUrl(docIcon); // Или установите иконку документа
+        
+        setPreviewUrl(docIcon); 
         setUploadedFile(null);
     };
 

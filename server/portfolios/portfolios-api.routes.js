@@ -303,10 +303,10 @@ router.delete('/portfolios/:portfolioId',
         try{
             // delete all images from portfolio
             const images = portfolio.images;
-            images.map(async (im)=>{
-                console.log(`trying delete image ${im.key}`)    
+            for (const im of images) {
+                console.log(`trying delete image ${im.key}`);
                 await PortfoliosService.deleteFromImages(portfolioId, im.key);
-            })
+            }
         }catch(err){
             throw new AppError(err, 500);
         }
