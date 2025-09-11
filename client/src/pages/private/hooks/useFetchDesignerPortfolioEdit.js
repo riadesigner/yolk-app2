@@ -10,7 +10,7 @@ export default function useFetchDesignerPortfolioEdit(setErrorMessage){
     const [description, setDescription] = useState('');
     const [title, setTitle] = useState('');
     const [portfolioItem, setPortfolioItem] = useState(null);
-    const [gallery, setGallery] = useState([]);
+    const [images, setImages] = useState([]);
     
     const navigate = useNavigate();    
 
@@ -25,7 +25,7 @@ export default function useFetchDesignerPortfolioEdit(setErrorMessage){
         }
 
         try {
-            const response = await api.patch('/portfolios/for/me', {portfolioId, title, description});
+            const response = await api.patch(`/portfolios/${portfolioId}`, {title, description});
 
             if(response.data.success){    
                 const resPortfolioItem = response.data.portfolio;                
@@ -50,7 +50,7 @@ export default function useFetchDesignerPortfolioEdit(setErrorMessage){
                     setPortfolioItem(portfolioItem);
                     setDescription(portfolioItem.description)
                     setTitle(portfolioItem.title)
-                    setGallery(portfolioItem.images)
+                    setImages(portfolioItem.images)
                 }
                 
             } catch (err) {
@@ -68,8 +68,8 @@ export default function useFetchDesignerPortfolioEdit(setErrorMessage){
         setTitle,
         description, 
         setDescription,
-        gallery, 
-        setGallery,
+        images, 
+        setImages,
         hdlSavePortfolio,
         }
 

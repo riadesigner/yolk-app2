@@ -19,8 +19,8 @@ export default function DesignerPortfolioEditPage(){
         setTitle,
         description, 
         setDescription,
-        gallery, 
-        setGallery,
+        images, 
+        setImages,
         hdlSavePortfolio,
     } = useFetchDesignerPortfolioEdit(setErrorMessage);
 
@@ -81,14 +81,14 @@ export default function DesignerPortfolioEditPage(){
                 portfolioItem && (
                     <div className="block mb-6">
                         <h2 className="subtitle is-size-7"><strong>Галерея изображений</strong></h2>
-                        <div className={styles.gallery}>                                
+                        <div className={styles.images}>                                
                             {                                    
-                                gallery.length > 0 && 
-                                gallery.map((image, index) => (                                
+                                images.length > 0 && 
+                                images.map((image, index) => (                                
                                     <div key={image.key} className="box" style={{ display:'flex', alignItems:'center', justifyContent:'center',}}>                                
                                         <ImageUploaderPortfolio 
                                             portfolioId={portfolioItem.id}
-                                            setGallery={setGallery}
+                                            setImages={setImages}
                                             image={image}
                                             />
                                     </div>
@@ -97,10 +97,10 @@ export default function DesignerPortfolioEditPage(){
 
                             {
                                 (
-                                    <div key={gallery.length} className="box" style={{ display:'flex', alignItems:'center', justifyContent:'center',}}>                                
+                                    <div key={images.length} className="box" style={{ display:'flex', alignItems:'center', justifyContent:'center',}}>                                
                                     <ImageUploaderPortfolio 
                                         portfolioId={portfolioItem.id}
-                                        setGallery={setGallery}                                    
+                                        setImages={setImages}                                    
                                         />
                                     </div>                        
                                 )                            

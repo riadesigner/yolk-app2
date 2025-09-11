@@ -41,7 +41,7 @@ export default function useFetchCreatingCompany({setErrorMessage}) {
                     ...userInput,
                 }                
                 console.log('неизвестная компания!')               
-                const response = await api.put(`/companies`, {companyData} );
+                const response = await api.put(`/companies/me`, {companyData} );
                 console.log('Компания успешно создана:', response.data);                                            
             }
 

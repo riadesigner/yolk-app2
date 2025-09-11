@@ -33,17 +33,17 @@ const upload = multer({
 });
 
 // GET /portfolios/by/:designerId – получить все для для дизайнера 
-// GET /portfolios/for/me – получить все для пользователя, который авторизировался 
+// GET /portfolios/me – получить все для пользователя, который авторизировался 
 // GET /portfolios/:portfolioId – получить одно 
 // GET /portfolios – получить все  / не реализована
 
-// PUT /portfolios/for/me – добавить одно портфолио для пользователя, который авторизировался 
 // PUT /portfolios/:portfolioId/image – добавить одно изображение
+// PUT /portfolios/me – добавить одно портфолио для пользователя, который авторизировался 
 
 // PATCH /portfolios/:portfolioId – частично обновить одно
 
-// DELETE /portfolios/:portfolioId – удалить одно портфолио
 // DELETE /portfolios/:portfolioId/image – удалить одно изображение из портфолио
+// DELETE /portfolios/:portfolioId – удалить одно портфолио
 
 // Более специфичные роуты - выше
 
@@ -67,7 +67,7 @@ router.get('/portfolios/by/:designerId',
     })
 );
 
-router.get('/portfolios/for/me',    
+router.get('/portfolios/me',    
     passport.authenticate('jwt', { session: false }),
     asyncHandler(async (req, res) => {        
                 
@@ -76,7 +76,7 @@ router.get('/portfolios/for/me',
         const allPortfolios = await PortfoliosService.findByUserId(userId);
 
         if(allPortfolios && allPortfolios.length>0){
-            const retPortfolios = allPortfolios.map((p)=>p.toJSON())    
+            const retPortfolios = allPortfolios.map((p)=>p.toJSON())
             sendSuccess(res, {             
                 portfolios: retPortfolios,            
             });
@@ -107,7 +107,84 @@ router.get('/portfolios/:portfolioId',
     })
 );
 
-router.put('/portfolios/for/me',
+router.put('/portfolios/:portfolioId/image',
+    passport.authenticate('jwt', { session: false }),
+    upload.single('image'),
+    asyncHandler(async (req, res) => {        
+        try {
+            if (!req.file) {
+                throw new AppError('it needs file to upload', 400)                
+            }
+            
+            const {portfolioId} = req.params;
+
+            if (!portfolioId) {
+                throw new AppError(`Not found portfolio ${portfolioId}`, 400)                
+            }
+            
+            // Оптимизация изображения с помощью sharp
+            const optimizedImage = await sharp(req.file.buffer)
+            .resize({
+                width: 1200,      // Максимальная ширина
+                height: 1200,     // Максимальная высота
+                fit: 'inside',    // Сохранять пропорции
+                withoutEnlargement: true // Не увеличивать маленькие изображения
+            })
+            .jpeg({ 
+                quality: 80,      // Качество JPEG
+                mozjpeg: true     // Использовать оптимизацию MozJPEG
+            })
+            .png({
+                quality: 80,      // Качество PNG
+                compressionLevel: 9 // Уровень сжатия
+            })
+            .toBuffer();
+
+            // Проверяем размер после оптимизации
+            if (optimizedImage.length > 5 * 1024 * 1024) {
+                return res.status(400).json({ error: 'Image is still too large after optimization' });
+            }
+
+            const params = {
+                Bucket: process.env.YANDEX_BUCKET_NAME,
+                Key: `portfolios/${Date.now()}_optimized_${req.file.originalname}`,
+                Body: optimizedImage,
+                ContentType: req.file.mimetype,
+                ACL: 'public-read',
+            };
+
+            const result = await s3.upload(params).promise();
+
+            // обновляем изображения портфолио
+            const portfolio = await PortfoliosService.findById(portfolioId)
+            const portfolioUpdateDto = {
+                images:[
+                    ...portfolio.images,
+                    { key:result.Key, url: result.Location },
+                ]         
+            }
+            const updatedPortfolio = await PortfoliosService.update(portfolioId, portfolioUpdateDto);
+            
+            if (!updatedPortfolio) {
+                throw new AppError('Не удалось обоновить портфолио', 500)                
+            }            
+
+            sendSuccess(res, {
+                message: 'File uploaded successfully',
+                uploaded_image:{ url: result.Location, key: result.Key },
+                size: optimizedImage.length,
+                originalSize: req.file.size,
+                images: updatedPortfolio.images,
+            });
+
+        } catch (err) {            
+            throw new AppError(err, 500);
+        }
+    })
+);
+
+
+router.put('/portfolios/me',
     passport.authenticate('jwt', { session: false }),
     asyncHandler(async (req, res) => {        
                 
@@ -142,88 +219,14 @@ router.put('/portfolios/for/me',
     })
 );
 
-router.put('/portfolios/:portfolioId/image',
-    passport.authenticate('jwt', { session: false }),
-    upload.single('image'),
-    asyncHandler(async (req, res) => {        
-        try {
-            if (!req.file) {
-                return res.status(400).json({ error: 'No file uploaded' });
-            }
-            
-            const {portfolioId} = req.params;
-
-            if (!portfolioId) {
-                throw new AppError(`Not found portfolio ${portfolioId}`, 400)                
-            }
-            
-            // Оптимизация изображения с помощью sharp
-            const optimizedImage = await sharp(req.file.buffer)
-            .resize({
-                width: 1200,      // Максимальная ширина
-                height: 1200,     // Максимальная высота
-                fit: 'inside',    // Сохранять пропорции
-                withoutEnlargement: true // Не увеличивать маленькие изображения
-            })
-            .jpeg({ 
-                quality: 80,      // Качество JPEG
-                mozjpeg: true     // Использовать оптимизацию MozJPEG
-            })
-            .png({
-                quality: 80,      // Качество PNG
-                compressionLevel: 9 // Уровень сжатия
-            })
-            .toBuffer();
-
-            // Проверяем размер после оптимизации
-            if (optimizedImage.length > 5 * 1024 * 1024) {
-                return res.status(400).json({ error: 'Image is still too large after optimization' });
-            }
-
-            const params = {
-                Bucket: process.env.YANDEX_BUCKET_NAME,
-                Key: `images/portfolios/${Date.now()}_optimized_${req.file.originalname}`,
-                Body: optimizedImage,
-                ContentType: req.file.mimetype,
-                ACL: 'public-read',
-            };
-
-            const result = await s3.upload(params).promise();
-
-            // обновляем галерею компании
-            const portfolio = await PortfoliosService.findById(portfolioId)
-            const portfolioUpdateDto = {
-                gallery:[
-                    ...portfolio.images,
-                    { key:result.Key, url: result.Location },
-                ]         
-            }
-            const updatedPortfolio = await PortfoliosService.update(portfolioId, portfolioUpdateDto);
-            if (!updatedPortfolio) {
-                throw new AppError('Не удалось обоновить портфолио', 500)                
-            }            
-
-            sendSuccess(res, {
-                message: 'File uploaded successfully',
-                uploaded_image:{ url: result.Location, key: result.Key },
-                size: optimizedImage.length,
-                originalSize: req.file.size,
-                gallery: updatedPortfolio.images,
-            });
-
-        } catch (err) {            
-            throw new AppError(err, 500);
-        }
-    })
-);
-
 router.patch('/portfolios/:portfolioId',
     passport.authenticate('jwt', { session: false }),
     asyncHandler(async (req, res) => {        
                 
         const userId = req.user.id;
         const userRole = req.user.role;
-        const {title, description} = req.body;
+        const {portfolioId} = req.params;
+        const {title, description} = req.body;        
 
         if(userRole!=='designer'){
             throw new AppError('Портфолио есть только у дизайнера', 403)            
@@ -247,6 +250,38 @@ router.patch('/portfolios/:portfolioId',
     })
 );
 
+router.delete('/portfolios/:portfolioId/image',
+    passport.authenticate('jwt', { session: false }),
+    asyncHandler(async (req, res) => {        
+
+        const { portfolioId } = req.params;
+        const { imageKey } = req.body;
+
+        try {
+            const params = {
+            Bucket: process.env.YANDEX_BUCKET_NAME,
+            Key: imageKey,
+            };
+
+            await s3.deleteObject(params).promise();
+
+            // обновляем галерею компании
+            const updatedPortfolio = await PortfoliosService.deleteFromImages(portfolioId, imageKey);
+            if (!updatedPortfolio) {
+                return sendError(res, 'Не удалось обоновить данные компании', 500);
+            }            
+
+            sendSuccess(res, { 
+                message: 'Данные удалены',
+                images: updatedPortfolio.images,
+            });
+            
+        } catch (err) {
+            throw new AppError(err, 500)            
+        }
+        
+    })
+);
 
 
 router.delete('/portfolios/:portfolioId',
@@ -285,41 +320,5 @@ router.delete('/portfolios/:portfolioId',
 
     })
 );
-
-
-
-router.delete('/portfolios/:portfolioId/image',
-    passport.authenticate('jwt', { session: false }),
-    asyncHandler(async (req, res) => {        
-
-        const { portfolioId } = req.params;
-        const { imageKey } = req.body;
-
-        try {
-            const params = {
-            Bucket: process.env.YANDEX_BUCKET_NAME,
-            Key: imageKey,
-            };
-
-            await s3.deleteObject(params).promise();
-
-            // обновляем галерею компании
-            const updatedPortfolio = await PortfoliosService.deleteFromImages(portfolioId, imageKey);
-            if (!updatedPortfolio) {
-                return sendError(res, 'Не удалось обоновить данные компании', 500);
-            }            
-
-            sendSuccess(res, { 
-                message: 'Данные удалены',
-                images: updatedPortfolio.images,
-            });
-            
-        } catch (err) {
-            throw new AppError(err, 500)            
-        }
-        
-    })
-);
-
 
 module.exports = router;

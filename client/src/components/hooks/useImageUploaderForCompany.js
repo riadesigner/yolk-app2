@@ -63,10 +63,9 @@ const [selectedFile, setSelectedFile] = useState(null);
                 lastModified: selectedFile.lastModified
             });
 
-        formData.append('image', renamedFile);
-        formData.append('companyId', companyId);      
+        formData.append('image', renamedFile);        
 
-        const response = await api.post('/companies/upload-image', formData, {
+        const response = await api.put(`/companies/${companyId}/image`, formData, {
             headers: {
             'Content-Type': 'multipart/form-data',
             },
@@ -108,10 +107,9 @@ const [selectedFile, setSelectedFile] = useState(null);
 
         try {
         
-            const response = await api.delete('/companies/delete-image', {
+            const response = await api.delete(`/companies/${companyId}/image`, {
             data: {
                 imageKey: uploadedImage.key,
-                companyId: companyId,
                 }
             });
 

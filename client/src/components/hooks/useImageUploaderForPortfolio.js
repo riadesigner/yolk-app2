@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import api from "../../utils/api";
 
-export default function useImageUploaderForPortfolio(setGallery, portfolioId, image){
+export default function useImageUploaderForPortfolio(setImages, portfolioId, image){
 
 const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
@@ -67,7 +67,7 @@ const [selectedFile, setSelectedFile] = useState(null);
       formData.append('image', renamedFile);
       formData.append('portfolioId', portfolioId);      
 
-      const response = await api.post('/portfolios/upload-image', formData, {
+      const response = await api.put(`/portfolios/${portfolioId}/image`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -76,13 +76,13 @@ const [selectedFile, setSelectedFile] = useState(null);
       console.log('response', response);
 
       const uploaded_image = response.data.uploaded_image;
-      const gallery = response.data.gallery;
+      const images = response.data.images;
       setUploadedImage(uploaded_image);
       setSelectedFile(null);
       setPreviewUrl('');
 
       setTimeout(()=>{
-        setGallery(gallery);
+        setImages(images);
       },1000);      
 
     } catch (err) {
@@ -109,10 +109,9 @@ const [selectedFile, setSelectedFile] = useState(null);
 
     try {
       
-        const response = await api.delete('/portfolios/delete-image', {
+        const response = await api.delete(`/portfolios/${portfolioId}/image`, {
         data: {
-            imageKey: uploadedImage.key,
-            portfolioId: portfolioId,
+            imageKey: uploadedImage.key,            
             }
         });
 
@@ -121,7 +120,7 @@ const [selectedFile, setSelectedFile] = useState(null);
         setUploadedImage(null);
 
         setTimeout(()=>{
-            setGallery(response.data.gallery);
+            setImages(response.data.images);
         },500);        
 
     } catch (err) {

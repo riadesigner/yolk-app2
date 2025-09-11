@@ -70,7 +70,7 @@ export default function useFetchCompanyCard({setErrorMessage}) {
                 const response = await api.patch(`/companies/${company.id}`, {companyData} );
                 console.log('Успешно обновлена:', response.data);
             }else{
-                const response = await api.put(`/companies`, {companyData});
+                const response = await api.put(`/companies/me`, {companyData});
                 console.log('Компания успешно создана:', response.data);                
             }            
             navigate('/cp/company/card');

@@ -34,16 +34,16 @@ const upload = multer({
   }
 });
 
-// GET /companies/:id – получить одну 
+// GET /companies/:companyId – получить одну 
 // GET /companies – получить все
 
-// PUT /companies/for/me – добавить одно портфолио для пользователя, который авторизировался 
-// PUT /companies/:portfolioId/image – добавить одно изображение
+// PUT /companies/:companyId/image – добавить одно изображение
+// PUT /companies/me – добавить компанию для пользователя, который авторизировался 
 
-// PATCH /companies/:portfolioId – частично обновить одно
+// PATCH /companies/:companyId – частично обновить одну компанию
 
-// DELETE /companies/:portfolioId – удалить одно портфолио
-// DELETE /companies/:portfolioId/image – удалить одно изображение из портфолио
+// DELETE /companies/:companyId – удалить компанию / не реализовано
+// DELETE /companies/:companyId/image – удалить одно изображение из галереи компании
 
 // Более специфичные роуты - выше
 
@@ -87,52 +87,6 @@ router.get('/companies',
     })
 );
 
-router.put('/companies',
-    passport.authenticate('jwt', { session: false }),
-    asyncHandler(async (req, res) => {        
-        
-        // getting the User
-        const user = await UsersService.findById(req.user.id);
-        if(!user){
-            return sendError(res, `User ${user._id} not found`, 404);    
-        }
-        // creating userCompany
-        const { companyData } = req.body;
-        companyData.userId = req.user.id;
-        
-        const company = await CompanyService.create(companyData);
-
-        if (!company) {            
-            throw new AppError(`Не удалось создать компанию для пользователя ${user._id}`, 500);
-        }        
-
-        // updating the User
-        const userUpdated = await UsersService.update(req.user.id, {userCompany:company._id});
-        
-        if(!userUpdated){
-            throw new AppError(`Не удалось привязать компанию ${company._id} к пользователю ${user._id}`, 500);
-        }        
-
-        sendSuccess(res, { message: 'Компания создана, к пользователю привязана' });        
-        
-    })
-);
-
-router.patch('/companies/:id',
-    passport.authenticate('jwt', { session: false }),
-    asyncHandler(async (req, res) => {                
-        const { id }= req.params; 
-        const { companyData } = req.body;
-        console.log('Получены данные для обновления:', id, companyData, req.body);        
-        const company = await CompanyService.update(id, companyData);
-        if (!company) {
-            return sendError(res, 'Не удалось обоновить данные компании', 404);
-        }    
-        sendSuccess(res, { message: `Данные компании ${company._id} обновлены` });        
-    })
-);
-
-
 router.put('/companies/:companyId/image',
     passport.authenticate('jwt', { session: false }),
     upload.single('image'),
@@ -173,7 +127,7 @@ router.put('/companies/:companyId/image',
 
             const params = {
                 Bucket: process.env.YANDEX_BUCKET_NAME,
-                Key: `images/${Date.now()}_optimized_${req.file.originalname}`,
+                Key: `companies/${Date.now()}_optimized_${req.file.originalname}`,
                 Body: optimizedImage,
                 ContentType: req.file.mimetype,
                 ACL: 'public-read',
@@ -205,6 +159,50 @@ router.put('/companies/:companyId/image',
         } catch (err) {            
             throw new AppError(err, 500)            
         }
+    })
+);
+
+router.put('/companies/me',
+    passport.authenticate('jwt', { session: false }),
+    asyncHandler(async (req, res) => {        
+        
+        // getting the User
+        const user = await UsersService.findById(req.user.id);
+        if(!user){
+            return sendError(res, `User ${user._id} not found`, 404);    
+        }
+        // creating userCompany
+        const { companyData } = req.body;
+        companyData.userId = req.user.id;
+        
+        const company = await CompanyService.create(companyData);
+
+        if (!company) {            
+            throw new AppError(`Не удалось создать компанию для пользователя ${user._id}`, 500);
+        }        
+
+        // updating the User
+        const userUpdated = await UsersService.update(req.user.id, {userCompany:company._id});
+        
+        if(!userUpdated){
+            throw new AppError(`Не удалось привязать компанию ${company._id} к пользователю ${user._id}`, 500);
+        }        
+
+        sendSuccess(res, { message: 'Компания создана, к пользователю привязана' });        
+        
+    })
+);
+
+router.patch('/companies/:companyId',
+    passport.authenticate('jwt', { session: false }),
+    asyncHandler(async (req, res) => {                
+        const { companyId }= req.params; 
+        const { companyData } = req.body;        
+        const company = await CompanyService.update(companyId, companyData);
+        if (!company) {
+            return sendError(res, 'Не удалось обоновить данные компании', 404);
+        }    
+        sendSuccess(res, { message: `Данные компании ${company._id} обновлены` });        
     })
 );
 

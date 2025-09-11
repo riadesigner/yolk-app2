@@ -4,7 +4,7 @@ import api from '../utils/api'
 import useImageUploaderForPortfoliio from './hooks/useImageUploaderForPortfolio';
 
 
-export default function ImageUploader({ portfolioId, setGallery, image = null }){
+export default function ImageUploaderPortfolio({ portfolioId, setImages, image = null }){
   
   const {
     selectedFile, 
@@ -17,7 +17,7 @@ export default function ImageUploader({ portfolioId, setGallery, image = null })
     handleFileChange,
     handleUpload,
     handleDelete,
-  } = useImageUploaderForPortfoliio(setGallery, portfolioId, image);
+  } = useImageUploaderForPortfoliio(setImages, portfolioId, image);
 
   return (
     <div style={{maxWidth:'600px'}}>
