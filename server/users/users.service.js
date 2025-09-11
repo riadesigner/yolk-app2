@@ -1,7 +1,7 @@
 
 const UsersModel = require('./users.model');
 const userInfoService = require('../userinfo/userinfo.service')
-
+const portfoliosService = require('../portfolios/portfolios.service')
   
   exports.findById = function (id) {
     return new Promise(async (res,rej)=>{
@@ -16,6 +16,19 @@ const userInfoService = require('../userinfo/userinfo.service')
         res(null);
       }
     })
+  }
+
+  exports.findDesigners = async function () {    
+      try{
+        const designers = await UsersModel
+          .find({
+            role:'designer',
+          })
+          .populate('userInfo');
+        return designers;
+      }catch(err){
+        return [];
+      }
   }
 
   exports.update = function (id, userUpdateDto) {

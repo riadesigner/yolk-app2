@@ -1,6 +1,7 @@
 const express = require('express')
 const UsersService = require('./users.service')
 const UserInfoService = require('../userinfo/userinfo.service')
+const PortfoliosService = require('../portfolios/portfolios.service')
 
 const CompanyService = require('../company/company.service')
 const passport = require('passport');
@@ -8,9 +9,37 @@ const { asyncHandler, sendSuccess, sendError } = require('../middleware/utils');
 
 const router = express.Router();
 
-// GET /api/users/me      - текущий пользователь (из сессии)
-// GET /api/users         - все пользователи  
-// GET /api/users/:id     - конкретный пользователь
+// GET /api/users/role/designer     - все дизайнеры  
+// GET /api/users/me                - текущий пользователь (из сессии)
+// GET /api/users/:id               - конкретный пользователь
+// GET /api/users                   - все пользователи  / не реализована
+
+// PATCH /users/me/select-role      - обновить роль аутентифицированного пользователя
+// PATCH /users/:id                 - обновить данные аутентифицированного пользователя
+
+router.get('/users/role/designer',    
+    asyncHandler(async (req, res) => {         
+        const users = await UsersService.findDesigners();                
+        const designers = users.map(user=>{
+            //------------------------------------
+            //     hidding private information
+            //------------------------------------
+            const { userCompany, ...publicUser } = user.toJSON();
+            publicUser.userInfo.phone=''; 
+            return publicUser;
+        });
+
+        // добавляем портфолио        
+        for (let i=0;i<designers.length;i++ ){
+          const portfolios = await PortfoliosService.findByUserId(designers[i].id);
+          console.log(`for designer ${designers[i]._id} найдены портфолио`, portfolios);
+          designers[i].portfolios = portfolios.map(p=>p.toJSON()) || [];          
+        }
+        
+        sendSuccess(res, { designers });
+    })
+);
+
 
 router.get('/users/me',
     passport.authenticate('jwt', { session: false }),
@@ -31,10 +60,10 @@ router.get('/users/:id',
         //------------------------------------
         //     hidding private information
         //------------------------------------
-        const { userCompany, ...userWithoutCompany } = user.toJSON();        
-        userWithoutCompany.userInfo.phone='';
+        const { userCompany, ...publicUser } = user.toJSON();        
+        publicUser.userInfo.phone='';
         //------------------------------------
-        sendSuccess(res, { user:userWithoutCompany });
+        sendSuccess(res, { user:publicUser });
     })
 );
 
@@ -97,10 +126,5 @@ router.patch('/users/:id',
         sendSuccess(res, { message: 'Данные сохранены' });        
     })
 );
-
-
-
-
-
 
 module.exports = router;

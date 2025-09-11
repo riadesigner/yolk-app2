@@ -4,6 +4,8 @@ import styles from '../components/DesignerPreview.module.css'
 
 export default function DesignerPreview({designer}){    
 
+    console.log('designer', designer);
+    
     const images = [];
     designer.portfolios.map((p)=>{
         p.images.map((i)=>{
@@ -11,19 +13,19 @@ export default function DesignerPreview({designer}){
         })
     });
 
-    const headerImages = images.length > 3 ? images.slice(0,3): images;    
+    const headerImages = images.length > 3 ? images.slice(0,2): images;    
 
-    const linkAnketa = '/designers/123/info';
-    const linkPortfolio = '/designers/123/portfolio';
+    const linkAnketa = `/designers/${designer.id}`;
+    const linkPortfolio = `/designers/${designer.id}/portfolio`;
     
     return(
         <div className={styles.preview}>
             
             <div className={styles.previewHeader}>
                 {
-                    headerImages.map((i, index)=>{
-                        return i && <div style={{
-                            background:`url(${i}) no-repeat center/cover`
+                    headerImages.map((img)=>{
+                        return img && <div key={img.key} style={{
+                            background:`url(${img.url}) no-repeat center/cover`
                         }}></div>                         
                     })
                 }
