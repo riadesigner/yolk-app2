@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import api from "../utils/api";
+import api from "../../utils/api";
 
-export default function useImageUploaderForCompany(setGallery, companyId, image){
+export default function useImageUploaderForPortfolio(setGallery, portfolioId, image){
 
 const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
@@ -11,32 +11,39 @@ const [selectedFile, setSelectedFile] = useState(null);
 
   const fileInputRef = useRef(null);
 
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
+  // ----------------------
+  //      FILE CHANGE
+  // ----------------------  
+  const handleFileChange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
 
-        // Проверка типа файла
-        if (!file.type.match('image.*')) {
-        setError('Пожалуйста, выберите файл изображения');
-        return;
-        }
+      // Проверка типа файла
+      if (!file.type.match('image.*')) {
+      setError('Пожалуйста, выберите файл изображения');
+      return;
+      }
 
-        setSelectedFile(file);
-        setError('');
+      setSelectedFile(file);
+      setError('');
 
-        // Создание превью
-        const reader = new FileReader();
-        reader.onload = () => {
-            setPreviewUrl(reader.result);
-            setUploadedImage(null)
-        };
-        reader.readAsDataURL(file);
-    };
+      // Создание превью
+      const reader = new FileReader();
+      reader.onload = () => {
+          setPreviewUrl(reader.result);
+          setUploadedImage(null)
+      };
+      reader.readAsDataURL(file);
+  };
 
-    const handleButtonClick = () => {
-        fileInputRef.current.click(); // Программно вызываем клик по скрытому input
-    };
+  const handleButtonClick = () => {
+      fileInputRef.current.click(); // Программно вызываем клик по скрытому input
+  };
 
+
+  // ----------------------
+  //      IMAGE UPLOAD
+  // ----------------------
   const handleUpload = async () => {
     if (!selectedFile) {
       setError('Пожалуйста, выберите файл');
@@ -58,9 +65,9 @@ const [selectedFile, setSelectedFile] = useState(null);
         });
 
       formData.append('image', renamedFile);
-      formData.append('companyId', companyId);      
+      formData.append('portfolioId', portfolioId);      
 
-      const response = await api.post('/companies/upload-image', formData, {
+      const response = await api.post('/portfolios/upload-image', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -91,6 +98,9 @@ const [selectedFile, setSelectedFile] = useState(null);
     }
   };
 
+  // ----------------------
+  //      IMAGE DELETE
+  // ----------------------  
   const handleDelete = async () => {
 
     if (!uploadedImage?.key) return;
@@ -99,10 +109,10 @@ const [selectedFile, setSelectedFile] = useState(null);
 
     try {
       
-        const response = await api.delete('/companies/delete-image', {
+        const response = await api.delete('/portfolios/delete-image', {
         data: {
             imageKey: uploadedImage.key,
-            companyId: companyId,
+            portfolioId: portfolioId,
             }
         });
 

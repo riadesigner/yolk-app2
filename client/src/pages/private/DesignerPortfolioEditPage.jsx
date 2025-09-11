@@ -2,7 +2,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 import Field from '../../components/Field';
-import ImageUploader from '../../components/ImageUploader';
+import ImageUploaderPortfolio from '../../components/ImageUploaderPortfolio';
 import Breadcrumb from '../../components/Breadcrumb';
 import styles from '../../pages/private/DesignerPortfolioEditPage.module.css'
 import ErrorMessage from '../../components/ErrorMessage';
@@ -86,8 +86,8 @@ export default function DesignerPortfolioEditPage(){
                                 gallery.length > 0 && 
                                 gallery.map((image, index) => (                                
                                     <div key={image.key} className="box" style={{ display:'flex', alignItems:'center', justifyContent:'center',}}>                                
-                                        <ImageUploader 
-                                            companyId={portfolioItem.id}
+                                        <ImageUploaderPortfolio 
+                                            portfolioId={portfolioItem.id}
                                             setGallery={setGallery}
                                             image={image}
                                             />
@@ -98,8 +98,8 @@ export default function DesignerPortfolioEditPage(){
                             {
                                 (
                                     <div key={gallery.length} className="box" style={{ display:'flex', alignItems:'center', justifyContent:'center',}}>                                
-                                    <ImageUploader 
-                                        companyId={portfolioItem.id}
+                                    <ImageUploaderPortfolio 
+                                        portfolioId={portfolioItem.id}
                                         setGallery={setGallery}                                    
                                         />
                                     </div>                        

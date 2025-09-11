@@ -8,6 +8,8 @@ const AWS = require('aws-sdk');
 const sharp = require('sharp')
 const AppError = require('../middleware/AppError')
 
+const router = express.Router();
+
 // Настройка S3 клиента для Yandex Cloud
 const s3 = new AWS.S3({
   endpoint: process.env.YANDEX_ENDPOINT,
@@ -32,27 +34,35 @@ const upload = multer({
   }
 });
 
-const router = express.Router();
+// GET /companies/:id – получить одну 
+// GET /companies – получить все
 
-router.get('/companies/:id',    
+// PUT /companies/for/me – добавить одно портфолио для пользователя, который авторизировался 
+// PUT /companies/:portfolioId/image – добавить одно изображение
+
+// PATCH /companies/:portfolioId – частично обновить одно
+
+// DELETE /companies/:portfolioId – удалить одно портфолио
+// DELETE /companies/:portfolioId/image – удалить одно изображение из портфолио
+
+// Более специфичные роуты - выше
+
+
+router.get('/companies/:companyId',    
     asyncHandler(async (req, res) => { 
         
-        let { id: companyId  } =  req.params;
-
-        if(!companyId || companyId==='by-user'){
-            const user = await UsersService.findByEmail(req.user.email);
-            if (!user) { 
-                return sendError(res, 'User not found', 404);
-            }
-            companyId = user.userCompany;
-        }
+        let { companyId  } =  req.params;
 
         try{
+
             const company = await CompanyService.findById(companyId);
-            sendSuccess(res, { company: company.toJSON() })
+
+            sendSuccess(res, { 
+                company: company.toJSON() 
+            })
 
         }catch(e){
-            return sendError(res, `Company with id ${companyId} not found`, 404);
+            throw new AppError(`Company with id ${companyId} not found`, 404)            
         }
     })
 );
@@ -74,20 +84,6 @@ router.get('/companies',
 
         const retCompanies = companies.map(co=>co.toJSON());
         sendSuccess(res, { companies:retCompanies, pagination }); 
-    })
-);
-
-router.patch('/companies/:id',
-    passport.authenticate('jwt', { session: false }),
-    asyncHandler(async (req, res) => {                
-        const { id }= req.params; 
-        const { companyData } = req.body;
-        console.log('Получены данные для обновления:', id, companyData, req.body);        
-        const company = await CompanyService.update(id, companyData);
-        if (!company) {
-            return sendError(res, 'Не удалось обоновить данные компании', 404);
-        }    
-        sendSuccess(res, { message: `Данные компании ${company._id} обновлены` });        
     })
 );
 
@@ -122,7 +118,22 @@ router.put('/companies',
     })
 );
 
-router.post('/companies/upload-image',
+router.patch('/companies/:id',
+    passport.authenticate('jwt', { session: false }),
+    asyncHandler(async (req, res) => {                
+        const { id }= req.params; 
+        const { companyData } = req.body;
+        console.log('Получены данные для обновления:', id, companyData, req.body);        
+        const company = await CompanyService.update(id, companyData);
+        if (!company) {
+            return sendError(res, 'Не удалось обоновить данные компании', 404);
+        }    
+        sendSuccess(res, { message: `Данные компании ${company._id} обновлены` });        
+    })
+);
+
+
+router.put('/companies/:companyId/image',
     passport.authenticate('jwt', { session: false }),
     upload.single('image'),
     asyncHandler(async (req, res) => {        
@@ -131,7 +142,8 @@ router.post('/companies/upload-image',
                 throw new AppError(`it needs file to upload`,400)                
             }
             
-            const companyId = req.body.companyId;
+            const {companyId} = req.params;
+            
             if (!companyId) {
                 throw new AppError(`Not found company ${companyId}`,404)
             }
@@ -196,11 +208,12 @@ router.post('/companies/upload-image',
     })
 );
 
-router.delete('/companies/delete-image',
+router.delete('/companies/:companyId/image',
     passport.authenticate('jwt', { session: false }),
     asyncHandler(async (req, res) => {                
 
-        const { imageKey, companyId } = req.body; // Всё из тела
+        const { companyId } = req.params; 
+        const { imageKey } = req.body;
 
         try {
             const params = {

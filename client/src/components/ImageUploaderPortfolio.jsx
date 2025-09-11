@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import api from '../utils/api'
-import useImageUploaderForCompany from './hooks/useImageUploaderForCompany';
+import useImageUploaderForPortfoliio from './hooks/useImageUploaderForPortfolio';
 
 
-export default function ImageUploader({ companyId, setGallery, image = null }){
+export default function ImageUploader({ portfolioId, setGallery, image = null }){
   
   const {
     selectedFile, 
@@ -17,7 +17,7 @@ export default function ImageUploader({ companyId, setGallery, image = null }){
     handleFileChange,
     handleUpload,
     handleDelete,
-  } = useImageUploaderForCompany(setGallery, companyId, image);
+  } = useImageUploaderForPortfoliio(setGallery, portfolioId, image);
 
   return (
     <div style={{maxWidth:'600px'}}>

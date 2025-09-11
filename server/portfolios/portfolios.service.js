@@ -71,21 +71,8 @@ exports.deleteById = async function(portfolioId) {
     }
 }
 
+exports.deleteFromImages = async function(portfolioId, imageKey) {      
+  throw new AppError('функция не реализована',500)
+}
 
-
-// exports.update = function (id, portfolioUpdateDto = {}) {  
-//     return new Promise(async (res,rej)=>{             
-//       try{                
-//         const updatedPortfolio = await PortfoliosModel.findByIdAndUpdate(
-//             id,
-//             portfolioUpdateDto,
-//             { new: true }
-//         );
-//         res(updatedPortfolio);
-//       }catch(e){
-//         console.log(`cant update portfolio, err:${e}`)
-//         res(null);
-//       } 
-//     })    
-// }  
 
