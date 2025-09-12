@@ -41,10 +41,6 @@ export default function SiteFooter(){
         <section className="container">
             <div className="section">
             <h2 className="subtitle is-size-6 mb-3">Временное меню</h2>
-            <Link to='/cp/company'>Админка компании</Link><br />
-            <Link to='/orders'>Все заказы</Link><br />
-            <Link to='/designers'>Все дизайнеры</Link><br />
-            <Link to='/companies'>Все заказчики</Link><br />
             <Link to='/chats/123'>Чат с дизайнером</Link><br />
             </div>
         </section>

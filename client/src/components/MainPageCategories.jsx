@@ -7,12 +7,8 @@ import api from "../utils/api";
 export default function MainPageCategories(){
     
     const [cats, setCats] = useState([]);
-    // const cats = [
-    //     {id:'123123', title:'Графический дизайн'},
-    //     {id:'123124', title:'Motion дизайн'},
-    //     {id:'123125', title:'Веб-дизайн'},
-    //     {id:'123126', title:'3D графика'},
-    // ]
+
+    console.log('cats', cats)
 
     useEffect(() => {
     const fetchCategories = async () => {
@@ -35,16 +31,19 @@ return (
             {
                 cats && cats.length>0 && (
                     <section className={styles.cats}>
-                        <ul>                
+                        <ul>             
                         {
                             cats.map((cat)=>{
                                 return (
-                                    <Link key={cat.id} to='/orders'>
+                                    <Link key={cat.id} to={`/orders/cat/${cat.id}`}>
                                         <li><span>{cat.name}</span></li>
                                     </Link>
                                 )
                             })
                         }
+                            <Link key={cats.length} to={`/orders`}>
+                                <li><span>Все категории</span></li>
+                            </Link>                                        
                         </ul>
                     </section>
                 )

@@ -39,31 +39,23 @@ export default function DesignerPreview({designer}){
 
             <div className={styles.fio}>                
                 <p className="mb-0">{designer.name} {designer.surname}</p>
-                <p className="is-size-7">г. {designer.city}</p>
+                {
+                    designer.city && (
+                        <p className="is-size-7">г. {designer.city}</p>    
+                    )
+                }
             </div>
             
             <div className="block mt-5 mb-0">
-                <div className="level is-1">
-                    <div className="level-item">
-                        <button className="button is-small is-link is-inverted">
-                            <span><i className="fa-regular fa-at"></i></span>
-                            <span>Написать</span>
-                        </button>
-                    </div>
-                    <div className="level-item">
                         <Link to={linkAnketa}>
-                        <button className="button is-small is-link is-inverted ">
+                        <button className="button is-small is-link is-inverted mr-2 ">
                             <span><i className="fa-regular fa-user"></i></span>
                             <span>Анкета</span>
                         </button>
                         </Link>
-                    </div>                    
-                    <div className="level-item is-right">
                         <Link to={linkPortfolio}>
                         <button className="button is-small is-link is-inverted">Портфолио</button>                        
                         </Link>
-                    </div>
-                </div>
             </div>
         </div>
     )

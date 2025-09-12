@@ -10,9 +10,14 @@ import ErrorMessage from '../../components/ErrorMessage'
 import styles from '../private/DesignerPortfolioPage.module.css'
 import useFetchDesignerPortfolio from './hooks/useFetchDesignerPortfolio'
 
+import {getPayloads} from '../../utils/payloads'
+
 export default function DesignerInfoPage(){
     
     // const navigate = useNavigate();
+
+    const pl = getPayloads();
+    const designerId = pl.id;
 
     const [errorMessage, setErrorMessage] = useState('');
         
@@ -44,7 +49,7 @@ export default function DesignerInfoPage(){
                     <h2 className="mb-0 is-size-3">Портфолио</h2>
                 </div>
                 <div className="level-item is-right">
-                    <Link to="/designers/125476578767989899/portfolio">
+                    <Link to={`/designers/${designerId}/portfolio`}>
                     <button className="button is-link is-small">
                         <span className="fa-solid fa-share-from-square"><i></i></span>
                         <span>Смотреть на сайте</span>

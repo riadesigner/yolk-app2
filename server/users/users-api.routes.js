@@ -32,10 +32,9 @@ router.get('/users/role/designer',
         // добавляем портфолио        
         for (let i=0;i<designers.length;i++ ){
           const portfolios = await PortfoliosService.findByUserId(designers[i].id);
-          console.log(`for designer ${designers[i]._id} найдены портфолио`, portfolios);
           designers[i].portfolios = portfolios.map(p=>p.toJSON()) || [];          
         }
-        
+
         sendSuccess(res, { designers });
     })
 );
@@ -63,6 +62,11 @@ router.get('/users/:id',
         const { userCompany, ...publicUser } = user.toJSON();        
         publicUser.userInfo.phone='';
         //------------------------------------
+        if(publicUser.role==='designer'){
+            // подгружаем портфолио
+            const portfolios = await PortfoliosService.findByUserId(publicUser.id);
+            publicUser.portfolios = portfolios.map(p=>p.toJSON()) || [];                      
+        }
         sendSuccess(res, { user:publicUser });
     })
 );

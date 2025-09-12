@@ -13,7 +13,7 @@ import UserAgreePage from './pages/UserAgreePage.jsx'
 import DesignerInfoPublicPage from './pages/DesignerInfoPublicPage.jsx'
 import OrdersPage from './pages/OrdersPage.jsx'
 import OrderPage from './pages/OrderPage.jsx'
-import PortfolioPage from './pages/PortfolioPage.jsx';
+import DesignerPortfolioPublicPage from './pages/DseignerPortfolioPublicPage.jsx';
 import CompanyPublicPage from './pages/CompanyPublicPage.jsx';
 import DesignersPage from './pages/DesignersPage.jsx';
 import CompaniesPage from './pages/CompaniesPage.jsx';
@@ -63,7 +63,7 @@ const router = createBrowserRouter([
       { path: 'startup', element: <StartUpPage /> }, // 
       { path: 'useragree', element: <UserAgreePage /> }, // 
       { path: 'designers', element: <DesignersPage /> }, // 
-      { path: 'designers/:designerId/portfolio', element: <PortfolioPage /> }, //       
+      { path: 'designers/:designerId/portfolio', element: <DesignerPortfolioPublicPage /> }, //       
       { path: 'designers/:designerId', element: <DesignerInfoPublicPage /> }, // 
       { path: 'companies/:companyId', element: <CompanyPublicPage /> }, // 
       { path: 'companies', element: <CompaniesPage /> }, // 
@@ -72,9 +72,10 @@ const router = createBrowserRouter([
 
       { path: 'auth-callback', element: <AuthCallback /> }, //             
 
-      { path: 'orders', element: <OrdersPage /> }, // 
-      { path: 'orders/:id', element: <OrderPage /> }, //       
       { path: 'orders/search/:userInput', element: <OrdersPage /> }, //       
+      { path: 'orders/cat/:categoryId', element: <OrdersPage /> }, // заказы из определенной категории       
+      { path: 'orders/:id', element: <OrderPage /> }, //             
+      { path: 'orders', element: <OrdersPage /> }, // 
 
       // private pages      
 

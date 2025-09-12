@@ -13,13 +13,13 @@ import useFetchCategories from './hooks/useFetchCategories.js'
 export default function PortfolioPage(){
    
     const params = useParams();
-    const {userInput} = params;
+    const {userInput, categoryId} = params;
 
 
     const {
         userCategories,
         setUserCategories,
-    } = useFetchCategories();    
+    } = useFetchCategories({categoryId});    
 
     const {
         orders,
@@ -31,12 +31,12 @@ export default function PortfolioPage(){
 
     const links = userInput ? [
         {link:'/', title:'Главная'},
-        {link:'/orders', title:'Все заказы',},                        
-        {link:'', title:userInput, isActive:true},
+        {link:'/orders', title:'Все заказы',},
+        {link:'#', title:userInput, isActive:true},
     ]:[
         {link:'/', title:'Главная'},
-        {link:'/orders', title:'Все заказы',},
-        {link:'', title:`всего найдено: ${paginationParams.totalItems}`, isActive:true},
+        // {link:'#', title:'Все заказы', isActive:true},
+        {link:'#', title:`Найдено заказов: ${paginationParams.totalItems}`, isActive:true},
     ]
 
     return(
