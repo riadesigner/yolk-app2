@@ -1,7 +1,7 @@
 
 const NotificationsModel = require('./notifications.model');
 const UsersService = require('../users/users.service');
-const CompanyService = require('../company/company.service');
+const OrdersService = require('../orders/orders.service');
 
 
 exports.findByUserId = function (userId) {  
@@ -76,6 +76,14 @@ exports.sendAboutNewRespond = function ({designerId, orderId, customerId}) {
       }        
     })    
 } 
+exports.sendAboutCheckTheBill = async function ({customerId, contractorId, orderId}) {  
+  const customer = await UsersService.findById(customerId); // заказчик
+  const contractor = await UsersService.findById(contractorId); // исполнитель  
+  const order = await OrdersService.findById(orderId); // заказ
+  
+
+  return true;
+}
 
 exports.sendAboutNewContractor = function ({customerId, contractorId, orderId}) {  
     return new Promise(async (res,rej)=>{ 

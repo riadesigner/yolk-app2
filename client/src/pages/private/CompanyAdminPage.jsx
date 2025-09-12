@@ -71,11 +71,18 @@ export default function CompanyAdminPage(){
                             </Link>
                                                         
                             <Link to="/cp/company/card">
-                            <button className="button  is-fluid is-medium is-regular-mobile is-link ">
+                            <button className="button  is-fluid is-medium is-regular-mobile is-link mb-3">
                                 <span>Реквизиты</span>    
                                 <span className="icon"><i className="fa fa-angle-right"></i></span>
                             </button>
                             </Link>
+
+                            <Link to="/cp/company/bills">
+                            <button className="button  is-fluid is-medium is-regular-mobile is-link ">
+                                <span>Счета</span>    
+                                <span className="icon"><i className="fa fa-angle-right"></i></span>
+                            </button>
+                            </Link>                            
                             </div>
 
                             <div className="block">                            

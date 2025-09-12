@@ -104,6 +104,7 @@ app.use('/api',require('./company/company-api.routes'));
 app.use('/api',require('./orders/orders-api.routes'));
 app.use('/api',require('./portfolios/portfolios-api.routes'));
 app.use('/api',require('./categories/categories-api.routes'));
+app.use('/api',require('./bills/bills-api.routes'));
 app.use('/api',require('./notifications/notifications-api.routes'));
 
 // Защищённый роут

@@ -5,6 +5,7 @@ const OrdersService = require('./orders.service')
 const NotificationsService = require('../notifications/notifications.service')
 const multer = require('multer');
 const AWS = require('aws-sdk');
+const AppError = require('../middleware/AppError');
 
 const passport = require('passport');
 const { asyncHandler, sendSuccess, sendError } = require('../middleware/utils');
@@ -160,22 +161,26 @@ router.patch('/orders/:orderId/new-contractor/:contractorId',
         const userRole = req.user.role;
 
         if(userRole!=='company'){
-            return sendError(res, 'Назначить Исполнителя может только Компания (Заказчик)', 403);
+            throw new AppError('Назначить Исполнителя может только Компания (Заказчик)', 403)            
         }        
 
         const orderUpdated = await OrdersService.setContractor(orderId, contractorId);
 
         if(!orderUpdated){
-            return sendError(res, `Не удалось назначить Исполнителя заказу ${orderId}`, 500);
+            throw new AppError(`Не удалось назначить Исполнителя заказу ${orderId}`, 500)
         }
-
-        const companyId = orderUpdated.company;
         
         // send notifications
         if (!await NotificationsService.sendAboutNewContractor( {customerId:userId, contractorId, orderId})){
-            return sendError(res, `Не удалось отправить сообщение о назначени Исполнителя ${contractorId} для заказа ${orderId}`, 500);
+            throw new AppError(`Не удалось отправить сообщение о назначени Исполнителя ${contractorId} для заказа ${orderId}`, 500)
         }
         
+        // send notification about check the bill
+        if (!await NotificationsService.sendAboutCheckTheBill( {customerId:userId, contractorId, orderId})){
+            throw new AppError(`Не удалось отправить сообщение об оплате счета Заказчиком (о переводе аванса на счет Yolk)`, 500)
+        }        
+
+
         sendSuccess(res, {             
             responded: orderUpdated.responded,
             message: 'ok', 

@@ -1,6 +1,7 @@
 
 const OrdersModel = require('./orders.model');
 const paginate = require('../utils/paginate')
+const AppError = require('../middleware/AppError');
 
 exports.create = function (orderCreateDto = {}) {  
     return new Promise(async (res,rej)=>{ 
@@ -104,30 +105,27 @@ exports.addRespond = function(orderId, userId){
   })
 }
 
-exports.setContractor = function(orderId, contractorId){
-  return new Promise(async (res,rej)=>{
-      try{   
-        
-        const order = await OrdersModel.findById(orderId);
+exports.setContractor = async function(orderId, contractorId){
+    try{   
+      
+      const order = await OrdersModel.findById(orderId);
 
-        if(!order.responded.includes(contractorId)){
-          console.log(`нельзя назначить исполнителем пользователя ${contractorId}, который не откликался на заказ ${orderId}` )
-          res(null);
-        }
-
-        const updatedOrder = await OrdersModel.findByIdAndUpdate(
-            orderId,
-            {
-              contractor: contractorId,
-            },
-            { new: true }
-        );
-        res(updatedOrder);
-      }catch(e){
-        console.log(`cant update order, err:${e}`)
-        res(null);
+      if(!order.responded.includes(contractorId)){
+        throw new AppError(`нельзя назначить исполнителем пользователя ${contractorId}, который не откликался на заказ ${orderId}`,400)
       }
-  })
+
+      const updatedOrder = await OrdersModel.findByIdAndUpdate(
+          orderId,
+          {
+            contractor: contractorId,
+          },
+          { new: true }
+      );
+      return updatedOrder;
+
+    }catch(err){
+      throw new AppError(err,500)
+    }
 }
 
 exports.update = function (id, orderUpdateDto = {}) {  
