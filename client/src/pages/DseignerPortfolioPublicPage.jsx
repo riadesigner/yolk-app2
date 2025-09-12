@@ -8,22 +8,18 @@ import Breadcrumb from '../components/Breadcrumb'
 
 export default function PortfolioPage(){
     
-
-    const params = useParams();
-    const { designerId } = params;
-
-    console.log('the designerId = ', designerId)
-
-    const links = [
-        {link:'/', title:'Главная'},
-        {link:'/designers', title:' Все дизайнеры'},
-        {link:'#', title:'Иванов', isActive:true},
-    ];
-
+    const { designerId } = useParams();
+    
     const {
         designer,
         portfolios,
     } = useFetchDesignerPortfolioPublicPage(designerId);
+
+    const links = [
+        {link:'/', title:'Главная'},
+        {link:'/designers', title:' Все дизайнеры'},
+        {link:'#', title:designer ? designer.name : `&nbsp;`, isActive:true},
+    ];
 
     return(
         <>
@@ -36,13 +32,14 @@ export default function PortfolioPage(){
             
         <section className="container">
             <div className="section">
-                <h1 className='title'>Алексей Обухов</h1>
                 
-                <div className="level is-4 is-3-mobile mb-4" >
-                    <p className='subtitle'>Портфолио</p>
+                <h1 className='title'>{designer ? designer.name : <>&nbsp;</>}</h1>
+                
+                <div className="level is-4 is-3-mobile mb-4" >                    
                     <p className='subtitle'>
                         <Link to={`/designers/${designerId}`}>Анкета</Link>                        
                     </p>
+                    <p className='subtitle'>Портфолио</p>
                 </div>
                 
                 <article>
