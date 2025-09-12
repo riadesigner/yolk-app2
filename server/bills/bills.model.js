@@ -4,7 +4,7 @@ const billsSchema = new Schema({
     direction: {type: String }, // TO_YOLK | FROM_YOLK
     sender:{ type: Schema.Types.ObjectId, ref: 'User' }, // отправитель
     receiver: { type: Schema.Types.ObjectId, ref: 'User' }, // получатель
-    number: { type:String },  // Номер счета 
+    key: { type:String },  // Номер счета 
     order: { type: Schema.Types.ObjectId, ref: 'Order' }, // Заказ 
     description: { type:String },  // Основание счета
     paid: { type: Boolean }, // Оплачен или нет 

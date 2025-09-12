@@ -16,6 +16,7 @@ export default function CompanyCardPage(){
     const companyId = '';
 
     const {
+        nowLoading,
         bills,
     } = useFetchCompanyBillsPage();   
 
@@ -31,7 +32,27 @@ export default function CompanyCardPage(){
             <div className="section">
             <article>
 
-            Счета
+            {
+                nowLoading ? (
+                    <>Загрузка...</>
+                ):(
+                    bills && bills.length>0 ? (
+                        <ul>
+                            {
+                                bills.map((b)=>{
+                                    <li key={b.id}>
+                                        <p>Счет № {b.key} <br /> от {b.createdAt},  
+                                        {b.paid ? <span className="is-primary">Оплачен</span> : <span>Не оплачен</span>}
+                                        </p>
+                                    </li>
+                                })       
+                            }
+                        </ul>
+                    ):(
+                        <>Пока счетов нет</>
+                    )
+                )
+            }
 
             </article> 
             </div>                                                                                     
