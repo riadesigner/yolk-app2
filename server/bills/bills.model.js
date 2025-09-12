@@ -2,8 +2,16 @@ const { Schema, model } = require('mongoose');
 
 const billsSchema = new Schema({
     direction: {type: String }, // TO_YOLK | FROM_YOLK
-    sender:{ type: Schema.Types.ObjectId, ref: 'User' }, // отправитель
-    receiver: { type: Schema.Types.ObjectId, ref: 'User' }, // получатель
+    sender:{ // отправитель
+      type: mongoose.Schema.Types.Mixed,
+      ref: 'User',
+      default: null,
+    }, 
+    receiver: { // получатель
+      type: mongoose.Schema.Types.Mixed,
+      ref: 'User',
+      default: null,      
+    }, 
     key: { type:String },  // Номер счета 
     order: { type: Schema.Types.ObjectId, ref: 'Order' }, // Заказ 
     description: { type:String },  // Основание счета

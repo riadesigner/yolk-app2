@@ -18,7 +18,7 @@ export default function useFetchCompanySetContractor(){
 
     const setNewContractor = async ()=>{
         try{
-            const response = await api.patch(`/orders/${orderId}/new-contractor/${contractorId}`);
+            const response = await api.patch(`/orders/${orderId}/set-contractor/${contractorId}`);
             if(response.data.success){
                 const order = response.data.order;
                 setOrder(order);

@@ -2,13 +2,13 @@
 const BillsModel = require('./bills.model');
 const AppError = require('../middleware/AppError')
 
-// exports.create = async function (billCreateDto = {}) {  
-//   try{
-//     return await BillsModel.create(billCreateDto)
-//   }catch(err){
-//     throw new AppError(err, 500);
-//   }   
-// }  
+exports.create = async function (billCreateDto = {}) {  
+  try{
+    return await BillsModel.create(billCreateDto)
+  }catch(err){
+    throw new AppError(err, 500);
+  }   
+}  
 
 // exports.update = async function (id, billUpdateDto = {}) {          
 //     try{        

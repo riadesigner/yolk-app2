@@ -152,7 +152,7 @@ router.get('/orders',
     })
 );
 
-router.patch('/orders/:orderId/new-contractor/:contractorId',
+router.patch('/orders/:orderId/set-contractor/:contractorId',
     passport.authenticate('jwt', { session: false }),
     asyncHandler(async (req, res) => {        
         
@@ -163,17 +163,21 @@ router.patch('/orders/:orderId/new-contractor/:contractorId',
         if(userRole!=='company'){
             throw new AppError('Назначить Исполнителя может только Компания (Заказчик)', 403)            
         }        
-
+        
+        // set contractor
         const orderUpdated = await OrdersService.setContractor(orderId, contractorId);
-
-        if(!orderUpdated){
-            throw new AppError(`Не удалось назначить Исполнителя заказу ${orderId}`, 500)
-        }
         
         // send notifications
         if (!await NotificationsService.sendAboutNewContractor( {customerId:userId, contractorId, orderId})){
             throw new AppError(`Не удалось отправить сообщение о назначени Исполнителя ${contractorId} для заказа ${orderId}`, 500)
         }
+        
+        // create the bill
+        // const theBill = await BillsService.create({
+        //     direction:'FROM_YOLK',
+        //     receiver:userId,
+
+        // });
         
         // send notification about check the bill
         if (!await NotificationsService.sendAboutCheckTheBill( {customerId:userId, contractorId, orderId})){
