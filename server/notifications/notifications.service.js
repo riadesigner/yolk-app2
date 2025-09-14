@@ -1,24 +1,22 @@
 
 const NotificationsModel = require('./notifications.model');
 const UsersService = require('../users/users.service');
-const OrdersService = require('../orders/orders.service');
+const BillsService = require('../bills/bills.service')
+const AppError = require('../middleware/AppError');
 
 
-exports.findByUserId = function (userId) {  
-    return new Promise(async (res,rej)=>{ 
-      try{ 
-        const notifs = await NotificationsModel
-          .find({receiver:userId})
-          .sort({ createdAt: -1 })
-          .limit(10)
-
-          console.log('notifs', notifs)
-        res(notifs);
-      }catch(e){
-        console.log(`notifs not found, err:${e}`);
-        res([]);
-      }        
-    })    
+exports.findByUserId = async function (userId, opt) {    
+    try{ 
+      const limit = opt && opt.limit || 100;
+      const notifs = await NotificationsModel
+        .find({receiver:userId})
+        .sort({ createdAt: -1 })
+        .limit(limit)        
+      return notifs;
+    }catch(e){
+      console.log(`notifs not found, err:${e}`);
+      return [];
+    }
 } 
 
 exports.sendAboutNewRespond = function ({designerId, orderId, customerId}) {  
@@ -76,13 +74,55 @@ exports.sendAboutNewRespond = function ({designerId, orderId, customerId}) {
       }        
     })    
 } 
-exports.sendAboutCheckTheBill = async function ({customerId, contractorId, orderId}) {  
-  const customer = await UsersService.findById(customerId); // заказчик
-  const contractor = await UsersService.findById(contractorId); // исполнитель  
-  const order = await OrdersService.findById(orderId); // заказ
-  
 
-  return true;
+exports.sendAboutCheckTheBill = async function ({customerId, contractorId, orderId, billId}) {  
+
+  try{
+
+      const chatId = '1';
+      const customer = await UsersService.findById(customerId); // заказчик
+      const contractor = await UsersService.findById(contractorId); // исполнитель        
+      const theBill = await BillsService.findById(billId); // счет        
+
+      // сообщение заказчику о создании счета для перевода Авансового платежа по Заказу
+      const notifToCustomer_1 = {
+          title: [
+            `Создан Счет № ${theBill.key} от ${theBill.createdAt} для перевода авансового платежа по Заказу ${orderId}. `,
+            `Проведите платеж, чтобы Дизайнер смог начать работу. `,
+          ].join(''),
+          readAt: '',
+          links: [
+              {
+                  name: `Счет № ${theBill.key}`,
+                  url: `/cp/company/bills/${billId}`
+              },    
+          ],
+          receiver: `${customer.id}`
+      }   
+
+      // сообщение заказчику о создании чата с дизайнером
+      const notifToCustomer_2 = {
+          title: [
+            `${customer.name}, для вас открыт персональный Чат с дизайнером (${contractor.name}), `,
+            `где вы сможете обсудить детали Заказа. `
+          ].join(''),
+          readAt: '',
+          links: [
+              {
+                  name: `Чат c ${contractor.name}`,
+                  url: `/cp/chats/${chatId}`
+              },
+          ],
+          receiver: `${customer.id}`
+      }        
+
+      const newNotifsToCompany_1 = await NotificationsModel.create(notifToCustomer_1)
+      const newNotifsToCompany_2 = await NotificationsModel.create(notifToCustomer_2)
+      return (!newNotifsToCompany_1 || !newNotifsToCompany_2) ? false : true;
+
+  }catch(err){
+    throw new AppError(err, 500);
+  }
 }
 
 exports.sendAboutNewContractor = function ({customerId, contractorId, orderId}) {  
@@ -107,7 +147,7 @@ exports.sendAboutNewContractor = function ({customerId, contractorId, orderId}) 
                   },
                   {
                       name: 'Исполнитель',
-                      url: `/designers/${userId}`
+                      url: `/designers/${contractorId}`
                   },
                   {
                       name: 'Чат с исполнителем',

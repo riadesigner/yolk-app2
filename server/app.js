@@ -131,6 +131,18 @@ app.use('/api', apiErrorHandler(sendError));
 app.use(fallbackErrorHandler);
 
 
-app.listen(process.env.PORT, () => {
+const server = app.listen(process.env.PORT, () => {
   console.log(`Сервер запущен на http://localhost:${process.env.PORT}`);
 });
+
+server.on('error', (error) => {
+  console.error('Server error:', error);
+});
+
+// Автоматический перезапуск при критических ошибках
+// process.on('SIGTERM', () => {
+//   console.log('SIGTERM received');
+//   server.close(() => {
+//     console.log('Process terminated');
+//   });
+// });

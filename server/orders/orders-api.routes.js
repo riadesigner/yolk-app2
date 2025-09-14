@@ -1,6 +1,7 @@
 const express = require('express')
 const UsersService = require('../users/users.service')
 const CompanyService = require('../company/company.service')
+const BillsService = require('../bills/bills.service')
 const OrdersService = require('./orders.service')
 const NotificationsService = require('../notifications/notifications.service')
 const multer = require('multer');
@@ -173,15 +174,19 @@ router.patch('/orders/:orderId/set-contractor/:contractorId',
         }
         
         // create the bill
-        // const theBill = await BillsService.create({
-        //     direction:'FROM_YOLK',
-        //     receiver:userId,
-
-        // });
-        
+        const totalFound = await BillsService.count({receiver:userId });
+        const key = totalFound.toString().padStart(2, '0'); // номер счета
+        const theBill = await BillsService.create({
+            direction:'FROM_YOLK',
+            receiver:userId,
+            key:key,            
+            order: orderId, 
+            description: `Авансовый платеж по Договору. Оплата заказа № ${orderId}`,  // Основание счета            
+        });
+                
         // send notification about check the bill
-        if (!await NotificationsService.sendAboutCheckTheBill( {customerId:userId, contractorId, orderId})){
-            throw new AppError(`Не удалось отправить сообщение об оплате счета Заказчиком (о переводе аванса на счет Yolk)`, 500)
+        if (!await NotificationsService.sendAboutCheckTheBill( {customerId:userId, contractorId, orderId, billId:theBill._id })){
+            throw new AppError(`Не удалось отправить сообщение о создании счета для Заказчика (для перевода аванса на счет Yolk)`, 500)
         }        
 
 

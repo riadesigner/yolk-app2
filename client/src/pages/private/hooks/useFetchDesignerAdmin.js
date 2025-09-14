@@ -7,19 +7,18 @@ export default function useFetchCompanyAdmin(){
 
     const [user, setUser] = useState(null);
     const [orders, setOrders] = useState([]);    
-    const [notifications, setNotifications] = useState([]);    
+    const [notifications, setNotifications] = useState([]);            
     
     const navigate = useNavigate();        
 
     useEffect(() => {
 
         const fetchNotifications = async ()=>{
-            const response = await api.get(`/notifications`);
+            const response = await api.get(`/notifications/me/limit/4`);
             if(response.data.success){                        
-                 return response.data.notifications;
-            }else{
-                return [];
-            }            
+                const arrNotifications = response.data.notifications;                
+                arrNotifications && arrNotifications.length>0 && setNotifications(arrNotifications);
+            }        
         }
 
         const fetchUserFull = async () => {     
@@ -33,8 +32,7 @@ export default function useFetchCompanyAdmin(){
                     const usr =  response.data.user;
                     if(usr){                        
                         setUser(usr);
-                        const arrNotifications = await fetchNotifications();
-                        arrNotifications && arrNotifications.length>0 && setNotifications(arrNotifications);
+                        await fetchNotifications()
                     }
                 }
                 
@@ -50,7 +48,7 @@ export default function useFetchCompanyAdmin(){
     return {
         user,
         orders,        
-        notifications,        
+        notifications,
         }
 
 }

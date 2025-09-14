@@ -88,7 +88,8 @@ export default function DesignerAdminPage(){
                                     }):(
                                         <p className="block has-text-centered">Сообщений нет</p>
                                     )
-                                }                                                                                                                      
+                                }                 
+                                <p className="has-text-centered"><a href="/cp/designer/notifs">Показать все сообщения</a></p>
                             </div> 
                         </div>
                     </div>

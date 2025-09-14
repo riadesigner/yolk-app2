@@ -10,18 +10,10 @@ export const formatDate = (isoDate) => {
     return date.toLocaleDateString('ru-RU', options);
 };
 
-export const formatDateTime = (isoDate)=>{        
-    const date = new Date(isoDate);
-    const options = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    timeZoneName: 'short'
-    };        
-    const humanReadable = date.toLocaleString('ru-RU', options);
-    return humanReadable;
-}
-
+export const formatDateTime = (dateString) => {
+  const date = new Date(dateString);
+  const months = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 
+                 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+  
+  return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+};

@@ -1,5 +1,6 @@
 
 import styles from './InboxMessage.module.css'
+import {formatDateTime} from '../utils/dateUtilits'
 
 const hdlClick = (e, url)=>{
     console.log('!!!!!, ', url, e)
@@ -9,12 +10,13 @@ const hdlClick = (e, url)=>{
 }
 
 export default function InboxMessage({messageData}){    
+    const date = formatDateTime(messageData.createdAt);
     return (         
         <div className={styles.message} id={messageData.id}>            
             
             <div className={styles.messageBell} ><i className={`fa-regular fa-bell is-primary`}></i></div>
             <h3>{messageData.title}</h3>
-            <small>23 Июля 2025</small>
+            <small>{date}</small>
             <div className={styles.messageLinks}>
                 {
                     messageData.links && messageData.links.length>0 && messageData.links.map((link, index)=>{

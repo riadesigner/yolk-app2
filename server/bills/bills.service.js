@@ -10,22 +10,23 @@ exports.create = async function (billCreateDto = {}) {
   }   
 }  
 
-// exports.update = async function (id, billUpdateDto = {}) {          
-//     try{        
+exports.count = async function (opt = {}) {  
+  try{
+    return await BillsModel.countDocuments(opt)
+  }catch(err){
+    console.log('BillsService err:', err);
+    return 0;
+  }   
+}  
 
-//       billUpdateDto.updatedAt = Date.now();
-
-//       const updatedBill = await BillsModel.findByIdAndUpdate(
-//           id,
-//           billUpdateDto,            
-//           { new: true }
-//       );
-//       return updatedBill;
-//     }catch(err){
-//         throw new AppError(err, 500);
-//     }        
-// }  
-
+exports.find = async function (opt = {}) {  
+  try{
+    return await BillsModel.find(opt)
+  }catch(err){
+    console.log('BillsService err:', err);
+    return [];
+  }   
+}  
 
 exports.findByReceiverId = async function (receiverId) {  
     try{ 
@@ -37,17 +38,13 @@ exports.findByReceiverId = async function (receiverId) {
 } 
 
 
-// exports.findById = function (id) {  
-//     return new Promise(async (res,rej)=>{ 
-//       try{ 
-//         const company = await CompanyModel.findById(id);
-//         res(company);
-//       }catch(e){
-//         console.log(`not found company with id ${id}, err:${e}`);
-//         res(null);
-//       }        
-//     })    
-// } 
+exports.findById = async function (id) {  
+    try{ 
+      return await BillsModel.findById(id);
+    }catch(err){
+      return null;
+    }    
+} 
 
 
 

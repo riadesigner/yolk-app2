@@ -25,6 +25,7 @@ import ChatPage from './pages/ChatPage.jsx';
 import AuthCallback from './pages/AuthCallback.jsx';
 import RoleSelectionPage from './pages/private/RoleSelectionPage.jsx';
 import DesignerAdminPage from './pages/private/DesignerAdminPage.jsx'
+import DesignerAdminNotifsPage from './pages/private/DesignerAdminNotifsPage.jsx'
 import DesignerInfoPage from './pages/private/DesignerInfoPage.jsx'
 import DesignerInfoEditPage from './pages/private/DesignerInfoEditPage.jsx'
 import DesignerPortfolioPage from './pages/private/DesignerPortfolioPage.jsx'
@@ -80,7 +81,8 @@ const router = createBrowserRouter([
 
       // private pages      
 
-      { path: 'cp/designer', element: <DesignerAdminPage /> }, // /личный кабинет менеджера
+      { path: 'cp/designer', element: <DesignerAdminPage /> }, // /личный кабинет дизайнера
+      { path: 'cp/designer/notifs', element: <DesignerAdminNotifsPage /> }, // /все сообщения дизайнеру      
       { path: 'cp/designer/info', element: <DesignerInfoPage /> }, // /анкета дизайнера      
       { path: 'cp/designer/info/edit', element: <DesignerInfoEditPage /> }, // /редактирование анкеты дизайнера            
       { path: 'cp/designer/portfolio/:portfolioId/edit', element: <DesignerPortfolioEditPage /> }, // /редактирование портфолио дизайнера            
