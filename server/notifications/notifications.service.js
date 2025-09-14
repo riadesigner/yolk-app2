@@ -3,19 +3,27 @@ const NotificationsModel = require('./notifications.model');
 const UsersService = require('../users/users.service');
 const BillsService = require('../bills/bills.service')
 const AppError = require('../middleware/AppError');
-
+const paginate = require('../utils/paginate')
 
 exports.findByUserId = async function (userId, opt) {    
     try{ 
+
       const limit = opt && opt.limit || 100;
-      const notifs = await NotificationsModel
-        .find({receiver:userId})
-        .sort({ createdAt: -1 })
-        .limit(limit)        
-      return notifs;
-    }catch(e){
-      console.log(`notifs not found, err:${e}`);
-      return [];
+      const page = opt && opt.page || 1;
+
+      const query = {receiver:userId};
+      const sort = { createdAt: -1 };
+        
+      const result = await paginate(NotificationsModel, query, {
+          page: page,
+          limit: limit,
+          sort: sort,
+      }); 
+
+      return result;
+
+    }catch(err){
+      throw new AppError(err, 500);
     }
 } 
 

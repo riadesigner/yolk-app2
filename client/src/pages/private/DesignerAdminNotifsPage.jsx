@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import useFetchDesignerAdminNotifs from './hooks/useFetchDesignerAdminNotifs'
 
 import Breadcrumb from '../../components/Breadcrumb'
+import Pagination from '../../components/Pagination.jsx'
 import InboxMessage from '../../components/InboxMessage'
 import styles from './DesignerAdminNotifsPage.module.css'
 
@@ -13,8 +14,12 @@ export default function DesignerAdminPage(){
         {link:'#', title:'Все сообщения', isActive:true},
     ];
 
-    const {
+    const {        
+        nowLoading,
         notifications,
+        currentPage, 
+        setCurrentPage,
+        paginationParams,         
     } = useFetchDesignerAdminNotifs();
 
     return (
@@ -28,18 +33,32 @@ export default function DesignerAdminPage(){
         <section className="container">
             <div className="section">
                 <article>
-                    <div className={styles.inboxMessages}>
-                        {
-                            notifications.length > 0 ? notifications.map((msg)=>{
-                                return (
-                                    <InboxMessage key={msg.id} messageData={msg} />
-                                )
-                            }):(
-                                <p className="block has-text-centered">Сообщений нет</p>
-                            )
-                        }                                
-                    </div> 
-                
+                    {
+                        nowLoading ? (
+                            <div>загружаем...</div>
+                        ):(
+                            <>      
+                            <div className={styles.inboxMessages}>
+                                {
+                                    notifications.length > 0 ? notifications.map((msg)=>{
+                                        return (
+                                            <InboxMessage key={msg.id} messageData={msg} />
+                                        )
+                                    }):(
+                                        <p className="block has-text-centered">Сообщений нет</p>
+                                    )
+                                }                                
+                            </div>
+                            <div className="block mt-6">
+                                <Pagination 
+                                    paginationParams={paginationParams}
+                                    currentPage={currentPage} 
+                                    setCurrentPage={setCurrentPage} 
+                                />
+                            </div>
+                            </>
+                        )
+                    }                
                 </article>
             </div>
         </section>

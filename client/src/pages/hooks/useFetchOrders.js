@@ -4,11 +4,11 @@ import api from "../../utils/api";
 import { useLocation } from 'react-router-dom';
 
 export default function useFetchOrders({userInput, userCategories}) {    
-          
+
+
     const ITEMS_ON_PAGE = 3;
-    const [orders, setOrders] = useState(null);
-    
-    const [currentPage, setCurrentPage] = useState('1');    
+    const [orders, setOrders] = useState([]);    
+    const [currentPage, setCurrentPage] = useState(1);    
 
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);

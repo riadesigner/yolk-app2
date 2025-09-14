@@ -26,9 +26,25 @@ router.get('/notifications',
     passport.authenticate('jwt', { session: false }),
     asyncHandler(async (req, res) => {
         const userId = req.user.id;
+
+        // Отключаем кэширование
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+
+        const page = req.query.page || 1;
+        const limit = req.query.limit || 3;
+
         try{
-            const notifs = await NotificationsService.findByUserId(userId);
-            sendSuccess(res, { notifications: notifs.map((n)=>n.toJSON()) })
+
+            const {
+                data:notifs,
+                pagination,
+            } = await NotificationsService.findByUserId(userId, {page, limit});            
+
+            const retNotifs = notifs.map((n)=>n.toJSON());
+            sendSuccess(res, { notifications:retNotifs, pagination }); 
+            
         }catch(e){
             return sendError(res, `Notifications not found`, 404);
         }        
