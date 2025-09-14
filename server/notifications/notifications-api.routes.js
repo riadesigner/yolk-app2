@@ -10,12 +10,16 @@ router.get('/notifications/me/limit/:num',
     passport.authenticate('jwt', { session: false }),
     asyncHandler(async (req, res) => {
         const userId = req.user.id;
-        try{
-            const opt = {
-                limit:req.params.num || 100,
-            }
-            const notifs = await NotificationsService.findByUserId(userId, opt);
-            sendSuccess(res, { notifications: notifs.map((n)=>n.toJSON()) })
+        try{            
+            const {
+                data:notifs,
+                pagination,
+            } = await NotificationsService.findByUserId(userId, {page:1, limit:req.params.num||5});            
+
+            const retNotifs = notifs.map((n)=>n.toJSON());
+            sendSuccess(res, { notifications:retNotifs, pagination }); 
+
+
         }catch(e){
             return sendError(res, `Notifications not found`, 404);
         }        

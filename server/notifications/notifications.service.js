@@ -5,7 +5,7 @@ const BillsService = require('../bills/bills.service')
 const AppError = require('../middleware/AppError');
 const paginate = require('../utils/paginate')
 
-exports.findByUserId = async function (userId, opt) {    
+exports.findByUserId = async function (userId, opt={}) {    
     try{ 
 
       const limit = opt && opt.limit || 100;
