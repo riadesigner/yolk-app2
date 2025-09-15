@@ -35,7 +35,11 @@ export default function OrderEditPage(){
         setDateTo,        
         files,
         setFiles,        
-        hdlSaveOrder,        
+        hdlSaveOrder,    
+        hdlRemoveOrder,
+        hdlRemoveOrderConfirmed,        
+        showConfirmToDeleteOrder,
+        setShowConfirmToDeleteOrder,
     } = useFetchOrder({ orderId, companyId, errorMessage, setErrorMessage});
 
     const options = {
@@ -116,8 +120,40 @@ export default function OrderEditPage(){
                 )
             }                    
    
+            <hr />
+
+            {
+                order && !order.contractor (
+                    <section className="container">
+                        <div className="section"> 
+                            <p>Вы можете <a href="#" onClick={(e)=>hdlRemoveOrder(e)}>удалить заказ</a>, пока не назначен Исполнитель</p>
+                            {
+                                showConfirmToDeleteOrder && (
+                                    <p>Подтвердите удаление: &nbsp;&nbsp; 
+                                        <a href="#" className='is-danger' 
+                                        onClick={(e)=>hdlRemoveOrderConfirmed(e)}>Удалить Заказ</a> 
+                                        &nbsp;&nbsp;|&nbsp;&nbsp;  
+                                        <a href="#" onClick={(e)=>{e.preventDefault();setShowConfirmToDeleteOrder(false);}}>Отмена</a></p>
+                                )
+                            }
+                        </div>
+                    </section>
+                )
+            }
+            {
+                order && order.contractor (
+                    <section className="container">
+                        <div className="section"> 
+                            <p>Заказу назначен исполнитель. Поэтому его нельзя удалить.</p>
+                        </div>
+                    </section>    
+                )                
+            }
 
             </article>
+
+
+
 
         </>
     )

@@ -7,7 +7,8 @@ export default function useFetchCompanyAdmin(){
 
     const [user, setUser] = useState(null);
     const [orders, setOrders] = useState([]);    
-    const [notifications, setNotifications] = useState([]);            
+    const [notifications, setNotifications] = useState([]);    
+    const [nowLoading, setNowLoading] = useState(true);            
     
     const navigate = useNavigate();        
 
@@ -33,6 +34,7 @@ export default function useFetchCompanyAdmin(){
                     if(usr){                        
                         setUser(usr);
                         await fetchNotifications()
+                        setNowLoading(false);
                     }
                 }
                 
@@ -49,6 +51,7 @@ export default function useFetchCompanyAdmin(){
         user,
         orders,        
         notifications,
+        nowLoading,
         }
 
 }

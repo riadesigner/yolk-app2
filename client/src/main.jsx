@@ -24,6 +24,7 @@ import ChatPage from './pages/ChatPage.jsx';
 // --------------------
 import AuthCallback from './pages/AuthCallback.jsx';
 import RoleSelectionPage from './pages/private/RoleSelectionPage.jsx';
+
 import DesignerAdminPage from './pages/private/DesignerAdminPage.jsx'
 import DesignerAdminNotifsPage from './pages/private/DesignerAdminNotifsPage.jsx'
 import DesignerInfoPage from './pages/private/DesignerInfoPage.jsx'
@@ -31,7 +32,9 @@ import DesignerInfoEditPage from './pages/private/DesignerInfoEditPage.jsx'
 import DesignerPortfolioPage from './pages/private/DesignerPortfolioPage.jsx'
 import DesignerPortfolioEditPage from './pages/private/DesignerPortfolioEditPage.jsx'
 import DesignerPortfolioAddPage from './pages/private/DesignerPortfolioAddPage.jsx'
+
 import CompanyAdminPage from './pages/private/CompanyAdminPage.jsx'
+import CompanyAdminNotifsPage from './pages/private/CompanyAdminNotifsPage.jsx'
 import CompanySetContractorPage from './pages/private/CompanySetContractorPage.jsx'
 import CompanyInfoPage from './pages/private/CompanyInfoPage.jsx'
 import CompanyInfoEditPage from './pages/private/CompanyInfoEditPage.jsx'
@@ -42,13 +45,13 @@ import OrderEditPage from './pages/private/OrderEditPage.jsx'
 import OrderNewPage from './pages/private/OrderNewPage.jsx'
 
 import AdminPage from './pages/private/AdminPage.jsx'
+import AdminNotifsPage from './pages/private/AdminNotifsPage.jsx'
 import AdminInfoPage from './pages/private/AdminInfoPage.jsx'
 import AdminOrdersPage from './pages/private/AdminOrdersPage.jsx'
 import AdminCompaniesPage from './pages/private/AdminCompaniesPage.jsx'
 import AdminDesignersPage from './pages/private/AdminDesignersPage.jsx'
 
 import { AuthProvider } from './providers/AuthProvider.jsx';
-
 import ErrorPage from './pages/ErrorPage.jsx'
 
 // Создаем роутер с включенным флагом будущего v7
@@ -90,6 +93,7 @@ const router = createBrowserRouter([
       { path: 'cp/designer/portfolio', element: <DesignerPortfolioPage /> }, // /портфолио дизайнера      
       
       { path: 'cp/company', element: <CompanyAdminPage /> }, // /личный кабинет компании
+      { path: 'cp/company/notifs', element: <CompanyAdminNotifsPage /> }, // /все сообщения компании      
       { path: 'cp/company/info', element: <CompanyInfoPage /> }, // /общая информация о компании      
       { path: 'cp/company/info/edit', element: <CompanyInfoEditPage /> }, // /редактирование общей информации о компании      
       { path: 'cp/company/card', element: <CompanyCardPage /> }, // /карточка компании (реквизиты)      
@@ -101,6 +105,7 @@ const router = createBrowserRouter([
       { path: 'cp/company/:companyId/order-edit/:orderId', element: <OrderEditPage /> }, // /редактирование заказа
 
       { path: 'cp/yolk-admin', element: <AdminPage /> }, // /личный кабинет администратора
+      { path: 'cp/yolk-admin/notifs', element: <AdminNotifsPage /> }, // /все сообщения администратору     
       { path: 'cp/yolk-admin/info', element: <AdminInfoPage /> }, // /сводная таблица (актуальные данные о проекте)      
       { path: 'cp/yolk-admin/orders', element: <AdminOrdersPage /> }, // /данные о состоянии всех заказов на сайте      
       { path: 'cp/yolk-admin/companies', element: <AdminCompaniesPage /> }, // /сводная таблица о компаниях на сайте      

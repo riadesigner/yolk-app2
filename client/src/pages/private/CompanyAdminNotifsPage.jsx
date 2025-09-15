@@ -1,15 +1,13 @@
 
-import Breadcrumb from '../../components/Breadcrumb'
+import Breadcrumb from '../../components/Breadcrumb.jsx'
 import NotifsList from '../../components/NotifsList'
 
-
-export default function DesignerAdminNotifsPage(){
+export default function CompanyAdminNotifsPage(){
     const links = [
         {link:'/', title:'Главная'},
-        {link:'/cp/designer', title:'Панель управления',},
+        {link:'/cp/company', title:'Панель управления',},
         {link:'#', title:'Все сообщения', isActive:true},
     ];
-
 
     return (
         <>

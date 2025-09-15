@@ -407,4 +407,44 @@ router.delete('/orders/delete-file',
 );
 
 
+router.delete('/orders/:orderId',
+    passport.authenticate('jwt', { session: false }),
+    asyncHandler(async (req, res) => {        
+
+        const { orderId } = req.params; 
+
+        try {
+            
+            const order = await OrdersService.findById(orderId);
+
+            if(order.contractor){
+                throw new AppError(`Заказ нельзя удалить, так как у него есть Исполнитель.` ,403);
+            }
+
+            // удаляем сначала все файлы заказа
+            const orderFiles = order.files;
+            
+            for (const file of orderFiles) {
+                const params = {
+                    Bucket: process.env.YANDEX_BUCKET_NAME,
+                    Key: file.key,
+                };                
+                await s3.deleteObject(params).promise();
+            }
+
+            // удаляем заказ
+            await OrdersService.deleteById(orderId);
+
+            sendSuccess(res, { 
+                message: `Заказ ${orderId} удален`,                
+            });
+            
+        } catch (err) {
+            throw new AppError(err, 500);
+        }
+        
+    })
+);
+
+
 module.exports = router;

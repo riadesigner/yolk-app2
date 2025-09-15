@@ -1,10 +1,9 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import useFetchDesignerAdmin from './hooks/useFetchDesignerAdmin'
 
 import Breadcrumb from '../../components/Breadcrumb'
-import InboxMessage from '../../components/InboxMessage'
-
+import NotifsLast from '../../components/NotifsLast'
 
 export default function DesignerAdminPage(){
     const links = [
@@ -12,11 +11,11 @@ export default function DesignerAdminPage(){
         {link:'#', title:'Панель управления', isActive:true},
     ];
 
-
     const {
         user,
         orders,
         notifications,
+        nowLoading,
     } = useFetchDesignerAdmin();
 
     return (
@@ -77,21 +76,13 @@ export default function DesignerAdminPage(){
                                 </div> 
                             </div>
                         </div>
-                        <div className="column is-6">
-                            <h2 className="is-size-5-mobile">Сообщения</h2>                             
-                            <div className="inbox-messages" id="inbox-messages">
-                                {
-                                    notifications.length > 0 ? notifications.map((msg)=>{
-                                        return (
-                                            <InboxMessage key={msg.id} messageData={msg} />
-                                        )
-                                    }):(
-                                        <p className="block has-text-centered">Сообщений нет</p>
-                                    )
-                                }                 
-                                <p className="has-text-centered"><a href="/cp/designer/notifs">Показать все сообщения</a></p>
-                            </div> 
-                        </div>
+
+                        <NotifsLast 
+                            linkToAll='/cp/company/notifs' 
+                            notifications={notifications} 
+                            nowLoading={nowLoading}
+                            />
+
                     </div>
                 
                 </article>

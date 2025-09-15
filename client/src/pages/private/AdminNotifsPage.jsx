@@ -6,7 +6,7 @@ import NotifsList from '../../components/NotifsList'
 export default function DesignerAdminNotifsPage(){
     const links = [
         {link:'/', title:'Главная'},
-        {link:'/cp/designer', title:'Панель управления',},
+        {link:'/cp/yolk-admin', title:'Панель управления',},
         {link:'#', title:'Все сообщения', isActive:true},
     ];
 

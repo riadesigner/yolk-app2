@@ -14,8 +14,31 @@ export default function useFetchOrder({orderId, companyId, setErrorMessage}) {
     const [tags, setTags] = useState("");
     const [price, setPrice] = useState(1000);
     const [dateTo, setDateTo] = useState('');
+    const [showConfirmToDeleteOrder, setShowConfirmToDeleteOrder] = useState(false);
     
     const {files, setFiles, addFile, removeFile, handleFileChange } = useFiles([]);
+
+    const hdlRemoveOrder = async (e)=>{
+        e.preventDefault();
+        setErrorMessage(null);
+        setShowConfirmToDeleteOrder(true);
+    }
+
+    const hdlRemoveOrderConfirmed = async (e)=>{
+        e.preventDefault();
+        setErrorMessage(null);
+        try {            
+            if(orderId){
+                const response = await api.delete(`/orders/${orderId}`);
+                console.log('Успешно удален заказ:', response.data.message);
+                navigate('/cp/company');
+            }
+        } catch (error) {
+            console.error('Ошибка:', error.response?.data || error.message);            
+            setErrorMessage('Не удалось удалить заказ')
+        }
+    }    
+    
 
     const hdlSaveOrder = async (e)=>{                   
         e.preventDefault();
@@ -134,6 +157,10 @@ export default function useFetchOrder({orderId, companyId, setErrorMessage}) {
         setDateTo,        
         files,
         setFiles,        
-        hdlSaveOrder,        
+        hdlSaveOrder,
+        hdlRemoveOrder,
+        hdlRemoveOrderConfirmed,        
+        showConfirmToDeleteOrder,
+        setShowConfirmToDeleteOrder,
     };
 }

@@ -1,10 +1,9 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-
-import { useAuth } from '../../contexts/AuthContext';
-import api from '../../utils/api';
+import { Link } from 'react-router-dom';
 
 import Breadcrumb from '../../components/Breadcrumb'
+import NotifsLast from '../../components/NotifsLast'
+
+import useFetchAdmin from './hooks/useFetchAdmin'
 
 export default function DesignerAdminPage(){
     const links = [
@@ -12,32 +11,12 @@ export default function DesignerAdminPage(){
         {link:'#', title:'Панель управления', isActive:true},
     ];
 
-    const [user, setUser] = useState(null);
-    const navigate = useNavigate();
-    const { isAuthenticated } = useAuth();
-
-    useEffect(() => {
-
-        console.log('Auth status:', isAuthenticated);
-
-        const fetchUser = async () => {         
-            try {
-                const response = await api.get('/user');
-
-                if(response.data.success){                    
-                    setUser(response.data.user);
-                }
-                
-            } catch (err) {
-                console.error('Ошибка загрузки профиля', err);
-                // navigate('/login');
-                navigate('/');
-            }
-        };
+    const {
+        user,
+        notifications,
+        nowLoading,
+    } = useFetchAdmin();
         
-        fetchUser();
-    }, []);
-
     return (
         <>
         <section className="container is-max-desktop desktop-only">
@@ -49,7 +28,7 @@ export default function DesignerAdminPage(){
             <div className="section mt-0">
                 <div className="banner is-primary">
                     <div className="banner-body">
-                        <h1 className='sub-title is-size-5-mobile mb-0'>Добро, пожаловать <nobr>{ user && user.name }!</nobr></h1>     
+                        <h1 className='sub-title is-size-5-mobile mb-0'>Добро, пожаловать Администратор <nobr>{ user && user.name }!</nobr></h1>     
                     </div>                     
                 </div>
             </div>
@@ -65,13 +44,11 @@ export default function DesignerAdminPage(){
                             <h2 className="is-size-5-mobile">Резюме</h2> 
                             <div className="block">
                             <Link to="/cp/yolk-admin/info">
-                            <button className="button is-fluid is-medium is-regular-mobile  is-link ">
+                            <button className="button is-fluid is-medium is-regular-mobile is-link mb-3">
                                 <span>Сводная таблица</span>
                                 <span className="icon"><i className="fa fa-angle-right"></i></span>
                             </button>                                                            
                             </Link>
-                            </div> 
-                            <div className="block">
                             <Link to="/cp/yolk-admin/orders">
                             <button className="button is-fluid is-medium is-regular-mobile  is-link ">
                                 <span>Все заказы</span>
@@ -83,13 +60,11 @@ export default function DesignerAdminPage(){
                             <h2 className="is-size-5-mobile">Пользователи</h2> 
                             <div className="block">
                             <Link to="/cp/yolk-admin/designers">
-                            <button className="button is-fluid is-medium is-regular-mobile is-primary">
+                            <button className="button is-fluid is-medium is-regular-mobile is-primary mb-3">
                                 <span>Дизайнеры</span>
                                 <span className="icon"><i className="fa fa-angle-right"></i></span>
                             </button>              
                             </Link>
-                            </div>          
-                            <div className="block">
                             <Link to="/cp/yolk-admin/companies">
                             <button className="button is-fluid is-medium is-regular-mobile is-primary">
                                 <span>Компании</span>
@@ -99,44 +74,13 @@ export default function DesignerAdminPage(){
                             </div>                                      
 
                         </div>
-                        <div className="column is-6">
-                            <h2 className="is-size-5-mobile">Новые сообщения</h2> 
-                            <div className="inbox-messages" id="inbox-messages">
-                                <a href="#">
-                                <div className="inbox-message is-active" id="1">
-                                    <div><i className="fa-regular fa-bell"></i></div>
-                                    <h3>Заполни свой профиль полностью и получи 10 баллов!</h3>
-                                    <small>23 Июля 2025</small>
-                                    <span><i className="fa-solid fa-arrow-right"></i></span>
-                                </div>
-                                </a>
-                                <a href="#">
-                                <div className="inbox-message" id="1">
-                                    <div><i className="fa-regular fa-bell"></i></div>
-                                    <h3>Вы выбраны в качестве исполнителя в заказе “Заказ №120931801”</h3>
-                                    <small>23 Июля 2025</small>
-                                    <span><i className="fa-solid fa-arrow-right"></i></span>
-                                </div>                                
-                                </a>
-                                <a href="#">
-                                <div className="inbox-message" id="1">
-                                    <div><i className="fa-regular fa-bell"></i></div>
-                                    <h3>У вас есть 3 непрочтенных сообщения в чате с менеджером YOLK</h3>
-                                    <small>23 Июля 2025</small>                                    
-                                    <span><i className="fa-solid fa-arrow-right"></i></span>
-                                </div>   
-                                </a>
-                                <a href="#">
-                                <div className="inbox-message" id="1">
-                                    <div><i className="fa-regular fa-bell"></i></div>
-                                    <h3>У вас есть 1 непрочтенное сообщение в чате заказа  №1231242345</h3>
-                                    <small>23 Июля 2025</small>
-                                    <span><i className="fa-solid fa-arrow-right"></i></span>
-                                </div> 
-                                </a>                                                                                               
-                            </div> 
-                            <p className="block has-text-centered"><a href="#">еще сообщения</a></p>
-                        </div>
+
+                        <NotifsLast 
+                            linkToAll='/cp/yolk-admin/notifs' 
+                            notifications={notifications} 
+                            nowLoading={nowLoading}
+                            />
+
                     </div>
                 
                 </article>

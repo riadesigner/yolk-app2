@@ -1,9 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from "react";
 
-import api from '../../../utils/api'
+import api from '../../utils/api'
 
-export default function useFetchCompanyAdminNotifs(){
+export default function useFetchNotifs(){
 
     const ITEMS_ON_PAGE = 6;
 
@@ -38,7 +38,7 @@ export default function useFetchCompanyAdminNotifs(){
                 `page=${currentPage}&limit=${ITEMS_ON_PAGE}`,
                 `&rnd=${Date.now()}`
                 ].join('');
-                console.log('query', query)
+
                 const response = await api.get(query);
                 setNowLoading(false)
 

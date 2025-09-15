@@ -164,3 +164,13 @@ exports.deleteFromFiles = function(id, fileKey){
       }        
     })  
 }
+
+exports.deleteById = async function(orderId) {      
+    try {
+      const result = await OrdersModel.findByIdAndDelete(orderId);      
+      if (!result) { throw new AppError('Заказ не найден', 404) }            
+      return result;
+    } catch (err) {      
+      throw new AppError(err, 500)      
+    }
+}
