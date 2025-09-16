@@ -1,28 +1,27 @@
 
 import { useState, useEffect } from "react";
+import { useParams } from 'react-router-dom';
 import api from "../../../utils/api"; // Путь к вашему API
-import {getPayloads} from '../../../utils/payloads'
 
-
-export default function useFetchCompanyBiils() {
+export default function useFetchBillToPrintPage() {
     
-    const [bills, setBills] = useState([]);    
+    const [bill, setBill] = useState(null);    
     const [nowLoading, setNowLoading] = useState(true);    
+    const params = useParams();
+    const {billId} = params;
     
-    const pl = getPayloads();
-    const receiverId = pl.id;    
-
     useEffect(() => {            
 
-        const fetchCompanyBills = async () => {
-            console.log('receiverId = ', receiverId)
+        const fetchBill = async () => {            
+            console.log('try to loading ', billId)
             try {                    
-                const response = await api.get(`/bills/to/company/${receiverId}`);
+                const response = await api.get(`/bills/${billId}`);
+                console.log('response', response)
                 if (response.data.success) {
-                    const resBills = response.data.bills;
-                    if(resBills){
-                        console.log('resBills',resBills)
-                        setBills(resBills);                    
+                    const resBill = response.data.bill;
+                    console.log('resBill', resBill);
+                    if(resBill){                        
+                        setBill(resBill);                    
                         setNowLoading(false);
                     }
                 }else{
@@ -33,11 +32,11 @@ export default function useFetchCompanyBiils() {
                 setNowLoading(false);
             }
         };
-        fetchCompanyBills();
-    }, []);
+        fetchBill();
+    }, [billId]);
 
     return {
         nowLoading,
-        bills,
+        bill,
     };
 }

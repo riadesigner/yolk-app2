@@ -41,6 +41,7 @@ import CompanyInfoEditPage from './pages/private/CompanyInfoEditPage.jsx'
 import CompanyCardPage from './pages/private/CompanyCardPage.jsx'
 import CompanyCardEditPage from './pages/private/CompanyCardEditPage.jsx'
 import CompanyBillsPage from './pages/private/CompanyBillsPage.jsx'
+import CompanyBillToPrintPage from './pages/private/CompanyBillToPrintPage.jsx'
 import OrderEditPage from './pages/private/OrderEditPage.jsx'
 import OrderNewPage from './pages/private/OrderNewPage.jsx'
 
@@ -98,6 +99,7 @@ const router = createBrowserRouter([
       { path: 'cp/company/info/edit', element: <CompanyInfoEditPage /> }, // /редактирование общей информации о компании      
       { path: 'cp/company/card', element: <CompanyCardPage /> }, // /карточка компании (реквизиты)      
       { path: 'cp/company/card/edit', element: <CompanyCardEditPage /> }, // /редактирование карточки компании 
+      { path: 'cp/company/bills/:billId', element: <CompanyBillToPrintPage /> }, // /счет компании       
       { path: 'cp/company/bills', element: <CompanyBillsPage /> }, // /счета компании       
       { path: 'cp/company/set-contractor/:contractorId/order/:orderId', element: <CompanySetContractorPage /> }, // /назначение исполнителя для Заказа      
             

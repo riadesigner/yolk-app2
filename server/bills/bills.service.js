@@ -30,7 +30,9 @@ exports.find = async function (opt = {}) {
 
 exports.findByReceiverId = async function (receiverId) {  
     try{ 
-      const bills = await BillsModel.find({receiver:receiverId});
+      const opt = {receiver:receiverId}
+      const sort= {createdAt:-1}      
+      const bills = await BillsModel.find(opt).sort(sort);
       return bills;
     }catch(err){
       return [];

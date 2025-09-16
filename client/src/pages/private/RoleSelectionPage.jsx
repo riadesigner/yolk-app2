@@ -14,7 +14,6 @@ export default function AboutPage(){
     const pl = getPayloads();
     const userId = pl.id;
     
-    console.log('pl', pl)
     const navigate = useNavigate();
 
     const [errorMessage, setErrorMessage] = useState(null);    

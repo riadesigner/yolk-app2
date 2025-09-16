@@ -1,19 +1,16 @@
 import { Link } from 'react-router-dom';
 
-import styles from '../../pages/private/CompanyCardPage.module.css'
 import Breadcrumb from '../../components/Breadcrumb';
-
+import {formatDateTime} from '../../utils/dateUtilits'
 import useFetchCompanyBillsPage from './hooks/useFetchCompanyBillsPage'
 
 
-export default function CompanyCardPage(){
+export default function CompanyBillsPage(){
     const links = [
         {link:'/', title:'Главная'},
         {link:'/cp/company', title:'Панель управления'},
         {link:'#', title:'Счета компании', isActive:true},
-    ];    
-
-    const companyId = '';
+    ];
 
     const {
         nowLoading,
@@ -35,19 +32,24 @@ export default function CompanyCardPage(){
             {
                 nowLoading ? (
                     <>Загрузка...</>
-                ):(
+                ):(            
                     bills && bills.length>0 ? (
-                        <ul>
+                        <div >
                             {
                                 bills.map((b)=>{
-                                    <li key={b.id}>
-                                        <p>Счет № {b.key} <br /> от {b.createdAt},  
-                                        {b.paid ? <span className="is-primary">Оплачен</span> : <span>Не оплачен</span>}
-                                        </p>
-                                    </li>
+                                    const fromDate = formatDateTime(b.createdAt);
+                                    return (                                        
+                                    <div key={b.id}>
+                                        <button className={`button ${b.paid?'is-primary':'is-link'} mb-3`}
+                                        onClick={()=>{location.href=`/cp/company/bills/${b.id}`}}
+                                        >
+                                            <span>Счет № {b.key} от {fromDate}, {b.paid ? <span>Оплачен</span> : <span>Не оплачен</span>}</span>
+                                        </button>                                                                                
+                                    </div>                                        
+                                    )
                                 })       
                             }
-                        </ul>
+                        </div>
                     ):(
                         <>Пока счетов нет</>
                     )
