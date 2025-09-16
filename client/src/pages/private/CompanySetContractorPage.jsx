@@ -20,6 +20,7 @@ export default function CompanySetContractorPage(){
         hasContractor,
         errorMessage,
         setNewContractor,
+        nowLoading,
     } = useFetchCompanySetContractor();   
 
     const hdlClickAction = async (e)=>{
@@ -71,7 +72,14 @@ export default function CompanySetContractorPage(){
                                     </>
                                 ):(
                                     <div className="block" style={{textAlign:'right'}}>
-                                        <button className="button is-large is-link" onClick={(e)=>{hdlClickAction(e)}}>Утвердить</button>
+                                        {
+                                            !nowLoading ? (
+                                                <button className="button is-large is-link" onClick={(e)=>{hdlClickAction(e)}}>Утвердить</button>
+                                            ):(
+                                                <button className="button is-large is-link" >&nbsp;&nbsp;&nbsp;...&nbsp;&nbsp;&nbsp;</button>
+                                            )
+                                        }
+                                        
                                     </div>                        
                                 )
                             )

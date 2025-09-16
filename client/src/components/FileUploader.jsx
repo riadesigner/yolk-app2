@@ -1,10 +1,9 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import api from '../utils/api'
-// import docIcon from '../../public/document.png'
-const docIcon='';
+import docIcon from '../../src/i/document.png'
 
-const FileUploader = ({ orderId, setFiles, file = null }) => {
+const FileUploader = ({ orderId, setFiles, file = null, nodelete = false }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
   const [uploadedFile, setUploadedFile] = useState(file);  
@@ -199,6 +198,7 @@ const FileUploader = ({ orderId, setFiles, file = null }) => {
 
       {uploadedFile && (
         <div style={{ marginTop: '30px' }}>
+          <a href={uploadedFile.url} target="_blank">
             <img src={docIcon}  alt="uploaded" style={{
                 maxWidth:'100%',
                 height:'50px',
@@ -206,14 +206,17 @@ const FileUploader = ({ orderId, setFiles, file = null }) => {
                 borderRadius:'10px',
             }}/>
             <p className="is-size-7">{uploadedFile.originalName}</p>
+          </a>          
           <div className="mt-4">
-            <button 
-              onClick={handleDelete} 
-              disabled={isLoading}              
-              className="button is-danger is-small"
-            >
-              {isLoading ? 'Удаление...' : 'Удалить'}
-            </button>
+            {!nodelete && (
+              <button 
+                onClick={handleDelete} 
+                disabled={isLoading}              
+                className="button is-danger is-small"
+              >
+                {isLoading ? 'Удаление...' : 'Удалить'}
+              </button>
+            )}
           </div>
         </div>
       )}

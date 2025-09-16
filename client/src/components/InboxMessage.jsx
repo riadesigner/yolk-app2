@@ -3,7 +3,6 @@ import styles from './InboxMessage.module.css'
 import {formatDateTime} from '../utils/dateUtilits'
 
 const hdlClick = (e, url)=>{
-    console.log('!!!!!, ', url, e)
     e.preventDefault()
     console.log('url', url)
     document.location.href=url;

@@ -7,6 +7,7 @@ export default function useFetchCompanySetContractor(){
 
     const { orderId, contractorId } = useParams();
 
+    const [nowLoading, setNowLoading] = useState(true);
     const [hasContractor, setHasContractor] = useState(false);
     const [user, setUser] = useState(null);
     const [contractor, setContractor] = useState(null);
@@ -17,16 +18,18 @@ export default function useFetchCompanySetContractor(){
     const navigate = useNavigate();        
 
     const setNewContractor = async ()=>{
+        setNowLoading(true)
         try{
             const response = await api.patch(`/orders/${orderId}/set-contractor/${contractorId}`);
             if(response.data.success){
-                const order = response.data.order;
-                setOrder(order);
-                if(order.contractor){
-                    setHasContractor(true)
+                const theOrder = response.data.order;
+                setOrder(theOrder);
+                if(theOrder.contractor){                    
+                    navigate('/cp/company')
                 }
             }
         }catch(err){
+            setNowLoading(false)
             setErrorMessage('Не удалось установить исполнителя')
             console.error('Ошибка установки исполнителя', err);
         }        
@@ -82,6 +85,7 @@ export default function useFetchCompanySetContractor(){
                     // загрузка данных о заказе
                     await fetchOrder(); 
                     await fetchContractor(); 
+                    setNowLoading(false)
                 }
                 
             } catch (err) {
@@ -101,6 +105,7 @@ export default function useFetchCompanySetContractor(){
         hasContractor,
         errorMessage,
         setNewContractor,
+        nowLoading,
         }
 
 }

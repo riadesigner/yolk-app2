@@ -79,40 +79,72 @@ export default function OrderEditPage(){
             <section className="container">
                 <div className="section "> 
                     <div className={styles.files}>
-                        {
-                                order && 
+                            {
+                                order && !order.contractor &&
                                 files.length > 0 && 
-                                files.map((file, index) => (                                
+                                files.map((file, index) => (
                                     <div key={file.key || index} className="box" style={{ display:'flex', alignItems:'center', justifyContent:'center',}}>
                                         <FileUploader 
                                             orderId={order.id}
                                             setFiles={setFiles}
                                             file={file}
+                                            nodelete
                                             />
                                     </div>
                                     ))                        
                             } 
 
                             {
-                                order && (
+                                order && !order.contractor && (
                                         <div key={files.length} className="box" style={{ display:'flex', alignItems:'center', justifyContent:'center',}}>                                
                                         <FileUploader 
                                             orderId={order.id}
                                             setFiles={setFiles}
                                             />
-                                    </div>                        
+                                    </div>
                                 )                            
-                            }                            
+                            }
+
+                            {
+                                order && order.contractor && files && files.length>0 && (
+                                    <>
+                                        <h2>Прикрепленные файлы: </h2>
+                                        <ul>
+                                            {
+                                                files.map((file)=>{
+                                                    <li><a href={file.url}>{file.key}</a></li>
+                                                })
+                                            }
+                                        </ul>
+                                    </>
+                                )
+                            }
+
                     </div>
                 </div>
             </section> 
             
-            <section className="container">
-                <div className="section has-text-right"> 
-                    <button className="button is-primary is-medium is-regular-mobile" onClick={(e)=>hdlSaveOrder(e)}>Сохранить</button>
-                </div>
-            </section>
 
+            {
+                order && order.contractor && (
+                    <section className="container">
+                        <div className="section has-text-left"> 
+                            <p>Заказу назначен исполнитель. Редактировать заказ запрещено.</p>
+                        </div>
+                    </section>                    
+                    
+                )
+            }
+
+            {
+                order && !order.contractor && (
+                    <section className="container">
+                        <div className="section has-text-right"> 
+                            <button className="button is-primary is-medium is-regular-mobile" onClick={(e)=>hdlSaveOrder(e)}>Сохранить</button>
+                        </div>
+                    </section>
+                )
+            }
 
             {
                 errorMessage && (
@@ -123,7 +155,7 @@ export default function OrderEditPage(){
             <hr />
 
             {
-                order && !order.contractor (
+                order && !order.contractor && (
                     <section className="container">
                         <div className="section"> 
                             <p>Вы можете <a href="#" onClick={(e)=>hdlRemoveOrder(e)}>удалить заказ</a>, пока не назначен Исполнитель</p>
@@ -141,10 +173,10 @@ export default function OrderEditPage(){
                 )
             }
             {
-                order && order.contractor (
+                order && order.contractor && (
                     <section className="container">
                         <div className="section"> 
-                            <p>Заказу назначен исполнитель. Поэтому его нельзя удалить.</p>
+                            <p>Заказу назначен исполнитель. Удалять заказ запрещено.</p>
                         </div>
                     </section>    
                 )                

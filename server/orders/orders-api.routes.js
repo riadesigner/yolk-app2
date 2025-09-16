@@ -189,10 +189,8 @@ router.patch('/orders/:orderId/set-contractor/:contractorId',
             throw new AppError(`Не удалось отправить сообщение о создании счета для Заказчика (для перевода аванса на счет Yolk)`, 500)
         }        
 
-
-        sendSuccess(res, {             
-            responded: orderUpdated.responded,
-            message: 'ok', 
+        sendSuccess(res, {        
+            order: orderUpdated,            
         });
 
     })

@@ -9,9 +9,7 @@ export default function useFetchCompanyAdmin(){
     const [orders, setOrders] = useState([]);    
     const [company, setCompany] = useState(null);    
     const [notifications, setNotifications] = useState([]);
-    const [nowLoading, setNowLoading] = useState(true);    
-
-    const navigate = useNavigate();    
+    const [nowLoading, setNowLoading] = useState(true);   
 
     useEffect(() => {
 

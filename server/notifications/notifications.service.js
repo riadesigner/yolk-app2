@@ -4,6 +4,7 @@ const UsersService = require('../users/users.service');
 const BillsService = require('../bills/bills.service')
 const AppError = require('../middleware/AppError');
 const paginate = require('../utils/paginate')
+const formatDateTime = require('../utils/dateUtilits')
 
 exports.findByUserId = async function (userId, opt={}) {    
     try{ 
@@ -44,11 +45,11 @@ exports.sendAboutNewRespond = function ({designerId, orderId, customerId}) {
                       bright: true
                   },
                   {
-                      name: 'заказ',
+                      name: 'Заказ',
                       url: `/orders/${orderId}`
                   },
                   {
-                      name: 'дизайнер',
+                      name: 'Дизайнер',
                       url: `/designers/${designerId}`
                   }
               ],
@@ -60,7 +61,7 @@ exports.sendAboutNewRespond = function ({designerId, orderId, customerId}) {
               readAt: '',
               links: [
                   {
-                      name: 'заказ',
+                      name: 'Заказ',
                       url: `/orders/${orderId}`
                   },
               ],
@@ -91,42 +92,29 @@ exports.sendAboutCheckTheBill = async function ({customerId, contractorId, order
       const customer = await UsersService.findById(customerId); // заказчик
       const contractor = await UsersService.findById(contractorId); // исполнитель        
       const theBill = await BillsService.findById(billId); // счет        
+      // const date = formatDateTime(theBill.createdAt);
+      const date = theBill.createdAt;
 
       // сообщение заказчику о создании счета для перевода Авансового платежа по Заказу
       const notifToCustomer_1 = {
           title: [
-            `Создан Счет № ${theBill.key} от ${theBill.createdAt} для перевода авансового платежа по Заказу ${orderId}. `,
+            `Создан Счет № ${theBill.key} от ${date} для перевода авансового платежа по Заказу ${orderId}. `,
             `Проведите платеж, чтобы Дизайнер смог начать работу. `,
           ].join(''),
           readAt: '',
           links: [
               {
                   name: `Счет № ${theBill.key}`,
-                  url: `/cp/company/bills/${billId}`
+                  url: `/cp/company/bills/${billId}`,
+                  bright: true,
+                  
               },    
           ],
           receiver: `${customer.id}`
       }   
 
-      // сообщение заказчику о создании чата с дизайнером
-      const notifToCustomer_2 = {
-          title: [
-            `${customer.name}, для вас открыт персональный Чат с дизайнером (${contractor.name}), `,
-            `где вы сможете обсудить детали Заказа. `
-          ].join(''),
-          readAt: '',
-          links: [
-              {
-                  name: `Чат c ${contractor.name}`,
-                  url: `/cp/chats/${chatId}`
-              },
-          ],
-          receiver: `${customer.id}`
-      }        
-
       const newNotifsToCompany_1 = await NotificationsModel.create(notifToCustomer_1)
-      const newNotifsToCompany_2 = await NotificationsModel.create(notifToCustomer_2)
-      return (!newNotifsToCompany_1 || !newNotifsToCompany_2) ? false : true;
+      return !newNotifsToCompany_1 ? false : true;
 
   }catch(err){
     throw new AppError(err, 500);
@@ -143,8 +131,7 @@ exports.sendAboutNewContractor = function ({customerId, contractorId, orderId}) 
           // сообщение заказчику
           const notifToCustomer = {
               title: [
-                `${customer.name}, вы назначили Исполнителя для заказа ${orderId} `,
-                `Переведите на Счет Закза предоплату, чтобы Дизайнер смог начать работу. `,
+                `${customer.name}, вы назначили Исполнителя для заказа ${orderId} \n`,
                 `Теперь Вам доступен Чат с Дизайнером, где вы можете обсудить детали Заказа.`
               ].join(''),
               readAt: '',
@@ -159,7 +146,8 @@ exports.sendAboutNewContractor = function ({customerId, contractorId, orderId}) 
                   },
                   {
                       name: 'Чат с исполнителем',
-                      url: `/chats/${orderId}`
+                      url: `/chats/${orderId}`,
+                      bright: true,
                   },    
               ],
               receiver: `${customer.id}`
@@ -175,11 +163,11 @@ exports.sendAboutNewContractor = function ({customerId, contractorId, orderId}) 
               readAt: '',
               links: [
                   {
-                      name: 'заказ',
+                      name: 'Заказ',
                       url: `/orders/${orderId}`
                   },
                   {
-                      name: 'чат с Заказчиком',
+                      name: 'Чат с Заказчиком',
                       url: `/chats/${orderId}`,
                       bright: true
                   },

@@ -270,9 +270,10 @@ hr {width: 50%;border:none;border-bottom:1px solid #b5b5b5;margin-top:2rem;margi
     cursor:pointer;transition:.3s;line-height: 1;
     background-color: #e4e4e4;
 }
-.button.is-left{justify-content:flex-start;}
-.button.is-left span:nth-child(1){margin-right: .25rem;}
-.button.is-fluid{width: 100%;;}
+.button.is-left{justify-content:flex-start !important;}
+.button.is-left span{text-align: left !important;}
+.button.is-left span:nth-child(1){margin-right: .25rem !important;}
+.button.is-fluid{width: 100%;}
 .button.is-small{font-size: 0.75rem;padding:.5rem 0.75rem;border-radius:5px !important;}
 .button, .button.is-regular{font-size: 1rem; border-radius:6px;}
 .button.is-medium{font-size: 1.25rem;padding:1rem 1.5rem;border-radius:8px !important;}

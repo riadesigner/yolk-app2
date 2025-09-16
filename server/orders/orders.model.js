@@ -8,7 +8,11 @@ const ordersSchema = new Schema({
     files: {type: Array},
     status: { type:String },    
     company: { type: Schema.Types.ObjectId, ref: 'Company' },
-    contractor: { type: Schema.Types.ObjectId, ref: 'Users' },
+    contractor: { 
+      type: Schema.Types.ObjectId, 
+      ref: 'Users',
+      default: null,
+     },
     responded: { type: Array }, // Designers, who respond to order
     price: { type: Number },
     dateTo: { type: Date },
