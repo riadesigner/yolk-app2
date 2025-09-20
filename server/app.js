@@ -2,16 +2,14 @@ require('dotenv').config();
 
 const express = require('express');
 
-const configurePassport = require('./config/passport');
 const configureSessions = require('./config/sessions');
+const configurePassport = require('./config/passport');
+const configureCors = require('./config/cors');
+const configureCategories = require('./config/categories');
 
 const error404 = require('./middleware/error404')
-const session = require('express-session');
 const path = require('path')
 const mongoose = require('mongoose')
-const jwtUtils = require('./utils/jwtUtils')
-
-const cors = require('cors');
 
 const requestLogger = require('./middleware/requestLogger')
 
@@ -21,8 +19,6 @@ const { authErrorHandler, apiErrorHandler, fallbackErrorHandler } = require('./m
 const MONGO_URL =`mongodb://${process.env.MONGO_ROOT_USER}:${process.env.MONGO_ROOT_PASSWORD}@mongo:27017`;
 const MONGO_DB = process.env.DB_NAME;
 const PUBLIC_PATH = path.join(__dirname+'/public');
-
-
 
 // ----------------
 //  CONNECT TO DB
@@ -43,27 +39,14 @@ const app = express();
 
 configureSessions(app);
 configurePassport(app);
+configureCors(app);
 
 app.set('view engine','ejs');
 app.set('views', __dirname + '/views');
 app.use('/public',express.static(PUBLIC_PATH))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-
-
-// Настройка CORS для кросс-портовых запросов
-const corsOptions = {
-  origin: process.env.FRONT_URL, // Фронтенд-адрес
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  credentials: true,
-  allowedHeaders: [
-    'Content-Type',
-    'Authorization' // Для Bearer token
-  ]  
-};
-app.use(cors(corsOptions));
 app.use(requestLogger);
-
 
 // ------------
 //    ROUTS
@@ -83,6 +66,8 @@ app.get('/', (req, res)=>{
     const user = req.user;
     res.render('index',{user});
 });
+
+configureCategories();
 
 
 // 404 — если ни один маршрут не сработал
