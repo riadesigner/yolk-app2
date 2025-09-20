@@ -1,6 +1,10 @@
 require('dotenv').config();
+
 const express = require('express');
-const cookieParser = require('cookie-parser');
+
+const configurePassport = require('./config/passport');
+const configureSessions = require('./config/sessions');
+
 const error404 = require('./middleware/error404')
 const session = require('express-session');
 const path = require('path')
@@ -8,15 +12,14 @@ const mongoose = require('mongoose')
 const jwtUtils = require('./utils/jwtUtils')
 
 const cors = require('cors');
-const passport = require('passport');
-const configurePassport = require('./config/passport');
+
 const requestLogger = require('./middleware/requestLogger')
+
 const { asyncHandler, sendSuccess, sendError } = require('./middleware/utils');
 const { authErrorHandler, apiErrorHandler, fallbackErrorHandler } = require('./middleware/errorHandlers');
 
 const MONGO_URL =`mongodb://${process.env.MONGO_ROOT_USER}:${process.env.MONGO_ROOT_PASSWORD}@mongo:27017`;
-// const MONGO_DB = process.env.DB_NAME;
-const MONGO_DB = 'new-yolk-db';
+const MONGO_DB = process.env.DB_NAME;
 const PUBLIC_PATH = path.join(__dirname+'/public');
 
 
@@ -38,39 +41,15 @@ const PUBLIC_PATH = path.join(__dirname+'/public');
 // -------------------
 const app = express();
 
-app.set('view engine','ejs')
-app.set('views', __dirname + '/views');
+configureSessions(app);
+configurePassport(app);
 
+app.set('view engine','ejs');
+app.set('views', __dirname + '/views');
+app.use('/public',express.static(PUBLIC_PATH))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use('/public',express.static(PUBLIC_PATH))
 
-// -----------------
-//    USE SESSION
-// ----------------- 
-
-const sessionMiddleware = session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  rolling: true,  
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'none',
-    httpOnly: false,
-    maxAge: 10 * 60 * 1000,
-  }
-});
-
-app.use(sessionMiddleware);
-
-// -----------------
-//    USE PASSPORT
-// ----------------- 
-
-configurePassport();
-app.use(passport.initialize());
-app.use(passport.session());
 
 // Настройка CORS для кросс-портовых запросов
 const corsOptions = {
@@ -83,22 +62,14 @@ const corsOptions = {
   ]  
 };
 app.use(cors(corsOptions));
-app.use(cookieParser());
-app.use(express.json());
 app.use(requestLogger);
-app.set('view engine','ejs');
+
 
 // ------------
 //    ROUTS
 // ------------
-
-app.get('/', (req, res)=>{
-    const user = req.user;
-    res.render('index',{user});
-});
-
 app.use('/auth',require('./auth/auth.routes')); // auth через яндекс и mailru  
-app.use('/api',require('./auth/auth-api.routes')); // logout jwt
+app.use('/api',require('./auth/auth-api.routes'));  // jwt
 app.use('/api',require('./users/users-api.routes'));
 app.use('/api',require('./company/company-api.routes'));
 app.use('/api',require('./orders/orders-api.routes'));
@@ -106,17 +77,13 @@ app.use('/api',require('./portfolios/portfolios-api.routes'));
 app.use('/api',require('./categories/categories-api.routes'));
 app.use('/api',require('./bills/bills-api.routes'));
 app.use('/api',require('./notifications/notifications-api.routes'));
+app.use('/',require('./auth/login.routes')); // разные роуты для логина и выхода
 
-// Защищённый роут
-app.get('/api/protected', (req, res) => {
-  const token = req.headers.authorization?.split(' ')[1];  
-  try {
-    jwtUtils.verifyToken(token);
-    res.json({ secretData: 'Доступ разрешён' });
-  } catch (err) {
-    res.status(401).json({ error: 'Неверный токен' });
-  }
+app.get('/', (req, res)=>{
+    const user = req.user;
+    res.render('index',{user});
 });
+
 
 // 404 — если ни один маршрут не сработал
 app.use(error404);

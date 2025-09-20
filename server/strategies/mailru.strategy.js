@@ -1,13 +1,13 @@
-const YandexStrategy = require('passport-yandex').Strategy;
+const MailruStrategy = require('passport-mailru-email').Strategy;
 const usersService = require('../users/users.service');
 
 const JWTUtils = require('../utils/jwtUtils');
 
 module.exports = (passport) => {
-  passport.use(new YandexStrategy({
-    clientID: process.env.YANDEX_CLIENT_ID,
-    clientSecret: process.env.YANDEX_CLIENT_SECRET,
-    callbackURL: process.env.YANDEX_CALLBACK_URL,
+  passport.use(new MailruStrategy({
+    clientID: process.env.MAILRU_CLIENT_ID,
+    clientSecret: process.env.MAILRU_CLIENT_SECRET,
+    callbackURL: process.env.MAILRU_CALLBACK_URL,
   }, async (accessToken, refreshToken, profile, done) => {
     
     try {
@@ -21,7 +21,7 @@ module.exports = (passport) => {
       }
 
       const userData = {
-        yandexId: id,
+        mailruId: id,
         email: emails[0].value,
         name: username,
         avatar: photos?.[0]?.value        
@@ -53,11 +53,11 @@ module.exports = (passport) => {
       const payload = { id: usr._id, email: usr.email, role:usr.role };      
       const token = JWTUtils.generateToken(payload, { expiresIn: '2h' });
 
-      console.log('Yandex auth success for:', payload );
+      console.log('Mailru auth success for:', payload );
       return done(null, { ...usr, token, accessToken });
 
     } catch (err) {
-      console.error('Yandex auth error:', err);
+      console.error('Mailru auth error:', err);
       return done(err.message);
     }
   }));
