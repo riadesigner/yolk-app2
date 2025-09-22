@@ -21,6 +21,7 @@ export default function CompanyInfoEditPage(){
 
     const {
         company,
+        companyId,
         companyName,
         setCompanyName,        
         specialization, 
@@ -52,7 +53,7 @@ export default function CompanyInfoEditPage(){
                 <div className={styles.info3}>
                     <div className="box">    
 
-                        <Logoloader companyId={company}/>
+                        <Logoloader companyId={companyId}/>
 
                     </div>
                     <div className="userFio box">

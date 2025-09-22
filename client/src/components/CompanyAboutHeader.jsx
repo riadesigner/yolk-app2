@@ -1,11 +1,9 @@
 import { Link, NavLink, useLocation } from 'react-router-dom';
 
-const logoImage = '/company-logo.jpg'; 
+export default function CompanyAboutHeader({company, orders=[], privateMode}){        
 
-export default function CompanyAboutHeader({company, orders=[], privateMode}){    
-
-    console.log('company ====', company)
-
+    const noLogoImage = '/no-image.jpg';
+    
     return(
             <section className="container">            
                 <div className="section ">
@@ -28,12 +26,23 @@ export default function CompanyAboutHeader({company, orders=[], privateMode}){
                 </div>
                 <div className="columns">
                     <div className="column is-3">
-                        <img src={logoImage} alt="" 
-                        className="is-max-3-mobile"
-                            style={{
-                            width:'80%', 
-                            borderRadius:'8px'                            
-                            }}/>                            
+                        {
+                            company && company.logo ? (
+                                <img src={company.logo.url} alt="" 
+                                className="is-max-3-mobile"
+                                style={{
+                                width:'80%', 
+                                borderRadius:'8px'                            
+                                }}/>
+                            ):(
+                                <img src={noLogoImage} alt="" 
+                                className="is-max-3-mobile"
+                                style={{
+                                width:'80%', 
+                                borderRadius:'8px'                            
+                                }}/>
+                            )
+                        }        
                     </div>
                     <div className="column is-9">
                         <h1 className="title is-size-3 mb-2">{company && company.name}</h1>

@@ -4,6 +4,10 @@ const companySchema = new Schema({
     userId: { type: Schema.Types.ObjectId, ref: 'Users' },
     name: { type:String },  
     city: { type:String },
+    logo: {
+      type:Object, // {key: String, url: String }
+      default: null,
+    },
     specialization: { type:String },
     description: { type:String },
     gallery: { type:Array },    

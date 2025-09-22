@@ -22,9 +22,7 @@ export default function useFetchCreatingCompany({setErrorMessage}) {
         
         setErrorMessage(null);
 
-        const userInput = { name:companyName, gallery, description, city, specialization }
-        
-        console.log('companyId', companyId)
+        const userInput = { name:companyName, gallery, description, city, specialization }        
 
         try {
             if(company && companyId){
@@ -33,7 +31,6 @@ export default function useFetchCreatingCompany({setErrorMessage}) {
                     ...userInput,
                 }
                 console.log(`будем обновлять компанию ${companyId}`)
-                console.log(`companyData`, companyData)
                 const response = await api.patch(`/companies/${company.id}`, {companyData});
                 console.log('Компания успешно обновлена:', response.data);      
                             
@@ -90,6 +87,7 @@ export default function useFetchCreatingCompany({setErrorMessage}) {
 
     return {
         company,
+        companyId,
         companyName,
         setCompanyName,        
         specialization, 

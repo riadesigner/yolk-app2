@@ -91,76 +91,160 @@ router.put('/companies/:companyId/image',
     passport.authenticate('jwt', { session: false }),
     upload.single('image'),
     asyncHandler(async (req, res) => {        
-        try {
-            if (!req.file) {
-                throw new AppError(`it needs file to upload`,400)                
-            }
-            
-            const {companyId} = req.params;
-            
-            if (!companyId) {
-                throw new AppError(`Not found company ${companyId}`,404)
-            }
-            
-            // Оптимизация изображения с помощью sharp
-            const optimizedImage = await sharp(req.file.buffer)
-            .resize({
-                width: 1200,      // Максимальная ширина
-                height: 1200,     // Максимальная высота
-                fit: 'inside',    // Сохранять пропорции
-                withoutEnlargement: true // Не увеличивать маленькие изображения
-            })
-            .jpeg({ 
-                quality: 80,      // Качество JPEG
-                mozjpeg: true     // Использовать оптимизацию MozJPEG
-            })
-            .png({
-                quality: 80,      // Качество PNG
-                compressionLevel: 9 // Уровень сжатия
-            })
-            .toBuffer();
-
-            // Проверяем размер после оптимизации
-            if (optimizedImage.length > 5 * 1024 * 1024) {
-                throw new AppError('Image is still too large after optimization', 400)                
-            }
-
-            const params = {
-                Bucket: process.env.YANDEX_BUCKET_NAME,
-                Key: `companies/${Date.now()}_optimized_${req.file.originalname}`,
-                Body: optimizedImage,
-                ContentType: req.file.mimetype,
-                ACL: 'public-read',
-            };
-
-            const result = await s3.upload(params).promise();
-
-            // обновляем галерею компании
-            const company = await CompanyService.findById(companyId)
-            const companyUpdateDto = {
-                gallery:[
-                    ...company.gallery,
-                    { key:result.Key, url: result.Location },
-                ]         
-            }
-            const updatedCompany = await CompanyService.update(companyId, companyUpdateDto);
-            if (!updatedCompany) {
-                throw new AppError('Не удалось обоновить данные компании', 500)                
-            }            
-
-            sendSuccess(res, {
-                message: 'File uploaded successfully',
-                uploaded_image:{ url: result.Location, key: result.Key },
-                size: optimizedImage.length,
-                originalSize: req.file.size,
-                gallery: updatedCompany.gallery,
-            });
-
-        } catch (err) {            
-            throw new AppError(err, 500)            
+        if (!req.file) {
+            throw new AppError(`it needs file to upload`,400)                
         }
+        
+        const {companyId} = req.params;
+        
+        if (!companyId) {
+            throw new AppError(`Not found company ${companyId}`,404)
+        }
+        
+        // Оптимизация изображения с помощью sharp
+        const optimizedImage = await sharp(req.file.buffer)
+        .resize({
+            width: 1200,      // Максимальная ширина
+            height: 1200,     // Максимальная высота
+            fit: 'inside',    // Сохранять пропорции
+            withoutEnlargement: true // Не увеличивать маленькие изображения
+        })
+        .jpeg({ 
+            quality: 80,      // Качество JPEG
+            mozjpeg: true     // Использовать оптимизацию MozJPEG
+        })
+        .png({
+            quality: 80,      // Качество PNG
+            compressionLevel: 9 // Уровень сжатия
+        })
+        .toBuffer();
+
+        // Проверяем размер после оптимизации
+        if (optimizedImage.length > 5 * 1024 * 1024) {
+            throw new AppError('Image is still too large after optimization', 400)                
+        }
+
+        const params = {
+            Bucket: process.env.YANDEX_BUCKET_NAME,
+            Key: `companies/${Date.now()}_optimized_${req.file.originalname}`,
+            Body: optimizedImage,
+            ContentType: req.file.mimetype,
+            ACL: 'public-read',
+        };
+
+        const result = await s3.upload(params).promise();
+
+        // обновляем галерею компании
+        const company = await CompanyService.findById(companyId)
+        const companyUpdateDto = {
+            gallery:[
+                ...company.gallery,
+                { key:result.Key, url: result.Location },
+            ]         
+        }
+        const updatedCompany = await CompanyService.update(companyId, companyUpdateDto);
+        if (!updatedCompany) {
+            throw new AppError('Не удалось обоновить данные компании', 500)                
+        }            
+
+        sendSuccess(res, {
+            message: 'File uploaded successfully',
+            uploaded_image:{ url: result.Location, key: result.Key },
+            size: optimizedImage.length,
+            originalSize: req.file.size,
+            gallery: updatedCompany.gallery,
+        });
     })
 );
+
+
+router.put('/companies/:companyId/logo',
+    passport.authenticate('jwt', { session: false }),
+    upload.single('image'),
+    asyncHandler(async (req, res) => {        
+   
+        if (!req.file) {
+            throw new AppError(`it needs file to upload`,400)                
+        }
+        
+        const {companyId} = req.params;
+        
+        if (!companyId) {
+            throw new AppError(`Not found company ${companyId}`,404)
+        }
+                
+        const user = await UsersService.findById(req.user.id);
+        
+        if(!user){
+            throw new AppError(`User ${user._id} not found`, 404);
+        }        
+
+        if(companyId !== user.userCompany._id.toString()){
+            throw new AppError(`Not allowed operation`, 403);
+        }
+
+        const company = await CompanyService.findById(companyId);
+        const oldLogo = company.logo;
+
+        // Оптимизация изображения с помощью sharp
+        const optimizedImage = await sharp(req.file.buffer)
+        .resize({
+            width: 600,      // Максимальная ширина
+            height: 600,     // Максимальная высота
+            fit: 'inside',    // Сохранять пропорции
+            withoutEnlargement: true // Не увеличивать маленькие изображения
+        })
+        .jpeg({ 
+            quality: 80,      // Качество JPEG
+            mozjpeg: true     // Использовать оптимизацию MozJPEG
+        })
+        .png({
+            quality: 80,      // Качество PNG
+            compressionLevel: 9 // Уровень сжатия
+        })
+        .toBuffer();
+
+        // Проверяем размер после оптимизации
+        if (optimizedImage.length > 5 * 1024 * 1024) {
+            throw new AppError('Image is still too large after optimization', 400)                
+        }
+
+        const params = {
+            Bucket: process.env.YANDEX_BUCKET_NAME,
+            Key: `companies/${Date.now()}_optimized_logo_${req.file.originalname}`,
+            Body: optimizedImage,
+            ContentType: req.file.mimetype,
+            ACL: 'public-read',
+        };
+
+        const result = await s3.upload(params).promise();
+
+        // // обновляем logo компании
+        const newLogo = {key:result.Key, url:result.Location};
+        const companyUpdateDto = { logo: newLogo }
+        const updatedCompany = await CompanyService.update(companyId, companyUpdateDto);
+        if (!updatedCompany) {
+            throw new AppError('Не удалось обоновить данные компании', 500)                
+        }
+        
+        // удаляем старое лого из облака
+        if(oldLogo){
+            const params = {
+            Bucket: process.env.YANDEX_BUCKET_NAME,
+            Key: oldLogo.key,
+            };
+            await s3.deleteObject(params).promise();            
+        }
+
+        sendSuccess(res, {
+            message: 'File uploaded successfully',
+            uploaded_logo: newLogo,
+            size: optimizedImage.length,
+            originalSize: req.file.size,            
+        });
+    })
+);
+
 
 router.put('/companies/me',
     passport.authenticate('jwt', { session: false }),
