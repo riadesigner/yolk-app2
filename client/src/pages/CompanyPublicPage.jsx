@@ -55,7 +55,8 @@ export default function CompanyPublicPage(){
                 </div> 
             </section>           
                 
-            <CompanyAboutKeepInTouch />
+            <br />
+            <br />
 
         </article>
         </>
