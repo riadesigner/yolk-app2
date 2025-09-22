@@ -3,8 +3,6 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import styles from '../components/DesignerPreview.module.css'
 
 export default function DesignerPreview({designer}){    
-
-    console.log('designer', designer);
     
     const images = [];
     designer.portfolios.map((p)=>{
@@ -23,14 +21,20 @@ export default function DesignerPreview({designer}){
             
             <div className={styles.previewHeader}>
                 {
-                    headerImages.map((img, i)=>{
-                        return img ? (
+                    headerImages && headerImages.length >0 && headerImages.map((img)=>{
+                        return (
                             <div key={img.key} style={{background:`#eaeaea url(${img.url}) no-repeat center/cover`}}></div>
-                        ):(
-                            <div key={i} style={{background: '#eaeaea'}}></div>
                         )
                     })
                 }
+                {
+                    !headerImages || headerImages.length == 0 && (
+                        <>
+                            <div style={{background:`#eaeaea url('/no-image.jpg') no-repeat center/cover`}}></div>
+                            <div style={{background:`#eaeaea url('/no-image.jpg') no-repeat center/cover`}}></div>
+                        </>
+                    )
+                }                
             </div>
 
             <Link to={linkAnketa}>
