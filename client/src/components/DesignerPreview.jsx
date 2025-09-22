@@ -23,17 +23,19 @@ export default function DesignerPreview({designer}){
             
             <div className={styles.previewHeader}>
                 {
-                    headerImages.map((img)=>{
-                        return img && <div key={img.key} style={{
-                            background:`url(${img.url}) no-repeat center/cover`
-                        }}></div>                         
+                    headerImages.map((img, i)=>{
+                        return img ? (
+                            <div key={img.key} style={{background:`#eaeaea url(${img.url}) no-repeat center/cover`}}></div>
+                        ):(
+                            <div key={i} style={{background: '#eaeaea'}}></div>
+                        )
                     })
                 }
             </div>
 
             <Link to={linkAnketa}>
             <div className={styles.avatar} style={{
-                background:`red url(${designer.avatar}) no-repeat center/cover`
+                background:`white url(${designer.avatar}) no-repeat center/cover`
             }}></div>
             </Link>
 

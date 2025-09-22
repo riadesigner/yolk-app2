@@ -45,7 +45,7 @@ export default function PortfolioPage(){
                 <article>
                     <div className={styles.portfolios}>                        
                         {
-                            designer && portfolios && portfolios.map((p)=>{
+                            designer && portfolios && portfolios.length>0 && portfolios.map((p)=>{
                                 return(
                                     <PublicPortfolioItem 
                                         key={p.id} 
@@ -54,7 +54,12 @@ export default function PortfolioPage(){
                                     />
                                 )
                             })
-                        }                                            
+                        }
+                        {
+                            designer && portfolios && portfolios.length == 0 && (
+                                <>Портфолио не заполнено</>
+                            )                            
+                        }                                                                    
                     </div>
                 </article>                            
             </div>
