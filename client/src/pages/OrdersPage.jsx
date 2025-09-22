@@ -66,7 +66,8 @@ export default function PortfolioPage(){
                                             return(
                                                 <OrderPreview 
                                                     key={order.id} 
-                                                    order={order} />
+                                                    order={order}
+                                                    />
                                             )
                                         })
                                     }

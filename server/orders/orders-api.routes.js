@@ -116,7 +116,6 @@ router.get('/orders',
         const cats = req.query.cats || null; // "...catId:catId:catId"        
 
         const  categories = cats !==null ?  cats.split(':') : [];
-        console.log('categories = ',categories);
                 
         let sort = null ;
 
@@ -147,6 +146,9 @@ router.get('/orders',
             data:orders,
             pagination,
         } = await OrdersService.findAll({sort, page, limit, categories});
+
+        console.log('--- orders ----', orders);
+
 
         const retOrders = orders.map(order=>order.toJSON());
         sendSuccess(res, { orders:retOrders, pagination });        

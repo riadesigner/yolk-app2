@@ -8,6 +8,9 @@ export default function OrderPreview({order}){
     const companyName = order.company.name || 'не указано';
     const dateTo = order.dateTo ? order.dateTo.split('T')[0] : '';
 
+    console.log('order', order)
+
+
     return (
         <div className={styles.order}>
             <Link to={`/orders/${order.id}`}>

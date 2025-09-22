@@ -47,8 +47,7 @@ exports.findAll = function (opt={}) {
               page: opt.page,
               limit: opt.limit,
               sort: sort,
-              populate: 'company',
-              populate: 'contractor',
+              populate: ['company', 'contractor'],              
           });          
           res(result);
 
