@@ -14,7 +14,9 @@ module.exports = (passport) => {
       // --------------------
       //  GENERATING PAYLOAD
       // --------------------
-      const { id, username, emails, photos, name, gender } = profile;      
+      console.log('================== profile ================== ', profile)
+
+      const { id, username, displayName, emails, photos, name, gender } = profile;      
 
       if (!emails?.[0]?.value) {
         return done("Email is required");
@@ -23,7 +25,7 @@ module.exports = (passport) => {
       const userData = {
         mailruId: id,
         email: emails[0].value,
-        name: username,
+        name: username || displayName,
         avatar: photos?.[0]?.value        
       };
       
