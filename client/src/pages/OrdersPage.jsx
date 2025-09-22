@@ -8,13 +8,13 @@ import Breadcrumb from '../components/Breadcrumb.jsx'
 
 import useFetchOrders from './hooks/useFetchOrders.js'
 import useFetchCategories from './hooks/useFetchCategories.js'
+import { useState } from 'react';
 
 
 export default function PortfolioPage(){
    
     const params = useParams();
-    const {userInput, categoryId} = params;
-
+    const {userInput, categoryId} = params;    
 
     const {
         userCategories,
@@ -25,7 +25,7 @@ export default function PortfolioPage(){
         orders,
         currentPage, 
         setCurrentPage,
-        paginationParams,
+        paginationParams,        
     } = useFetchOrders({ userInput, userCategories });
     
 
