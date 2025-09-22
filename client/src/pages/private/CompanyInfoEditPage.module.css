@@ -12,13 +12,6 @@
     gap: 2rem;
 }
 
-.logoBox {    
-    display: flex;
-    height: 100%;
-    flex-direction: column;    
-    justify-content: space-between;
-    align-items:flex-start;
-}
 
 
 /* ----------------------------- 
@@ -39,12 +32,6 @@
     }
 
     .gallery img{height: 90px !important;}
-
-    .logoBox {                    
-        flex-direction: row;    
-        justify-content: space-between;
-        align-items:center;
-    }    
 
 
 }

@@ -4,11 +4,9 @@ import styles from '../../pages/private/CompanyInfoEditPage.module.css'
 import Field from '../../components/Field'
 import Breadcrumb from '../../components/Breadcrumb';
 import ErrorMessage from '../../components/ErrorMessage';
+import Logoloader from '../../components/LogoLoader';
 import useFetchCreatingCompany from './hooks/useFetchCreatingCompany';
 import ImageUploader from '../../components/ImageUploader';
-
-const logoImage = '/company-logo.jpg'; 
-const noimage = '/no-image.jpg'; 
 
 export default function CompanyInfoEditPage(){
     
@@ -32,10 +30,7 @@ export default function CompanyInfoEditPage(){
         city,
         setCity,
         gallery,
-        setGallery, 
-        // addImage,
-        // removeImage,
-        // handleGalleryChange,
+        setGallery,        
         hdlSaveAll,     
     } = useFetchCreatingCompany({errorMessage, setErrorMessage});        
     
@@ -56,17 +51,9 @@ export default function CompanyInfoEditPage(){
             <div className="block mb-6">
                 <div className={styles.info3}>
                     <div className="box">    
-                        <div className={styles.logoBox}>
-                        
-                        <img className="is-max-4-mobile" src={logoImage} style={{
-                            width:'70%',
-                            borderRadius:'10px',
-                            objectFit:'cover',
-                        }} alt="" />
-                        
-                        <button className="button is-link is-small-mobile" >Заменить лого</button>                           
-                        
-                        </div>
+
+                        <Logoloader companyId={company}/>
+
                     </div>
                     <div className="userFio box">
                         

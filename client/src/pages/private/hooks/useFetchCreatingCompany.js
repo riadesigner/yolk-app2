@@ -5,6 +5,7 @@ import api from "../../../utils/api";
 import useGallery from './useGallery';
 
 export default function useFetchCreatingCompany({setErrorMessage}) {
+
     const [user, setUser] = useState(null);
     const [companyId, setCompanyId] = useState(null);
     const [company, setCompany] = useState(null);
@@ -12,6 +13,7 @@ export default function useFetchCreatingCompany({setErrorMessage}) {
     const [specialization, setSpecialization] = useState("");
     const [description, setDescription] = useState("");    
     const [city, setCity] = useState("");    
+    
     const navigate = useNavigate();
 
     const { gallery, setGallery, addImage, removeImage, handleGalleryChange } = useGallery([]);

@@ -1,0 +1,29 @@
+
+
+
+.logoBox {    
+    display: flex;
+    height: 100%;
+    flex-direction: column;    
+    justify-content: space-between;
+    align-items:flex-start;
+}
+
+
+/* ----------------------------- 
+    
+   STARTED MOBILE MODE FROM HERE 
+
+   ----------------------------- */
+
+@media (max-width: 1023px) {
+ 
+
+    .logoBox {                    
+        flex-direction: row;    
+        justify-content: space-between;
+        align-items:center;
+    }    
+
+
+}
