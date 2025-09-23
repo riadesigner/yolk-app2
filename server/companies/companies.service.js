@@ -1,5 +1,5 @@
 
-const CompanyModel = require('./company.model');
+const CompanyModel = require('./companies.model');
 const paginate = require('../utils/paginate')
 
 exports.create = function (companyCreateDto = {}) {  

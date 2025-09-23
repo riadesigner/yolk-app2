@@ -3,7 +3,7 @@ const UsersService = require('./users.service')
 const UserInfoService = require('../userinfo/userinfo.service')
 const PortfoliosService = require('../portfolios/portfolios.service')
 
-const CompanyService = require('../company/company.service')
+const CompaniesService = require('../companies/companies.service')
 const passport = require('passport');
 const { asyncHandler, sendSuccess, sendError } = require('../middleware/utils');
 
@@ -85,7 +85,7 @@ router.patch('/users/me/select-role',
         const user = await UsersService.update(userId, userData);
 
         if(userData.role === 'company' && !user.userCompany){
-            const newUserCompany = await CompanyService.create({userId});
+            const newUserCompany = await CompaniesService.create({userId});
             user.userCompany = newUserCompany._id;            
             await user.save();
         }

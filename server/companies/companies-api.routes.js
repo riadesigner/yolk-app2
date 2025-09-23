@@ -1,6 +1,6 @@
 const express = require('express')
 const UsersService = require('../users/users.service')
-const CompanyService = require('./company.service')
+const CompaniesService = require('./companies.service')
 const passport = require('passport');
 const { asyncHandler, sendSuccess, sendError } = require('../middleware/utils');
 const multer = require('multer');
@@ -55,7 +55,7 @@ router.get('/companies/:companyId',
 
         try{
 
-            const company = await CompanyService.findById(companyId);
+            const company = await CompaniesService.findById(companyId);
 
             sendSuccess(res, { 
                 company: company.toJSON() 
@@ -80,7 +80,7 @@ router.get('/companies',
         const {
             data:companies,
             pagination,
-        } = await CompanyService.findAll({page, limit});
+        } = await CompaniesService.findAll({page, limit});
 
         const retCompanies = companies.map(co=>co.toJSON());
         sendSuccess(res, { companies:retCompanies, pagination }); 
@@ -135,14 +135,14 @@ router.put('/companies/:companyId/image',
         const result = await s3.upload(params).promise();
 
         // обновляем галерею компании
-        const company = await CompanyService.findById(companyId)
+        const company = await CompaniesService.findById(companyId)
         const companyUpdateDto = {
             gallery:[
                 ...company.gallery,
                 { key:result.Key, url: result.Location },
             ]         
         }
-        const updatedCompany = await CompanyService.update(companyId, companyUpdateDto);
+        const updatedCompany = await CompaniesService.update(companyId, companyUpdateDto);
         if (!updatedCompany) {
             throw new AppError('Не удалось обоновить данные компании', 500)                
         }            
@@ -183,7 +183,7 @@ router.put('/companies/:companyId/logo',
             throw new AppError(`Not allowed operation`, 403);
         }
 
-        const company = await CompanyService.findById(companyId);
+        const company = await CompaniesService.findById(companyId);
         const oldLogo = company.logo;
 
         // Оптимизация изображения с помощью sharp
@@ -222,7 +222,7 @@ router.put('/companies/:companyId/logo',
         // // обновляем logo компании
         const newLogo = {key:result.Key, url:result.Location};
         const companyUpdateDto = { logo: newLogo }
-        const updatedCompany = await CompanyService.update(companyId, companyUpdateDto);
+        const updatedCompany = await CompaniesService.update(companyId, companyUpdateDto);
         if (!updatedCompany) {
             throw new AppError('Не удалось обоновить данные компании', 500)                
         }
@@ -259,7 +259,7 @@ router.put('/companies/me',
         const { companyData } = req.body;
         companyData.userId = req.user.id;
         
-        const company = await CompanyService.create(companyData);
+        const company = await CompaniesService.create(companyData);
 
         if (!company) {            
             throw new AppError(`Не удалось создать компанию для пользователя ${user._id}`, 500);
@@ -282,7 +282,7 @@ router.patch('/companies/:companyId',
     asyncHandler(async (req, res) => {                
         const { companyId }= req.params; 
         const { companyData } = req.body;        
-        const company = await CompanyService.update(companyId, companyData);
+        const company = await CompaniesService.update(companyId, companyData);
         if (!company) {
             return sendError(res, 'Не удалось обоновить данные компании', 404);
         }    
@@ -306,7 +306,7 @@ router.delete('/companies/:companyId/image',
             await s3.deleteObject(params).promise();
 
             // обновляем галерею компании
-            const updatedCompany = await CompanyService.deleteFromGallery(companyId, imageKey);
+            const updatedCompany = await CompaniesService.deleteFromGallery(companyId, imageKey);
             if (!updatedCompany) {
                 return sendError(res, 'Не удалось обоновить данные компании', 500);
             }

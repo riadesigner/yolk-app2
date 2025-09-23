@@ -1,7 +1,7 @@
 const express = require('express')
 const BillsService = require('../bills/bills.service')
 
-// const CompanyService = require('./company.service')
+// const CompaniesService = require('./companies.service')
 // const passport = require('passport');
 const { asyncHandler, sendSuccess, sendError } = require('../middleware/utils');
 const AppError = require('../middleware/AppError')
@@ -29,7 +29,7 @@ router.get('/bills/from/designer/:senderId',
     asyncHandler(async (req, res) => {         
         let { senderId  } =  req.params;
         // try{
-        //     const company = await CompanyService.findById(companyId);
+        //     const company = await CompaniesService.findById(companyId);
         //     sendSuccess(res, { 
         //         company: company.toJSON() 
         //     })

@@ -1,6 +1,6 @@
 const express = require('express')
 const UsersService = require('../users/users.service')
-const CompanyService = require('../company/company.service')
+const CompaniesService = require('../companies/companies.service')
 const BillsService = require('../bills/bills.service')
 const OrdersService = require('./orders.service')
 const NotificationsService = require('../notifications/notifications.service')
@@ -219,7 +219,7 @@ router.patch('/orders/:orderId/new-respond',
         const companyId = orderUpdated.company;
         
         // send notifications          
-        const company = await CompanyService.findById(companyId);
+        const company = await CompaniesService.findById(companyId);
         if(!company){
             return sendError(res, `Не удалось загрузить информацию о компании ${companyId}`, 404);
         }   
@@ -272,7 +272,7 @@ router.put('/orders/:companyId',
         if (!user) {  return sendError(res, 'Unknown user', 404); }        
         if (user.role !=='company') {  return sendError(res, 'User not autorized for this action', 403);}                
 
-        const company = await CompanyService.findById(companyId);
+        const company = await CompaniesService.findById(companyId);
         if(!company){ return sendError(res, `Company with id ${companyId} not found`, 404); }
 
         const orderCreateDto = {

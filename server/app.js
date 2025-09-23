@@ -54,7 +54,7 @@ app.use(requestLogger);
 app.use('/auth',require('./auth/auth.routes')); // auth через яндекс и mailru  
 app.use('/api',require('./auth/auth-api.routes'));  // jwt
 app.use('/api',require('./users/users-api.routes'));
-app.use('/api',require('./company/company-api.routes'));
+app.use('/api',require('./companies/companies-api.routes'));
 app.use('/api',require('./orders/orders-api.routes'));
 app.use('/api',require('./portfolios/portfolios-api.routes'));
 app.use('/api',require('./categories/categories-api.routes'));
