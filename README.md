@@ -3,19 +3,19 @@
 ## стек
 
 - client: React
-- server: ExpressJs + JWT (в localStorage)
-- docker для запуска
+- server: ExpressJs
+- docker/nginx
 
 ### Как запускать
 
-Для продакшена
+Для прода
 
 ```bash
-docker-compose up --build
+docker-compose -f docker-compose.prod.yml up --build
 ```
 
 Для разработки
 
 ```bash
-docker-compose -f docker-compose.dev.yml up --build
+docker-compose up --build
 ```
