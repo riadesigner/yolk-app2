@@ -3,7 +3,6 @@ import { Link, NavLink, useLocation, useParams } from 'react-router-dom';
 import Breadcrumb from '../components/Breadcrumb';
 import CompanyGallery from '../components/CompanyGallery';
 import CompanyAboutHeader from '../components/CompanyAboutHeader';
-import CompanyAboutKeepInTouch from '../components/CompanyAboutKeepInTouch';    
 import CompanyAboutOrders from '../components/CompanyAboutOrders';    
 import useFetchCompany from '../pages/hooks/useFetchCompany';    
 

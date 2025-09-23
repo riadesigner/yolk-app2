@@ -63,6 +63,7 @@ export default function PortfolioPage(){
                                     <div className = {styles.orders} >
                                     {
                                         orders.length > 0 && orders.map((order)=>{                                            
+                                            console.log('order= ', order)
                                             return(
                                                 <OrderPreview 
                                                     key={order.id} 

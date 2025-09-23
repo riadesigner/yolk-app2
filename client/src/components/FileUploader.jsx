@@ -162,7 +162,8 @@ const FileUploader = ({ orderId, setFiles, file = null, nodelete = false }) => {
         {
             !file && (
                 <>
-                <h2 className="title is-size-5">Добавить файл</h2>                
+                <h2 className="title is-size-5 mb-2">Добавить файл</h2>
+                <p className="is-primary">(.pdf,.doc,.ppt,.xls...)</p>                
                 <div style={{ marginBottom: '20px' }}>
                     <input type="file" onChange={handleFileChange} 
                         accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 

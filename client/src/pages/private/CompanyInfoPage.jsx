@@ -2,7 +2,6 @@
 import Breadcrumb from '../../components/Breadcrumb';
 import CompanyGallery from '../../components/CompanyGallery';
 import CompanyAboutHeader from '../../components/CompanyAboutHeader';
-import CompanyAboutKeepInTouch from '../../components/CompanyAboutKeepInTouch';
 import CompanyAboutOrders from '../../components/CompanyAboutOrders';
 
 import useFetchCompanyAdminInfo from './hooks/useFetchCompanyAdminInfo'
@@ -60,9 +59,7 @@ export default function CompanyInfoPage(){
                 <div className="section">
                     <CompanyAboutOrders orders={orders} />
                 </div> 
-            </section>     
-
-            <CompanyAboutKeepInTouch />
+            </section>
 
         </article>
         </>

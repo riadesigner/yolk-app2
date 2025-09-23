@@ -45,8 +45,6 @@ const upload = multer({
 // DELETE /companies/:companyId – удалить компанию / не реализовано
 // DELETE /companies/:companyId/image – удалить одно изображение из галереи компании
 
-// Более специфичные роуты - выше
-
 
 router.get('/companies/:companyId',    
     asyncHandler(async (req, res) => { 

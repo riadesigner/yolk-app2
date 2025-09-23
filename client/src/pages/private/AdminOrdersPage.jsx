@@ -14,7 +14,6 @@ import api from '../../utils/api';
 import Breadcrumb from '../../components/Breadcrumb';
 // import CompanyGallery from '../../components/CompanyGallery';
 // import CompanyAboutHeader from '../../components/CompanyAboutHeader';
-// import CompanyAboutKeepInTouch from '../../components/CompanyAboutKeepInTouch';
 // import CompanyAboutOrders from '../../components/CompanyAboutOrders';
 // import TextWithBreaks from '../../components/TextWithBreaks';
 

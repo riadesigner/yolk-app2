@@ -11,7 +11,7 @@ export default function useFetchOrderPage() {
     const userRole = savedUser ? savedUser.role : 'unknown';     
     const {nowLoading, setNowLoading} = useState(true);
 
-    const { orderId } = useParams();
+    const { id } = useParams();
 
     const [order, setOrder]= useState(null);
     const [files, setfiles] = useState([])

@@ -15,6 +15,8 @@ export default function CompanyAboutOrders({orders}){
                 })
             }                        
         </div>
+        <br />
+        <br />
         </>
     )
 }
