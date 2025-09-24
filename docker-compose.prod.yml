@@ -1,16 +1,48 @@
 services:
-  client:
-    build: ./client
-    ports:
-      - "80:80"
-    depends_on:
-      - server
-    restart: unless-stopped
+
+  mongo:
+    image: mongo
+    container_name: yolk2.db
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${DB_NAME}
+    volumes:
+      - ./data/db:/data/db
+    networks:
+      - yolk2-network
 
   server:
-    build: ./server
-    ports:
-      - "3000:3000"
+    build:
+      context: ./server
+      dockerfile: Dockerfile.prod
+    container_name: yolk2.server
+    restart: always
+    env_file:
+      - .env
     environment:
       - NODE_ENV=production
-    restart: unless-stopped
+    depends_on:
+      - mongo
+    networks:
+      - yolk2-network
+
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile.prod
+    container_name: yolk2.nginx
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - 80:80
+    depends_on:
+      - server
+    networks:
+      - yolk2-network
+
+networks:
+  yolk2-network:
+    driver: bridge

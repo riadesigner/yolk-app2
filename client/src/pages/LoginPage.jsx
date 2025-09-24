@@ -5,12 +5,14 @@ import api from '../utils/api';
 export default function LoginPage(){
 
     const hdlYandexLogin = () => {
-        window.location.href = 'http://localhost:3000/auth/yandex';
+        window.location.href = `/auth/yandex`;
+        // window.location.href = 'http://localhost:3000/auth/yandex';
     };
 
     const hdlMailruLogin = () => {
-        window.location.href = 'http://localhost:3000/auth/mailru';
-    };        
+        window.location.href = `/auth/mailru`;
+        // window.location.href = 'http://localhost:3000/auth/mailru';
+    };
 
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
