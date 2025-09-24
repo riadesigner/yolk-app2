@@ -1,0 +1,14 @@
+# Этап 1: Сборка клиента
+FROM node:24-alpine AS client-builder
+WORKDIR /app/client
+COPY client/package.json client/package-lock.json ./
+RUN npm ci
+COPY client/ .
+RUN npm run build
+
+# Этап 2: Финальный nginx образ
+FROM nginx:alpine
+COPY --from=client-builder /app/client/dist /usr/share/nginx/html
+COPY nginx/prod.conf /etc/nginx/nginx.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
