@@ -1,0 +1,11 @@
+export { default as HomePage } from './HomePage';
+export { default as FAQPage } from './FAQPage';
+export { default as ErrorPage } from './ErrorPage';
+export { default as AboutPage } from './AboutPage';
+export { default as ChatPage } from './ChatPage';
+export { default as StartUpPage } from './StartUpPage';
+export { default as PrivacyPage } from './PrivacyPage';
+export * from './auth';
+export * from './company';
+export * from './designer';
+export * from './order';
