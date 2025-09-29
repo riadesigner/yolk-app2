@@ -83,7 +83,7 @@ export default function DesignerAdminPage() {
               </div>
 
               <NotifsLast
-                linkToAll="/cp/company/notifs"
+                linkToAll="/cp/designer/notifs"
                 notifications={notifications}
                 nowLoading={nowLoading}
               />

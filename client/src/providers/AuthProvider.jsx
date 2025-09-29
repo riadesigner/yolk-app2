@@ -1,22 +1,24 @@
 // providers/AuthProvider.jsx
 import { useState } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
+import PropTypes from 'prop-types';
 
-export function AuthProvider({ children }) {  
-
-  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('jwt'));
+export function AuthProvider({ children }) {
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    !!localStorage.getItem('jwt')
+  );
 
   const login = (token) => {
     localStorage.setItem('jwt', token);
     setIsAuthenticated(true);
-    console.log('Login executed'); // Для отладки
-  };  
+    // console.log('Login executed'); // Для отладки
+  };
 
   const logout = async () => {
     // await api.post('/auth/logout');
     localStorage.removeItem('jwt');
-    setIsAuthenticated(false);    
-    console.log('Logout executed'); // Для отладки
+    setIsAuthenticated(false);
+    // console.log('Logout executed'); // Для отладки
   };
 
   return (
@@ -25,3 +27,7 @@ export function AuthProvider({ children }) {
     </AuthContext.Provider>
   );
 }
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};

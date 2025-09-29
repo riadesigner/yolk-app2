@@ -1,8 +1,8 @@
-import { jwtDecode } from './jwtUtils'
+import { jwtDecode } from './jwtUtils';
 
-export const getPayloads = ()=>{    
-    const jwt = localStorage.getItem('jwt');    
-    const [err, payloads] = jwtDecode(jwt);
-    err && console.log('err = ', err);
-    return payloads;
-}
+export const getPayloads = () => {
+  const jwt = localStorage.getItem('jwt');
+  const [err, payloads] = jwtDecode(jwt);
+  err && console.error(err);
+  return payloads;
+};
