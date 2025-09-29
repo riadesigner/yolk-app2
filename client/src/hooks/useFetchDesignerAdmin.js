@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import api from '../utils/api.jsx';
 
-export default function useFetchCompanyAdmin() {
+export default function useFetchDesignerAdmin() {
   const [user, setUser] = useState(null);
   const [orders] = useState([]);
   const [notifications, setNotifications] = useState([]);

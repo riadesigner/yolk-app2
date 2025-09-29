@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import ErrorMessage from '../../../components/ErrorMessage.jsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import api from '../../../utils/api.jsx';
 import { useAuth } from '../../../contexts/AuthContext.jsx';
 import { getPayloads } from '../../../utils/payloads.jsx';
@@ -8,12 +8,16 @@ import { getPayloads } from '../../../utils/payloads.jsx';
 export default function RoleSelectionPage() {
   const { login } = useAuth();
 
-  const pl = getPayloads();
-  const userId = pl.id;
-
+  const { id: userId, role: currentRole } = getPayloads();
   const navigate = useNavigate();
 
   const [errorMessage, setErrorMessage] = useState(null);
+
+  useEffect(() => {
+    if (currentRole !== 'unknown' || !userId) {
+      navigate('/');
+    }
+  }, [currentRole, navigate, userId]);
 
   const hdlClick = async (role) => {
     if (!userId) {
