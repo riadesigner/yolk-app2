@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
-
+const configureDataBase = require('./config/db');
 const configureSessions = require('./config/sessions');
 const configurePassport = require('./config/passport');
 const configureCors = require('./config/cors');
@@ -9,34 +9,19 @@ const configureCategories = require('./config/categories');
 
 const error404 = require('./middleware/error404')
 const path = require('path')
-const mongoose = require('mongoose')
-
 const requestLogger = require('./middleware/requestLogger')
 
-const { asyncHandler, sendSuccess, sendError } = require('./middleware/utils');
+const { sendError } = require('./middleware/utils');
 const { authErrorHandler, apiErrorHandler, fallbackErrorHandler } = require('./middleware/errorHandlers');
 
-const MONGO_URL =`mongodb://${process.env.MONGO_ROOT_USER}:${process.env.MONGO_ROOT_PASSWORD}@mongo:27017`;
-const MONGO_DB = process.env.DB_NAME;
 const PUBLIC_PATH = path.join(__dirname+'/public');
 
-// ----------------
-//  CONNECT TO DB
-// ---------------- 
-(async ()=>{    
-    try{
-        const db_hdlr = await mongoose.connect(MONGO_URL, {dbName:MONGO_DB});        
-        console.log('DB CONNECTED');
-    }catch(e){
-        console.log(e, "error connect to mongo / mongoose");        
-    }    
-})();
 
 // -------------------
 //      APP INIT
 // -------------------
 const app = express();
-
+configureDataBase();
 configureSessions(app);
 configurePassport(app);
 configureCors(app);
@@ -60,11 +45,9 @@ app.use('/api',require('./portfolios/portfolios-api.routes'));
 app.use('/api',require('./categories/categories-api.routes'));
 app.use('/api',require('./bills/bills-api.routes'));
 app.use('/api',require('./notifications/notifications-api.routes'));
-app.use('/',require('./auth/login.routes')); // разные роуты для логина и выхода
 
-app.get('/', (req, res)=>{
-    const user = req.user;
-    res.render('index',{user});
+app.get('/', (req, res)=>{    
+    res.redirect('/');
 });
 
 configureCategories();
