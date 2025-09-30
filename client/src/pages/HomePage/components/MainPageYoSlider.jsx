@@ -1,9 +1,12 @@
+import { useNavigate } from 'react-router-dom';
 import styles from './MainPageYoSliders.module.css';
 import { getPayloads } from '../../../utils/payloads.jsx';
 
 export default function MainPageYoSlider() {
   const savedUser = getPayloads();
   const userRole = savedUser ? savedUser.role : 'unknown';
+
+  const navigate = useNavigate();
 
   const navTo = {
     company: '/cp/company',
@@ -17,12 +20,12 @@ export default function MainPageYoSlider() {
       <section className="container is-max-desktop desktop-only">
         <div className="section">
           <div className={styles.yoSlider}>
-            <svg width="4" height="1.5" viewBox="0 0 4 1.5"></svg>
+            <svg width="4" height="1.5" viewBox="0 0 4 1.5" />
             <div className={styles.yoSliderContainer}>
               <div
                 className="p-6"
                 onClick={() => {
-                  location.href = navTo[userRole];
+                  navigate(navTo[userRole]);
                 }}
               >
                 <h1 className="title is-size-3">
@@ -30,12 +33,12 @@ export default function MainPageYoSlider() {
                   свой
                   <br /> профиль
                 </h1>
-                <span></span>
+                <span />
               </div>
               <div
                 className="p-6"
                 onClick={() => {
-                  location.href = '/designers';
+                  navigate('/designers');
                 }}
               >
                 <h1 className="title is-size-3">
@@ -43,12 +46,12 @@ export default function MainPageYoSlider() {
                   своего
                   <br /> дизайнера
                 </h1>
-                <span></span>
+                <span />
               </div>
               <div
                 className="p-6"
                 onClick={() => {
-                  location.href = '/orders';
+                  navigate('/orders');
                 }}
               >
                 <h1 className="title is-size-3">
@@ -58,7 +61,7 @@ export default function MainPageYoSlider() {
                   <br />
                   заказ
                 </h1>
-                <span></span>
+                <span />
               </div>
             </div>
           </div>
@@ -70,29 +73,29 @@ export default function MainPageYoSlider() {
             <div
               className="block "
               onClick={() => {
-                location.href = navTo[userRole];
+                navigate(navTo[userRole]);
               }}
             >
               <h1 className="title is-size-5">Создай свой профиль</h1>
-              <i className="fa-solid fa-arrow-right"></i>
+              <i className="fa-solid fa-arrow-right" />
             </div>
             <div
               className="block "
               onClick={() => {
-                location.href = '/designers';
+                navigate('/designers');
               }}
             >
               <h1 className="title is-size-5">Заполни свое портфолио</h1>
-              <i className="fa-solid fa-arrow-right"></i>
+              <i className="fa-solid fa-arrow-right" />
             </div>
             <div
               className="block "
               onClick={() => {
-                location.href = '/orders';
+                navigate('/orders');
               }}
             >
               <h1 className="title is-size-5">Найди свой заказ</h1>
-              <i className="fa-solid fa-arrow-right"></i>
+              <i className="fa-solid fa-arrow-right" />
             </div>
           </div>
         </section>

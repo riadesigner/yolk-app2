@@ -1,37 +1,49 @@
 const { Schema, model } = require('mongoose');
 
-const ordersSchema = new Schema({
-    title: { type:String },  
-    description: { type:String },
+const ordersSchema = new Schema(
+  {
+    title: { type: String },
+    description: { type: String },
     tags: { type: [String] },
     categories: { type: [String] },
-    files: {type: Array},
-    status: { type:String },    
+    files: { type: Array },
+    status: { type: String },
     company: { type: Schema.Types.ObjectId, ref: 'Company' },
-    contractor: { 
-      type: Schema.Types.ObjectId, 
+    contractor: {
+      type: Schema.Types.ObjectId,
       ref: 'Users',
       default: null,
-     },
+    },
     responded: { type: Array }, // Designers, who respond to order
     price: { type: Number },
     dateTo: { type: Date },
-}, {
-  timestamps: true,
-  toJSON: {
-    transform(doc, ret) {
-      ret.id = ret._id.toString();
-      delete ret._id;
-      delete ret.__v;
-      return ret;
-    }
-  }
+  },
+  {
+    timestamps: true,
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id.toString();
+        delete ret._id;
+        delete ret.__v;
+        return ret;
+      },
+      virtuals: true,
+    },
+    toObject: { virtuals: true },
+  },
+);
+
+ordersSchema.virtual('viewsCount', {
+  ref: 'OrderView',
+  localField: '_id',
+  foreignField: 'orderId',
+  count: true,
 });
 
 ordersSchema.index({
   title: 'text',
-  description: 'text', 
-  tags: 'text'
+  description: 'text',
+  tags: 'text',
 });
 
 module.exports = model('Orders', ordersSchema);
