@@ -128,7 +128,7 @@ router.patch(
     if (userData) {
       const userUpdated = await UsersService.update(id, userData);
       if (!userUpdated) {
-        const errMsg = `Не удалось обоновить данные пользователя ${id}`;
+        const errMsg = `Не удалось обновить данные пользователя ${id}`;
         return sendError(res, errMsg, 404);
       }
       console.log('saved user', userUpdated);

@@ -14,6 +14,7 @@ export default function useFetchDesigner({ setErrorMessage }) {
   const [webSite, setWebSite] = useState('');
   const [phone, setPhone] = useState('');
   const [specialization, setSpecialization] = useState('');
+  const [requisites, setRequisites] = useState('');
   const navigate = useNavigate();
 
   const { schools, setSchools, addSchool, removeSchool, handleSchoolChange } =
@@ -48,6 +49,7 @@ export default function useFetchDesigner({ setErrorMessage }) {
       webSite,
       phone,
       specialization,
+      requisites,
     };
 
     try {
@@ -109,6 +111,7 @@ export default function useFetchDesigner({ setErrorMessage }) {
           // Contacts
           setWebSite(user?.userInfo?.webSite || '');
           setPhone(user?.userInfo?.phone || '');
+          setRequisites(user?.userInfo?.requisites || '');
         }
       } catch (err) {
         console.error('Ошибка загрузки данных пользователя', err);
@@ -140,6 +143,8 @@ export default function useFetchDesigner({ setErrorMessage }) {
     removeSoftSkill,
     handleSoftSkillChange,
     hardSkills,
+    requisites,
+    setRequisites,
     setHardSkills,
     addHardSkill,
     removeHardSkill,

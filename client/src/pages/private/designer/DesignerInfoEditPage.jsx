@@ -42,6 +42,8 @@ export default function DesignerEditInfoPage() {
     specialization,
     setSpecialization,
     hdlSaveUser,
+    requisites,
+    setRequisites,
   } = useFetchDesigner({ errorMessage, setErrorMessage });
 
   return (
@@ -307,6 +309,31 @@ export default function DesignerEditInfoPage() {
                     }}
                   />
                 </div>
+              </div>
+            </div>
+
+            <div className="block mb-6">
+              <h2 className="subtitle is-size-7">
+                <strong>Реквизиты</strong>
+              </h2>
+              <p className="is-size-6 mb-5">
+                Внесите правильные реквизиты самозанятого, чтобы получить
+                гонорар за выполненные работы. <br /> Обязательные данные:{' '}
+                <strong>
+                  ИНН, паспортные данные и адрес регистрации, а также банковские
+                  реквизиты
+                </strong>
+              </p>
+              <div className="box">
+                <Field
+                  type="textarea"
+                  name="requisites"
+                  label="Реквизиты"
+                  value={requisites}
+                  onChange={(val) => {
+                    setRequisites(val);
+                  }}
+                />
               </div>
             </div>
 
