@@ -12,10 +12,11 @@ import {
   LoginPage,
   OrderPage,
   OrdersPage,
+  PortfolioItemPage,
   PortfolioPage,
   PrivacyPage,
   StartUpPage,
-} from './pages/index.js';
+} from './pages';
 
 // --------------------
 //    PRIVATE PAGES
@@ -46,7 +47,7 @@ import {
   OrderEditPage,
   OrderNewPage,
   RoleSelectionPage,
-} from './pages/private/index.js';
+} from './pages/private';
 import Entry from './Entry.jsx';
 
 const routes = [
@@ -73,7 +74,16 @@ const routes = [
               },
               {
                 path: 'portfolio',
-                Component: PortfolioPage,
+                children: [
+                  {
+                    index: true,
+                    Component: PortfolioPage,
+                  },
+                  {
+                    path: ':portfolioId',
+                    Component: PortfolioItemPage,
+                  },
+                ],
               },
             ],
           },
