@@ -1,33 +1,34 @@
-
 const UserInfoModel = require('./userinfo.model');
 
-exports.create = function (userinfoCreateDto = {}) {  
-    return new Promise(async (res,rej)=>{ 
-      try{
-        res(await UserInfoModel.create(userinfoCreateDto));
-      }catch(e){
-        console.log(`cant create new userinfo, err:${e}`)
-        res(null);
-      }        
-    })    
-}  
+exports.create = function (userinfoCreateDto = {}) {
+  // eslint-disable-next-line no-async-promise-executor
+  return new Promise(async (res) => {
+    try {
+      res(await UserInfoModel.create(userinfoCreateDto));
+    } catch (e) {
+      console.log(`cant create new userinfo, err:${e}`);
+      res(null);
+    }
+  });
+};
 
-exports.update = function (id, userInfoUpdateDto = {}) {  
-    return new Promise(async (res,rej)=>{ 
+exports.update = function (id, userInfoUpdateDto = {}) {
+  // eslint-disable-next-line no-async-promise-executor
+  return new Promise(async (res) => {
+    const {
+      updatedAt: _updated,
+      createdAt: _created,
+      ...data
+    } = userInfoUpdateDto;
 
-      const {updatedAt, createdAt, ...data } = userInfoUpdateDto;
-
-      try{        
-        const userInfoUpdated = await UserInfoModel.findByIdAndUpdate(
-            id,
-            data,
-            { new: true }
-        );
-        res(userInfoUpdated);
-      }catch(e){
-        console.log(`cant update userInfo ${id}, err:${e}`)
-        res(null);
-      }        
-    })    
-}  
-
+    try {
+      const userInfoUpdated = await UserInfoModel.findByIdAndUpdate(id, data, {
+        new: true,
+      });
+      res(userInfoUpdated);
+    } catch (e) {
+      console.log(`cant update userInfo ${id}, err:${e}`);
+      res(null);
+    }
+  });
+};
