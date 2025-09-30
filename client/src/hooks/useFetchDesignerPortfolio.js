@@ -1,22 +1,23 @@
 import { useEffect, useState } from 'react';
 
 import api from '../utils/api.jsx';
+import { useNavigate } from 'react-router-dom';
 
 export default function useFetchDesignerPortfolio(setErrorMessage) {
+  const navigate = useNavigate();
   const hdlAddToPortfolio = (e) => {
     e.preventDefault();
-    window.location.href = '/cp/designer/portfolio/add';
+    navigate('/cp/designer/portfolio/add');
   };
 
   const hdlEdit = (e, id) => {
     e.preventDefault();
-    window.location.href = `/cp/designer/portfolio/${id}/edit`;
+    navigate(`/cp/designer/portfolio/${id}/edit`);
   };
 
   const hdlDelete = async (e, idPortfolio) => {
     e.preventDefault();
     try {
-      // console.log('idPortfolio', idPortfolio);
       const response = await api.delete(`/portfolios/${idPortfolio}`);
 
       if (response.data.success) {

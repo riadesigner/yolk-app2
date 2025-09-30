@@ -101,7 +101,7 @@ export default function DesignerPortfolioEditPage() {
                       </div>
                     ))}
 
-                  {
+                  {images.length < 10 && (
                     <div
                       key={images.length}
                       className="box"
@@ -116,7 +116,7 @@ export default function DesignerPortfolioEditPage() {
                         setImages={setImages}
                       />
                     </div>
-                  }
+                  )}
                 </div>
               </div>
             )}

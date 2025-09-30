@@ -107,7 +107,7 @@ export default function CompanyInfoEditPage() {
                     </div>
                   ))}
 
-                {company && (
+                {company && gallery.length < 10 && (
                   <div
                     key={gallery.length}
                     className="box"
