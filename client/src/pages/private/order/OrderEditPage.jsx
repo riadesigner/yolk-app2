@@ -100,7 +100,7 @@ export default function OrderEditPage() {
                   </div>
                 ))}
 
-              {order && !order.contractor && (
+              {order && !order.contractor && files.length < 10 && (
                 <div
                   key={files.length}
                   className="box"

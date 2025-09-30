@@ -17,7 +17,7 @@ export default function CompanyAboutHeader({
               О компании
             </h2>
           </div>
-          {privateMode === 'true' && (
+          {privateMode && (
             <div className="level-item is-right">
               <Link to="/cp/company/info/edit">
                 <button className="button is-primary is-small-mobile">

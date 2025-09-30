@@ -100,7 +100,7 @@ export default function OrderEditForm({ options }) {
             Выполнить к:
             <Field
               value={dateTo}
-              onChange={(e) => setDateTo(e.target.value)}
+              onChange={setDateTo}
               type="date"
               sublabel="Выберите дату"
             />

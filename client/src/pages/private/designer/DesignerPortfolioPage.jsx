@@ -35,7 +35,7 @@ export default function DesignerInfoPage() {
                 <NavLink to="/cp/designer">Панель управления</NavLink>
               </li>
               <li className="is-active">
-                <a href="#">Портфолио</a>
+                <Link href="#">Портфолио</Link>
               </li>
             </ul>
           </nav>
@@ -81,10 +81,12 @@ export default function DesignerInfoPage() {
                     />
                   );
                 })}
-                <AddButton
-                  label="Добавить проект"
-                  onClick={(val) => hdlAddToPortfolio(val)}
-                />
+                {portfolios.length < 4 && (
+                  <AddButton
+                    label="Добавить проект"
+                    onClick={(val) => hdlAddToPortfolio(val)}
+                  />
+                )}
               </div>
             ) : (
               <div style={{ marginTop: '2vw' }}>

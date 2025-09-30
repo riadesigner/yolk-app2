@@ -18,11 +18,6 @@ export default function CompanyAdminPage() {
 
   const navigate = useNavigate();
 
-  const hdlNewOrder = (e) => {
-    e.preventDefault();
-    navigate(`/cp/company/${company ? company.id : ''}/order-new`);
-  };
-
   const hdlOpenOrder = (e, orderId) => {
     e.preventDefault();
     navigate(`/cp/company/${company ? company.id : ''}/order-edit/${orderId}`);
@@ -109,16 +104,18 @@ export default function CompanyAdminPage() {
                     })}
                 </div>
 
-                {company && (
+                {company && orders.length < 20 && (
                   <div className="block">
-                    <a href="#" onClick={(e) => hdlNewOrder(e)}>
+                    <Link
+                      to={`/cp/company/${company ? company.id : ''}/order-new`}
+                    >
                       <button className="button is-fluid is-medium is-regular-mobile is-white">
                         <span>Создать новый</span>
                         <span className="icon">
                           <i className="fa fa-angle-right"></i>
                         </span>
                       </button>
-                    </a>
+                    </Link>
                   </div>
                 )}
 
