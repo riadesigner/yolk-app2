@@ -7,6 +7,7 @@ const NotificationsService = require('../notifications/notifications.service')
 const multer = require('multer');
 const AWS = require('aws-sdk');
 const AppError = require('../middleware/AppError');
+const optionalAuth = require('../middleware/optionalAuth');
 
 const passport = require('passport');
 const { asyncHandler, sendSuccess, sendError } = require('../middleware/utils');
@@ -92,13 +93,22 @@ router.get('/orders/search/:userInput',
     })
 );
 
-router.get('/orders/:id',    
+router.get('/orders/:id',  
+    optionalAuth,  
     asyncHandler(async (req, res) => { 
         const { id } = req.params;
         const order = await OrdersService.findById(id);                 
         if (!order) {
             return sendError(res, 'Order not found', 404);
+        }        
+
+        // Записываем просмотр только для авторизованных дизайнеров
+        if (req.user && req.user.role === 'designer') {
+            await OrdersService.recordView(id, req.user.id);                
+            // order = await OrdersService.findById(id); 
+            // снова order? тут будет ошибка, т.к. order уже вверху определен
         }
+
         sendSuccess(res, { order:order.toJSON() });        
     })
 );
