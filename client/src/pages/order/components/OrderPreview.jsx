@@ -8,8 +8,6 @@ export default function OrderPreview({ order }) {
   const companyName = order.company?.name || 'не указано';
   const dateTo = order.dateTo ? order.dateTo.split('T')[0] : '';
 
-  // console.log('order', order);
-
   return (
     <div className={styles.order}>
       <Link to={`/orders/${order.id}`}>
@@ -20,7 +18,7 @@ export default function OrderPreview({ order }) {
           <i
             className="fa-solid fa-ruble-sign is-size-6 is-primary"
             style={{ opacity: 0.6 }}
-          ></i>
+          />
         </p>
       </Link>
       <hr />
@@ -31,12 +29,13 @@ export default function OrderPreview({ order }) {
         <div className="level mt-4">
           <div className="level-item ">
             <span className="is-size-7">
-              <i className="fa-solid fa-eye is-primary"></i> 2
+              <i className="fa-solid fa-eye is-primary" />{' '}
+              {order.viewsCount || '0'}
             </span>
           </div>
           <div className="level-item is-right is-size-7">
             <span style={{ opacity: 0.4 }}>
-              <i className="fa-regular fa-calendar-days"></i>
+              <i className="fa-regular fa-calendar-days" />
             </span>
             <span>{dateTo}</span>
           </div>
@@ -56,5 +55,6 @@ OrderPreview.propTypes = {
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       name: PropTypes.string,
     }),
+    viewsCount: PropTypes.number,
   }).isRequired,
 };

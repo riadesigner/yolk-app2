@@ -38,6 +38,7 @@ export default [
       ...reactHooks.configs.recommended.rules,
       'prettier/prettier': 'error',
       'react/react-in-jsx-scope': 'off',
+      'react/self-closing-comp': 'error',
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
       'no-console': ['error', { allow: ['error'] }],
     },
