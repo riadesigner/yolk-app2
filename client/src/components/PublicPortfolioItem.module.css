@@ -1,7 +1,10 @@
 
 .portItem{
-  cursor: pointer;
   position: relative;
+}
+
+.portItemWrapper{
+    cursor: pointer;
 }
 
 .imagesBlock{

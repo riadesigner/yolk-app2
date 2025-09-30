@@ -1,0 +1,31 @@
+.portfolioItem {
+    display: flex;
+    position: relative;
+    gap: 2rem;
+}
+
+.portfolioItemTitle {
+    font-size: 1.5rem;
+    font-weight: 100;
+}
+
+.portfolioItemDescription {
+    font-size: 1rem;
+}
+
+.portfolioItemImages {
+    width: 100%;
+    max-width: 950px;
+}
+
+.portfolioItemImage {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    object-fit: cover;
+    max-height: 712px;
+    object-position: center;
+}
+
+.portfolioItemImage:last-child {
+    margin-bottom: 0;
+}

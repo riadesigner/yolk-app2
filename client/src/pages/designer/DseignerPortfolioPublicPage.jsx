@@ -45,6 +45,7 @@ export default function PortfolioPage() {
                   return (
                     <PublicPortfolioItem
                       key={p.id}
+                      id={p.id}
                       images={p.images}
                       title={p.title}
                     />
