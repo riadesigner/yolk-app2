@@ -4,6 +4,7 @@ import useFetchDesignerAdmin from '../../../hooks/useFetchDesignerAdmin.js';
 
 import Breadcrumb from '../../../components/Breadcrumb.jsx';
 import NotifsLast from '../../../components/NotifsLast.jsx';
+import DesignerOrderItem from './components/DesignerOrderItem.jsx';
 
 export default function DesignerAdminPage() {
   const links = [
@@ -43,7 +44,7 @@ export default function DesignerAdminPage() {
                     <button className="button is-fluid is-medium is-regular-mobile is-link mb-3">
                       <span>Анкета</span>
                       <span className="icon">
-                        <i className="fa fa-angle-right"></i>
+                        <i className="fa fa-angle-right" />
                       </span>
                     </button>
                   </Link>
@@ -52,7 +53,7 @@ export default function DesignerAdminPage() {
                     <button className="button  is-fluid is-medium is-regular-mobile is-link ">
                       <span>Портфолио</span>
                       <span className="icon">
-                        <i className="fa fa-angle-right"></i>
+                        <i className="fa fa-angle-right" />
                       </span>
                     </button>
                   </Link>
@@ -60,23 +61,39 @@ export default function DesignerAdminPage() {
 
                 <h2 className="is-size-5-mobile">Заказы</h2>
                 <div className="block mb-6 mb-5-mobile">
-                  <button className="button disabled is-fluid is-medium is-regular-mobile is-white">
+                  <Link
+                    to={`/cp/designer/orders`}
+                    className="button is-fluid is-medium is-regular-mobile is-white mb-4"
+                  >
                     <span>Мои заказы</span>
                     <span className="icon">
-                      <i className="fa fa-angle-right"></i>
+                      <i className="fa fa-angle-right" />
                     </span>
-                  </button>
+                  </Link>
+                  {user?.contracts &&
+                    user?.contracts?.length > 0 &&
+                    // user?.contracts?.map(
+                    user?.contracts?.slice(0, 4).map((order) => {
+                      return (
+                        <DesignerOrderItem
+                          key={order.id}
+                          orderId={order.id}
+                          title={order.title}
+                          clientName="mb-4"
+                        />
+                      );
+                    })}
                 </div>
                 <h2 className="is-size-5-mobile">Мой статус</h2>
                 <div className="block mb-6 mb-5-mobile">
                   <div className="stars-block">
                     <div className="stars-block-label">Новенький</div>
                     <div className="stars-block-items">
-                      <span className="is-active"></span>
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                      <span></span>
+                      <span className="is-active" />
+                      <span />
+                      <span />
+                      <span />
+                      <span />
                     </div>
                   </div>
                 </div>

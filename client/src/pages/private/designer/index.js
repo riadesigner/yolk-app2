@@ -5,3 +5,4 @@ export { default as DesignerInfoPage } from './DesignerInfoPage';
 export { default as DesignerPortfolioPage } from './DesignerPortfolioPage';
 export { default as DesignerPortfolioAddPage } from './DesignerPortfolioAddPage';
 export { default as DesignerPortfolioEditPage } from './DesignerPortfolioEditPage';
+export { default as DesignerOrdersPage } from './DesignerOrdersPage';

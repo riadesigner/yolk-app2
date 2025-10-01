@@ -7,7 +7,8 @@ exports.findById = function (id) {
     try {
       const user = await UsersModel.findById(id)
         .populate('userInfo')
-        .populate('userCompany');
+        .populate('userCompany')
+        .populate('contractsByContractor');
       res(user);
     } catch (e) {
       console.log(`cant find user by id ${id}, err: ${e.message || e}`);
@@ -72,7 +73,8 @@ exports.findByEmail = function (email) {
     try {
       const user = await UsersModel.findOne({ email: email })
         .populate('userInfo')
-        .populate('userCompany');
+        .populate('userCompany')
+        .populate('contracts');
       res(user);
     } catch (e) {
       console.log(`cant find user by id ${email}, err:${e.message || e}`);

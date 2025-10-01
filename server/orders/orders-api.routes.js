@@ -96,6 +96,15 @@ router.get(
 );
 
 router.get(
+  '/orders/by-contractor/:contractorId',
+  asyncHandler(async (req, res) => {
+    const { contractorId } = req.params;
+    const orders = await OrdersService.find({ contractor: contractorId });
+    sendSuccess(res, { orders: orders });
+  }),
+);
+
+router.get(
   '/orders/:id',
   optionalAuth,
   asyncHandler(async (req, res) => {

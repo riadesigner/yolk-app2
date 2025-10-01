@@ -44,6 +44,7 @@ import {
   DesignerPortfolioAddPage,
   DesignerPortfolioEditPage,
   DesignerPortfolioPage,
+  DesignerOrdersPage,
   OrderEditPage,
   OrderNewPage,
   RoleSelectionPage,
@@ -150,6 +151,10 @@ const routes = [
                     Component: DesignerPortfolioAddPage,
                   }, // /добавление проекта в портфолио дизайнера
                 ],
+              },
+              {
+                path: 'orders',
+                Component: DesignerOrdersPage,
               }, // /портфолио дизайнера
             ],
           },
