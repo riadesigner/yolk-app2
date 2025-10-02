@@ -294,6 +294,70 @@ router.patch(
 );
 
 router.patch(
+  '/orders/:orderId/set-done',
+  passport.authenticate('jwt', { session: false }),
+  asyncHandler(async (req, res) => {
+    const { orderId } = req.params;
+
+    const user = await UsersService.findByEmail(req.user.email);
+    if (!user) {
+      return sendError(res, 'Unknown user', 404);
+    }
+
+    const order = await OrdersService.findById(orderId);
+    if (!order) {
+      return sendError(res, 'Unknown order', 404);
+    }
+
+    if (
+      user.role !== 'company' ||
+      user.id !== order.company.userId.toString()
+    ) {
+      return sendError(res, 'User not authorized for this action', 403);
+    }
+
+    const orderUpdated = await OrdersService.update(orderId, {
+      status: 'DONE',
+    });
+
+    try {
+      const admin = (await UsersService.findAdmins())[0];
+      console.log('admin', admin);
+      const totalFound = await BillsService.count({ receiver: admin.id });
+      const key = totalFound.toString().padStart(2, '0'); // номер счета
+      const bill = await BillsService.create({
+        direction: 'TO_YOLK',
+        receiver: admin.id,
+        key,
+        order: orderUpdated.id,
+        description: `Счет на получение гонорара. Заказ № ${orderId}`, // Основание счета
+      });
+
+      await NotificationsService.sendWorkCompletedToAdministrator(
+        admin.id,
+        orderUpdated.id,
+        bill.id,
+      );
+      await NotificationsService.sendWorkCompletedToDesigner(
+        orderUpdated.contractor.toString(),
+        orderUpdated.id,
+      );
+      await NotificationsService.sendWorkCompletedToCompany(
+        orderUpdated.company.userId.toString(),
+        orderUpdated.id,
+      );
+    } catch (e) {
+      console.error(e);
+    }
+
+    sendSuccess(res, {
+      order: orderUpdated, //68de4e4989502dd12ea313d9 68de4e4989502dd12ea313d9
+      message: 'Заказ обновлен', //68de4a2a89502dd12ea313a0 68de4a2a89502dd12ea313a0
+    });
+  }),
+);
+
+router.patch(
   '/orders/:orderId',
   passport.authenticate('jwt', { session: false }),
   asyncHandler(async (req, res) => {

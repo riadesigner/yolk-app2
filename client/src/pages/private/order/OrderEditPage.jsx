@@ -37,6 +37,7 @@ export default function OrderEditPage() {
     hdlSaveOrder,
     hdlRemoveOrder,
     hdlRemoveOrderConfirmed,
+    hdlCompleteOrder,
     showConfirmToDeleteOrder,
     setShowConfirmToDeleteOrder,
   } = useFetchOrder({ orderId, companyId, errorMessage, setErrorMessage });
@@ -118,11 +119,11 @@ export default function OrderEditPage() {
                 <>
                   <h2>Прикрепленные файлы: </h2>
                   <ul>
-                    {files.map((file) => {
-                      <li>
+                    {files.map((file) => (
+                      <li key={file.key}>
                         <a href={file.url}>{file.key}</a>
-                      </li>;
-                    })}
+                      </li>
+                    ))}
                   </ul>
                 </>
               )}
@@ -146,6 +147,19 @@ export default function OrderEditPage() {
                 onClick={(e) => hdlSaveOrder(e)}
               >
                 Сохранить
+              </button>
+            </div>
+          </section>
+        )}
+
+        {order && order.status === 'DEPOSIT_PAID' && (
+          <section className="container">
+            <div className="section has-text-right">
+              <button
+                className="button is-primary is-medium is-regular-mobile"
+                onClick={hdlCompleteOrder}
+              >
+                Отметить выполненным
               </button>
             </div>
           </section>

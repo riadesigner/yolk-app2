@@ -82,6 +82,17 @@ export default function useFetchOrder({ orderId, companyId, setErrorMessage }) {
     }
   };
 
+  const hdlCompleteOrder = async () => {
+    setErrorMessage(null);
+    try {
+      await api.patch(`/orders/${orderId}/set-done`);
+      navigate('/cp/company');
+    } catch (error) {
+      console.error('Ошибка:', error.response?.data || error.message);
+      setErrorMessage('Не удалось завершить заказ');
+    }
+  };
+
   useEffect(() => {
     const fetchOrder = async (allCats) => {
       try {
@@ -160,6 +171,7 @@ export default function useFetchOrder({ orderId, companyId, setErrorMessage }) {
     hdlSaveOrder,
     hdlRemoveOrder,
     hdlRemoveOrderConfirmed,
+    hdlCompleteOrder,
     showConfirmToDeleteOrder,
     setShowConfirmToDeleteOrder,
   };
