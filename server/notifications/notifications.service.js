@@ -283,7 +283,7 @@ exports.sendBillPayedToCompany = async (companyUserId, orderId) => {
       links: [
         {
           name: 'Заказ',
-          url: `/orders/${orderId}`,
+          url: `/cp/company/orders/${orderId}`,
         },
         {
           name: 'Чат с исполнителем',
@@ -292,6 +292,78 @@ exports.sendBillPayedToCompany = async (companyUserId, orderId) => {
         },
       ],
       receiver: companyUserId,
+    });
+  } catch (err) {
+    throw new AppError(
+      `Failed to send welcome notification: ${err.message}`,
+      500,
+    );
+  }
+};
+
+exports.sendWorkCompletedToCompany = async (companyUserId, orderId) => {
+  try {
+    return await NotificationsModel.create({
+      title: [
+        'Cпасибо!',
+        `Заказ ${orderId} отмечен Выполненным и отправлен в архив.`,
+      ].join(' '),
+      readAt: null,
+      links: [
+        {
+          name: 'Заказ',
+          url: `/cp/company/orders/${orderId}`,
+        },
+      ],
+      receiver: companyUserId,
+    });
+  } catch (err) {
+    throw new AppError(
+      `Failed to send welcome notification: ${err.message}`,
+      500,
+    );
+  }
+};
+
+exports.sendWorkCompletedToDesigner = async (designerId, orderId) => {
+  try {
+    return await NotificationsModel.create({
+      title: [
+        'Заказчик принял работу.',
+        'От Вашего имени выставлен Счет на получение гонорара с реквизитами, которые вы указали в Анкете.',
+      ].join(' '),
+      readAt: null,
+      links: [
+        {
+          name: 'Заказ',
+          url: `/orders/${orderId}`,
+        },
+      ],
+      receiver: designerId,
+    });
+  } catch (err) {
+    throw new AppError(
+      `Failed to send welcome notification: ${err.message}`,
+      500,
+    );
+  }
+};
+
+exports.sendWorkCompletedToAdministrator = async (adminId, orderId, billId) => {
+  try {
+    return await NotificationsModel.create({
+      title: [
+        `Заказ ${orderId} отмечен Выполненным.`,
+        `Выставлен Счет от Исполнителя.`,
+      ].join(' '),
+      readAt: null,
+      links: [
+        {
+          name: 'Счет',
+          url: `/cp/yolk-admin/bills/${billId}`,
+        },
+      ],
+      receiver: adminId,
     });
   } catch (err) {
     throw new AppError(
