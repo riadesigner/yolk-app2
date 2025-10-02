@@ -125,6 +125,7 @@ router.get(
 
 router.get(
   '/orders',
+  optionalAuth,
   asyncHandler(async (req, res) => {
     // Отключаем кэширование
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
@@ -156,13 +157,19 @@ router.get(
     }
 
     const page = req.query.page || 1;
-    const limit = req.query.limit || 3;
+    const limit = req.query.limit || 10;
+
+    let withBills = false;
+    if (req.user && req.user.role === 'administrator') {
+      withBills = true;
+    }
 
     const { data: orders, pagination } = await OrdersService.findAll({
       sort,
       page,
       limit,
       categories,
+      withBills,
     });
 
     console.log('--- orders ----', orders);
@@ -202,7 +209,7 @@ router.patch(
       }))
     ) {
       throw new AppError(
-        `Не удалось отправить сообщение о назначени Исполнителя ${contractorId} для заказа ${orderId}`,
+        `Не удалось отправить сообщение о назначении Исполнителя ${contractorId} для заказа ${orderId}`,
         500,
       );
     }
@@ -298,7 +305,7 @@ router.patch(
       return sendError(res, 'Unknown user', 404);
     }
     if (user.role !== 'company') {
-      return sendError(res, 'User not autorized for this action', 403);
+      return sendError(res, 'User not authorized for this action', 403);
     }
 
     const orderUpdateDto = {

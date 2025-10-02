@@ -7,7 +7,7 @@ const ordersSchema = new Schema(
     tags: { type: [String] },
     categories: { type: [String] },
     files: { type: Array },
-    status: { type: String },
+    status: { type: String, default: 'PUBLISHED' },
     company: { type: Schema.Types.ObjectId, ref: 'Company' },
     contractor: {
       type: Schema.Types.ObjectId,
@@ -38,6 +38,12 @@ ordersSchema.virtual('viewsCount', {
   localField: '_id',
   foreignField: 'orderId',
   count: true,
+});
+
+ordersSchema.virtual('bills', {
+  ref: 'Bills',
+  localField: '_id',
+  foreignField: 'order',
 });
 
 ordersSchema.index({

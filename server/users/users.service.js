@@ -8,7 +8,7 @@ exports.findById = function (id) {
       const user = await UsersModel.findById(id)
         .populate('userInfo')
         .populate('userCompany')
-        .populate('contractsByContractor');
+        .populate('contracts');
       res(user);
     } catch (e) {
       console.log(`cant find user by id ${id}, err: ${e.message || e}`);
@@ -19,10 +19,9 @@ exports.findById = function (id) {
 
 exports.findDesigners = async function () {
   try {
-    const designers = await UsersModel.find({
+    return await UsersModel.find({
       role: 'designer',
     }).populate('userInfo');
-    return designers;
     // eslint-disable-next-line no-unused-vars
   } catch (err) {
     return [];
