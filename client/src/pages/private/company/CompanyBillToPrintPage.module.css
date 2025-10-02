@@ -1,0 +1,86 @@
+.bill {
+
+}
+
+.billTitle,
+.billPartTitle {
+    font-weight: bold !important;
+    margin-bottom: .65rem !important;
+}
+
+.billRequisites ul {
+    padding-left: 0;
+    margin-top: 0;
+}
+
+.billRequisites ul li {
+    list-style: none;
+}
+
+.billRequisites {
+    font-size: 1rem;
+}
+
+.billRow {
+    justify-content: flex-start;
+}
+
+.billRow *:first-child {
+    min-width: 300px;
+}
+
+.billTableWrapper {
+    max-width: 100%;
+}
+
+.billTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.billTable, .billTable th, .billTable td {
+    border: 2px solid black;
+}
+
+.billDelimiter {
+    width: 100%;
+}
+
+.billTotal {
+    font-weight: bold;
+    text-align: right;
+    vertical-align: middle;
+}
+
+.billTotal * {
+    margin-bottom: 0 !important;
+    line-height: 1rem;
+}
+
+.billTotal > div:not(:last-child) {
+    margin-bottom: 1rem !important;
+}
+
+.billTotal > div *:first-child {
+    width: fit-content;
+    margin-left: auto;
+}
+
+.billTotal > div *:last-child {
+    width: 150px;
+}
+
+@media (max-width: 1023px) {
+
+    .billTableWrapper {
+        overflow-x: scroll;
+    }
+
+    .billTotal > div {
+        flex-direction: row;
+    }
+    .billTotal > div *:last-child {
+        width: 120px;
+    }
+}

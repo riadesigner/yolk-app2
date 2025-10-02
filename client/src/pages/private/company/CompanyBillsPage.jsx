@@ -1,6 +1,7 @@
 import Breadcrumb from '../../../components/Breadcrumb.jsx';
 import { formatDateTime } from '../../../utils/dateUtilits.jsx';
 import useFetchCompanyBillsPage from '../../../hooks/useFetchCompanyBillsPage.js';
+import { useNavigate } from 'react-router-dom';
 
 export default function CompanyBillsPage() {
   const links = [
@@ -8,6 +9,8 @@ export default function CompanyBillsPage() {
     { link: '/cp/company', title: 'Панель управления' },
     { link: '#', title: 'Счета компании', isActive: true },
   ];
+
+  const navigate = useNavigate();
 
   const { nowLoading, bills } = useFetchCompanyBillsPage();
 
@@ -33,7 +36,7 @@ export default function CompanyBillsPage() {
                       <button
                         className={`button ${b.paid ? 'is-primary' : 'is-link'} mb-3`}
                         onClick={() => {
-                          location.href = `/cp/company/bills/${b.id}`;
+                          navigate(`/cp/company/bills/${b.id}`);
                         }}
                       >
                         <span>
