@@ -6,6 +6,7 @@ const configureSessions = require('./config/sessions');
 const configurePassport = require('./config/passport');
 const configureCors = require('./config/cors');
 const configureCategories = require('./config/categories');
+const configureAdmins = require('./config/admin');
 
 const error404 = require('./middleware/error404');
 const path = require('path');
@@ -54,6 +55,7 @@ app.get('/', (req, res) => {
 });
 
 configureCategories();
+configureAdmins();
 
 // 404 — если ни один маршрут не сработал
 app.use(error404);
