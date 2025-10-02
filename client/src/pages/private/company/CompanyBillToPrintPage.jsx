@@ -59,11 +59,11 @@ export default function CompanyBillToPrintPage() {
                     className={[
                       styles.billTitle,
                       'title',
-                      'is-size-3',
-                      'is-size-4-mobile',
+                      'is-size-4',
+                      'is-size-5-mobile',
                     ].join(' ')}
                   >
-                    СЧЕТ НА ОПЛАТУ № {bill.key}
+                    СЧЕТ НА ОПЛАТУ № {bill.id}
                   </h1>
                   <p
                     className={[styles.billTitle, 'title', 'is-size-5'].join(

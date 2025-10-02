@@ -1,52 +1,72 @@
-export default function OrdersFilter() {
+import PropTypes from 'prop-types';
+
+export default function OrdersFilter({
+  setFilter,
+  currentFilter,
+  ordersCount,
+}) {
   return (
     <>
-      <div className="block mt-0">
-        <h2 className="subtitle is-size-6 mb-4">Сортировка</h2>
-        <button className="button is-fluid mb-4 is-primary">
-          <span>По дате</span>
-          <span>
-            <i className="fa-solid fa-angle-down"></i>
-          </span>
-        </button>
-        <button className="button is-fluid mb-4 ">
-          <span>По стоимости</span>
-          <span>
-            <i className="fa-solid fa-angle-down"></i>
-          </span>
-        </button>
-      </div>
-
       <div className="block">
         <h2 className="subtitle is-size-6 mb-4">Категории</h2>
-        <button className="button is-fluid mb-4 is-link is-left">
-          <span>Вакантные (10)</span>
+        <button
+          className={[
+            'button is-fluid mb-4 is-left',
+            currentFilter === 'PUBLISHED' ? 'is-link' : '',
+          ].join(' ')}
+          onClick={() => setFilter('PUBLISHED')}
+        >
+          <span>Вакантные ({ordersCount['PUBLISHED'] ?? 0})</span>
           <span>
-            <i className="fa-solid fa-arrow-right"></i>
+            <i className="fa-solid fa-arrow-right" />
           </span>
         </button>
-        <button className="button is-fluid mb-4 is-left">
-          <span>Есть исполнитель (1)</span>
+        <button
+          className={[
+            'button is-fluid mb-4 is-left',
+            currentFilter === 'HAS_CONTRACTOR' ? 'is-link' : '',
+          ].join(' ')}
+          onClick={() => setFilter('HAS_CONTRACTOR')}
+        >
+          <span>Есть исполнитель ({ordersCount['HAS_CONTRACTOR'] ?? 0})</span>
           <span>
-            <i className="fa-solid fa-arrow-right"></i>
+            <i className="fa-solid fa-arrow-right" />
           </span>
         </button>
-        <button className="button is-fluid mb-4 is-left">
-          <span>В работе (2)</span>
+        <button
+          className={[
+            'button is-fluid mb-4 is-left',
+            currentFilter === 'DEPOSIT_PAID' ? 'is-link' : '',
+          ].join(' ')}
+          onClick={() => setFilter('DEPOSIT_PAID')}
+        >
+          <span>Оплачен ({ordersCount['DEPOSIT_PAID'] ?? 0})</span>
           <span>
-            <i className="fa-solid fa-arrow-right"></i>
+            <i className="fa-solid fa-arrow-right" />
           </span>
         </button>
-        <button className="button is-fluid mb-4 is-left">
-          <span>Архив (5)</span>
+        <button
+          className={[
+            'button is-fluid mb-4 is-left',
+            currentFilter === 'DONE' ? 'is-link' : '',
+          ].join(' ')}
+          onClick={() => setFilter('DONE')}
+        >
+          <span>Выполнен ({ordersCount['DONE'] ?? 0})</span>
           <span>
-            <i className="fa-solid fa-arrow-right"></i>
+            <i className="fa-solid fa-arrow-right" />
           </span>
         </button>
-        <button className="button is-fluid mb-4 is-left">
-          <span>Удаленные (1)</span>
+        <button
+          className={[
+            'button is-fluid mb-4 is-left',
+            currentFilter === 'ARCHIVED' ? 'is-link' : '',
+          ].join(' ')}
+          onClick={() => setFilter('ARCHIVED')}
+        >
+          <span>В архиве ({ordersCount['ARCHIVED'] ?? 0})</span>
           <span>
-            <i className="fa-solid fa-arrow-right"></i>
+            <i className="fa-solid fa-arrow-right" />
           </span>
         </button>
       </div>
@@ -58,3 +78,9 @@ export default function OrdersFilter() {
     </>
   );
 }
+
+OrdersFilter.propTypes = {
+  setFilter: PropTypes.func.isRequired,
+  currentFilter: PropTypes.string.isRequired,
+  ordersCount: PropTypes.object.isRequired,
+};

@@ -116,3 +116,13 @@ exports.findById = async function (id) {
     return null;
   }
 };
+
+exports.setPayed = async function (id) {
+  return BillsModel.findByIdAndUpdate(id, { paid: true })
+    .populate({
+      path: 'order',
+      populate: { path: 'contractor', model: 'Users' },
+    })
+    .populate('receiver')
+    .populate('sender');
+};

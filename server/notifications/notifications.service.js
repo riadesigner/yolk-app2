@@ -243,6 +243,64 @@ exports.sendWelcomeToNewCompany = async (companyId) => {
   }
 };
 
+exports.sendBillPayedToDesigner = async (designerId, orderId) => {
+  try {
+    return await NotificationsModel.create({
+      title: [
+        'Приветствуем!',
+        `Заказ ${orderId} был оплачен, можно приступать к работе!`,
+      ].join(' '),
+      readAt: null,
+      links: [
+        {
+          name: 'Заказ',
+          url: `/orders/${orderId}`,
+        },
+        {
+          name: 'Чат с Заказчиком',
+          url: `/chats/${orderId}`,
+          bright: true,
+        },
+      ],
+      receiver: designerId,
+    });
+  } catch (err) {
+    throw new AppError(
+      `Failed to send welcome notification: ${err.message}`,
+      500,
+    );
+  }
+};
+
+exports.sendBillPayedToCompany = async (companyUserId, orderId) => {
+  try {
+    return await NotificationsModel.create({
+      title: [
+        'Приветствуем!',
+        `Заказ ${orderId} был оплачен, ожидайте завершения работы!`,
+      ].join(' '),
+      readAt: null,
+      links: [
+        {
+          name: 'Заказ',
+          url: `/orders/${orderId}`,
+        },
+        {
+          name: 'Чат с исполнителем',
+          url: `/chats/${orderId}`,
+          bright: true,
+        },
+      ],
+      receiver: companyUserId,
+    });
+  } catch (err) {
+    throw new AppError(
+      `Failed to send welcome notification: ${err.message}`,
+      500,
+    );
+  }
+};
+
 // Найти все непрочитанные уведомления
 // const unreadNotifications = await Notifications.find({ readAt: null });
 

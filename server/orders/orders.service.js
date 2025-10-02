@@ -43,11 +43,16 @@ exports.findAll = function (opt = {}) {
     }
 
     try {
+      const populate = ['company', 'contractor', 'viewsCount'];
+      if (opt.withBills) {
+        populate.push('bills');
+      }
+
       const result = await paginate(OrdersModel, query, {
         page: opt.page,
         limit: opt.limit,
         sort: sort,
-        populate: ['company', 'contractor', 'viewsCount'],
+        populate,
       });
       res(result);
     } catch (e) {
@@ -126,6 +131,7 @@ exports.setContractor = async function (orderId, contractorId) {
       orderId,
       {
         contractor: contractorId,
+        status: 'HAS_CONTRACTOR',
       },
       { new: true },
     );
@@ -200,4 +206,14 @@ exports.recordView = async function (orderId, userId) {
     console.log('cant record order view, err:', err);
     return false;
   }
+};
+
+exports.updateStatus = async function (id, status) {
+  const order = await OrdersModel.findById(id);
+  if (!order) {
+    throw new AppError('Заказ не найден', 404);
+  }
+  order.status = status;
+  await order.save();
+  return order;
 };
