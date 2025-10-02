@@ -29,6 +29,17 @@ exports.findDesigners = async function () {
   }
 };
 
+exports.findAdmins = async function () {
+  try {
+    return await UsersModel.find({
+      role: 'administrator',
+    }).populate('userInfo');
+    // eslint-disable-next-line no-unused-vars
+  } catch (err) {
+    return [];
+  }
+};
+
 exports.update = function (id, userUpdateDto) {
   // eslint-disable-next-line no-async-promise-executor
   return new Promise(async (res) => {
