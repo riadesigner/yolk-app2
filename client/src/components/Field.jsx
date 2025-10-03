@@ -13,6 +13,12 @@ export default function Field(props) {
   } = props;
   const strPlaceHolder = placeHolder ?? 'Введите текст';
 
+  const hdlChange = (e) => {
+    if (e.target.value.toString().length < 500) {
+      onChange(e.target.value);
+    }
+  };
+
   return (
     <div className="field">
       {label ? (
@@ -35,9 +41,9 @@ export default function Field(props) {
             rows="8"
             placeholder={strPlaceHolder}
             value={value}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={hdlChange}
             disabled={disabled}
-          ></textarea>
+          />
         ) : (
           <input
             disabled={disabled}
@@ -46,7 +52,7 @@ export default function Field(props) {
             type={type}
             placeholder={strPlaceHolder}
             value={value}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={hdlChange}
           />
         )}
       </div>
