@@ -122,6 +122,7 @@ exports.sendAboutNewContractor = function ({
   customerId,
   contractorId,
   orderId,
+  chatId,
 }) {
   // eslint-disable-next-line no-async-promise-executor
   return new Promise(async (res) => {
@@ -147,7 +148,7 @@ exports.sendAboutNewContractor = function ({
           },
           {
             name: 'Чат с исполнителем',
-            url: `/chats/${orderId}`,
+            url: `/chats/${chatId}`,
             bright: true,
           },
         ],
@@ -169,7 +170,7 @@ exports.sendAboutNewContractor = function ({
           },
           {
             name: 'Чат с Заказчиком',
-            url: `/chats/${orderId}`,
+            url: `/chats/${chatId}`,
             bright: true,
           },
         ],

@@ -1,6 +1,7 @@
 require('dotenv').config();
-
+const { createServer } = require('http');
 const express = require('express');
+const { Server } = require('socket.io');
 const configureDataBase = require('./config/db');
 const configureSessions = require('./config/sessions');
 const configurePassport = require('./config/passport');
@@ -21,6 +22,7 @@ const {
   apiErrorHandler,
   fallbackErrorHandler,
 } = require('./middleware/errorHandlers');
+const { chatListener } = require('./chats/chats.listener');
 
 const PUBLIC_PATH = path.join(__dirname + '/public');
 
@@ -28,6 +30,9 @@ const PUBLIC_PATH = path.join(__dirname + '/public');
 //      APP INIT
 // -------------------
 const app = express();
+const server = createServer(app);
+const io = new Server(server);
+
 configureDataBase();
 configureSessions(app);
 configurePassport(app);
@@ -55,6 +60,7 @@ app.use('/api', require('./portfolios/portfolios-api.routes'));
 app.use('/api', require('./categories/categories-api.routes'));
 app.use('/api', require('./bills/bills-api.routes'));
 app.use('/api', require('./notifications/notifications-api.routes'));
+app.use('/api', require('./chats/chats-api.routes'));
 
 app.get('/', (req, res) => {
   res.redirect('/');
@@ -75,7 +81,9 @@ app.use('/api', apiErrorHandler(sendError));
 // Фолбэк
 app.use(fallbackErrorHandler);
 
-const server = app.listen(process.env.PORT, () => {
+io.on('connect', (socket) => chatListener(socket, io));
+
+server.listen(process.env.PORT, () => {
   console.log(`Сервер запущен на http://localhost:${process.env.PORT}`);
 });
 

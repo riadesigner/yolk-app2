@@ -34,6 +34,8 @@ const userSchema = new Schema(
       transform(doc, ret) {
         ret.id = ret._id.toString();
         delete ret._id;
+        delete ret.refreshToken;
+        delete ret.refreshTokenExpires;
         delete ret.__v;
         return ret;
       },
