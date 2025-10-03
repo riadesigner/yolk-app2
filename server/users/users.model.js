@@ -13,6 +13,8 @@ const userSchema = new Schema(
     name: { type: String },
     avatar: { type: String },
     role: { type: String },
+    refreshToken: { type: String },
+    refreshTokenExpires: { type: Date },
     userInfo: {
       type: Schema.Types.ObjectId,
       ref: 'UserInfo',

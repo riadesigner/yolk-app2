@@ -13,6 +13,7 @@ const error404 = require('./middleware/error404');
 const path = require('path');
 const requestLogger = require('./middleware/requestLogger');
 const sanitize = require('./middleware/sanitize');
+const refreshTokenMiddleware = require('./middleware/refreshTokenMiddleware');
 
 const { sendError } = require('./middleware/utils');
 const {
@@ -40,6 +41,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(requestLogger);
 app.use(helmet());
 app.use(sanitize);
+app.use(refreshTokenMiddleware);
 
 // ------------
 //    ROUTS

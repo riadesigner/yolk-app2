@@ -92,3 +92,67 @@ exports.findByEmail = function (email) {
     }
   });
 };
+
+// Методы для работы с refresh токенами
+exports.saveRefreshToken = function (userId, refreshToken, expiresAt) {
+  // eslint-disable-next-line no-async-promise-executor
+  return new Promise(async (res) => {
+    try {
+      const user = await UsersModel.findByIdAndUpdate(
+        userId,
+        {
+          refreshToken,
+          refreshTokenExpires: expiresAt,
+        },
+        { new: true },
+      );
+      res(user);
+    } catch (e) {
+      console.log(
+        `cant save refresh token for user ${userId}, err:${e.message || e}`,
+      );
+      res(null);
+    }
+  });
+};
+
+exports.findByRefreshToken = function (refreshToken) {
+  // eslint-disable-next-line no-async-promise-executor
+  return new Promise(async (res) => {
+    try {
+      const user = await UsersModel.findOne({
+        refreshToken,
+        refreshTokenExpires: { $gt: new Date() }, // Проверяем что токен не истек
+      })
+        .populate('userInfo')
+        .populate('userCompany')
+        .populate('contracts');
+      res(user);
+    } catch (e) {
+      console.log(`cant find user by refresh token, err:${e.message || e}`);
+      res(null);
+    }
+  });
+};
+
+exports.clearRefreshToken = function (userId) {
+  // eslint-disable-next-line no-async-promise-executor
+  return new Promise(async (res) => {
+    try {
+      const user = await UsersModel.findByIdAndUpdate(
+        userId,
+        {
+          refreshToken: null,
+          refreshTokenExpires: null,
+        },
+        { new: true },
+      );
+      res(user);
+    } catch (e) {
+      console.log(
+        `cant clear refresh token for user ${userId}, err:${e.message || e}`,
+      );
+      res(null);
+    }
+  });
+};

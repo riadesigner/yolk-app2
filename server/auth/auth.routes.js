@@ -38,8 +38,12 @@ router.get(
   },
   (req, res) => {
     // Успешная аутентификация
+    const { accessToken, refreshToken } = req.user;
+    const tokenParam = encodeURIComponent(accessToken);
+    const refreshParam = encodeURIComponent(refreshToken);
+
     res.redirect(
-      `${process.env.FRONT_URL}/auth-callback?token=${encodeURIComponent(req.user.token)}`,
+      `${process.env.FRONT_URL}/auth-callback?token=${tokenParam}&refreshToken=${refreshParam}`,
     );
   },
 );
@@ -65,8 +69,12 @@ router.get(
   },
   (req, res) => {
     // Успешная аутентификация
+    const { accessToken, refreshToken } = req.user;
+    const tokenParam = encodeURIComponent(accessToken);
+    const refreshParam = encodeURIComponent(refreshToken);
+
     res.redirect(
-      `${process.env.FRONT_URL}/auth-callback?token=${encodeURIComponent(req.user.token)}`,
+      `${process.env.FRONT_URL}/auth-callback?token=${tokenParam}&refreshToken=${refreshParam}`,
     );
   },
 );
