@@ -7,10 +7,12 @@ const configurePassport = require('./config/passport');
 const configureCors = require('./config/cors');
 const configureCategories = require('./config/categories');
 const configureAdmins = require('./config/admin');
+const helmet = require('helmet');
 
 const error404 = require('./middleware/error404');
 const path = require('path');
 const requestLogger = require('./middleware/requestLogger');
+const sanitize = require('./middleware/sanitize');
 
 const { sendError } = require('./middleware/utils');
 const {
@@ -36,6 +38,8 @@ app.use('/public', express.static(PUBLIC_PATH));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(requestLogger);
+app.use(helmet());
+app.use(sanitize);
 
 // ------------
 //    ROUTS
