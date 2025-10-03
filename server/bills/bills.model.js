@@ -18,6 +18,7 @@ const billsSchema = new Schema(
     key: { type: String }, // Номер счета
     order: { type: Schema.Types.ObjectId, ref: 'Orders' }, // Заказ
     description: { type: String }, // Основание счета
+    amount: { type: Number }, // Сумма
     paid: {
       // Оплачен или нет
       type: Boolean,
