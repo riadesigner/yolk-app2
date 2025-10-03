@@ -35,7 +35,7 @@ router.get(
     if (req.user.role !== 'administrator') {
       return sendError(res, 'Доступ запрещен', 403);
     }
-    const bills = await BillsService.findAdminBills();
+    const bills = await BillsService.find({}, true);
     sendSuccess(res, {
       bills: bills.map((b) => b.toJSON()),
     });

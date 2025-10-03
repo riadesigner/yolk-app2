@@ -2,7 +2,7 @@ import Breadcrumb from '../../../components/Breadcrumb.jsx';
 import { useFetchAdminBills } from '../../../hooks/useFetchAdminBills.js';
 import { formatDateTime } from '../../../utils/dateUtilits.jsx';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 const links = [
   { link: '/', title: 'Главная' },
@@ -13,9 +13,18 @@ const links = [
 const AdminBillsPage = () => {
   const { error, loading, bills, fetchSetBillPayed } = useFetchAdminBills();
   const [isPaided, setIsPaided] = useState(false);
+  const [isFromYolk, setIsFromYolk] = useState(true);
   const navigate = useNavigate();
 
-  const filteredBills = bills?.filter((b) => b.paid === isPaided);
+  const filteredBills = useMemo(
+    () =>
+      bills?.filter(
+        (b) =>
+          b.paid === isPaided &&
+          b.direction === (isFromYolk ? 'FROM_YOLK' : 'TO_YOLK')
+      ),
+    [bills, isPaided, isFromYolk]
+  );
 
   if (error) return <div>Error: {error}</div>;
 
@@ -32,6 +41,24 @@ const AdminBillsPage = () => {
           <article>
             <div className={'columns'}>
               <div className="rows">
+                <button
+                  className={[
+                    'button',
+                    isFromYolk ? 'is-primary' : 'is-link',
+                  ].join(' ')}
+                  onClick={() => setIsFromYolk(true)}
+                >
+                  Исходящие
+                </button>
+                <button
+                  className={[
+                    'button',
+                    !isFromYolk ? 'is-primary' : 'is-link',
+                  ].join(' ')}
+                  onClick={() => setIsFromYolk(false)}
+                >
+                  Входящие
+                </button>
                 <button
                   className={[
                     'button',
@@ -56,7 +83,7 @@ const AdminBillsPage = () => {
                   <>Загрузка...</>
                 ) : filteredBills && filteredBills.length > 0 ? (
                   <div>
-                    {bills.map((b) => {
+                    {filteredBills.map((b) => {
                       const fromDate = formatDateTime(b.createdAt);
                       return (
                         <div key={b.id}>
