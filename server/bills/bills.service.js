@@ -92,23 +92,39 @@ exports.findById = async function (id) {
     return await BillsModel.findById(id)
       .populate({
         path: 'receiver',
-        populate: {
-          path: 'userCompany',
-          model: 'Company',
-        },
+        populate: [
+          {
+            path: 'userCompany',
+            model: 'Company',
+          },
+          {
+            path: 'userInfo',
+            model: 'UserInfo',
+          },
+        ],
       })
       .populate({
         path: 'sender',
-        populate: {
-          path: 'userCompany',
-          model: 'Company',
-        },
+        populate: [
+          {
+            path: 'userCompany',
+            model: 'Company',
+          },
+          {
+            path: 'userInfo',
+            model: 'UserInfo',
+          },
+        ],
       })
       .populate({
         path: 'order',
         populate: {
           path: 'contractor',
           model: 'Users',
+          populate: {
+            path: 'userInfo',
+            model: 'UserInfo',
+          },
         },
       });
   } catch (err) {
@@ -125,4 +141,8 @@ exports.setPayed = async function (id) {
     })
     .populate('receiver')
     .populate('sender');
+};
+
+exports.findAdminBills = async function () {
+  return BillsModel.find({ direction: 'TO_YOLK' });
 };

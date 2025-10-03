@@ -330,6 +330,7 @@ router.patch(
         receiver: admin.id,
         key,
         order: orderUpdated.id,
+        sender: orderUpdated.contractor.toString(),
         description: `Счет на получение гонорара. Заказ № ${orderId}`, // Основание счета
       });
 

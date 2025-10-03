@@ -44,15 +44,23 @@ export default function DesignerAdminPage() {
                     <button className="button is-fluid is-medium is-regular-mobile is-link mb-3">
                       <span>Сводная таблица</span>
                       <span className="icon">
-                        <i className="fa fa-angle-right"></i>
+                        <i className="fa fa-angle-right" />
                       </span>
                     </button>
                   </Link>
                   <Link to="/cp/yolk-admin/orders">
-                    <button className="button is-fluid is-medium is-regular-mobile  is-link ">
+                    <button className="button is-fluid is-medium is-regular-mobile mb-3 is-link ">
                       <span>Все заказы</span>
                       <span className="icon">
-                        <i className="fa fa-angle-right"></i>
+                        <i className="fa fa-angle-right" />
+                      </span>
+                    </button>
+                  </Link>
+                  <Link to="/cp/yolk-admin/bills">
+                    <button className="button is-fluid is-medium is-regular-mobile is-link ">
+                      <span>Все счета</span>
+                      <span className="icon">
+                        <i className="fa fa-angle-right" />
                       </span>
                     </button>
                   </Link>
@@ -64,7 +72,7 @@ export default function DesignerAdminPage() {
                     <button className="button is-fluid is-medium is-regular-mobile is-primary mb-3">
                       <span>Дизайнеры</span>
                       <span className="icon">
-                        <i className="fa fa-angle-right"></i>
+                        <i className="fa fa-angle-right" />
                       </span>
                     </button>
                   </Link>
@@ -72,7 +80,7 @@ export default function DesignerAdminPage() {
                     <button className="button is-fluid is-medium is-regular-mobile is-primary">
                       <span>Компании</span>
                       <span className="icon">
-                        <i className="fa fa-angle-right"></i>
+                        <i className="fa fa-angle-right" />
                       </span>
                     </button>
                   </Link>

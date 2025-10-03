@@ -373,6 +373,24 @@ exports.sendWorkCompletedToAdministrator = async (adminId, orderId, billId) => {
   }
 };
 
+exports.sendCompleteOrderToDesigner = async (designerId, orderId) => {
+  try {
+    return await NotificationsModel.create({
+      title: [
+        `YOLK оплатили заказ ${orderId} по указанным вами реквизитам`,
+      ].join(' '),
+      readAt: null,
+      links: [],
+      receiver: designerId,
+    });
+  } catch (err) {
+    throw new AppError(
+      `Failed to send welcome notification: ${err.message}`,
+      500,
+    );
+  }
+};
+
 // Найти все непрочитанные уведомления
 // const unreadNotifications = await Notifications.find({ readAt: null });
 
