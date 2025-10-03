@@ -222,6 +222,7 @@ router.patch(
       receiver: userId,
       key: key,
       order: orderId,
+      amount: orderUpdated.price,
       description: `Авансовый платеж по Договору. Оплата заказа № ${orderId}`, // Основание счета
     });
 
@@ -330,6 +331,8 @@ router.patch(
         receiver: admin.id,
         key,
         order: orderUpdated.id,
+        amount:
+          orderUpdated.price * (1 - process.env.VITE_PLATFORM_COMMISSION / 100),
         sender: orderUpdated.contractor.toString(),
         description: `Счет на получение гонорара. Заказ № ${orderId}`, // Основание счета
       });

@@ -27,9 +27,10 @@ const YolkRequisites = () => (
 const BillToPrint = ({ bill }) => {
   const platformCommission = +import.meta.env.VITE_PLATFORM_COMMISSION;
   const billPrice = (
-    bill.direction === 'TO_YOLK'
+    bill?.amount ??
+    (bill.direction === 'TO_YOLK'
       ? (bill?.order?.price ?? 0) * (1 - platformCommission / 100)
-      : (bill?.order?.price ?? 0)
+      : (bill?.order?.price ?? 0))
   ).toLocaleString();
 
   return (
@@ -167,6 +168,7 @@ BillToPrint.propTypes = {
     direction: PropTypes.oneOf(['TO_YOLK', 'FROM_YOLK']).isRequired,
     updatedAt: PropTypes.string.isRequired,
     paid: PropTypes.bool,
+    amount: PropTypes.number.isRequired,
     receiver: PropTypes.shape({
       userCompany: PropTypes.shape({
         details: PropTypes.shape({
