@@ -48,6 +48,8 @@ import {
   OrderEditPage,
   OrderNewPage,
   RoleSelectionPage,
+  AdminBillsPage,
+  AdminBillToPrintPage,
 } from './pages/private';
 import Entry from './Entry.jsx';
 
@@ -234,6 +236,19 @@ const routes = [
               { path: 'notifs', Component: AdminNotifsPage }, // /все сообщения администратору
               { path: 'info', Component: AdminInfoPage }, // /сводная таблица (актуальные данные о проекте)
               { path: 'orders', Component: AdminOrdersPage }, // /данные о состоянии всех заказов на сайте
+              {
+                path: 'bills',
+                children: [
+                  {
+                    index: true,
+                    Component: AdminBillsPage,
+                  },
+                  {
+                    path: ':billId',
+                    Component: AdminBillToPrintPage,
+                  },
+                ],
+              }, // /данные о состоянии всех заказов на сайте
               {
                 path: 'companies',
                 Component: AdminCompaniesPage,

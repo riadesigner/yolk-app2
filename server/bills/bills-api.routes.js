@@ -29,18 +29,16 @@ router.get(
 );
 
 router.get(
-  '/bills/from/designer/:senderId',
-  asyncHandler(async () => {
-    // let { senderId } = req.params;
-    // try{
-    //     const company = await CompaniesService.findById(companyId);
-    //     sendSuccess(res, {
-    //         company: company.toJSON()
-    //     })
-    // }catch(e){
-    //     throw new AppError(`Company with id ${companyId} not found`, 404)
-    // }
-    return 'ok';
+  '/bills/admin',
+  passport.authenticate('jwt'),
+  asyncHandler(async (req, res) => {
+    if (req.user.role !== 'administrator') {
+      return sendError(res, 'Доступ запрещен', 403);
+    }
+    const bills = await BillsService.findAdminBills();
+    sendSuccess(res, {
+      bills: bills.map((b) => b.toJSON()),
+    });
   }),
 );
 
@@ -72,19 +70,33 @@ router.patch(
     let { billId } = req.params;
     try {
       const bill = await BillsService.setPayed(billId);
-      await OrdersService.updateStatus(bill.order.id, 'DEPOSIT_PAID');
+      await OrdersService.updateStatus(
+        bill.order.id,
+        bill.direction === 'FROM_YOLK' ? 'DEPOSIT_PAID' : 'ARCHIVED',
+      );
 
-      try {
-        await NotificationService.sendBillPayedToDesigner(
-          bill.order.contractor.id,
-          bill.order.id,
-        );
-        await NotificationService.sendBillPayedToCompany(
-          bill.receiver.id,
-          bill.order.id,
-        );
-      } catch (e) {
-        console.error(e);
+      if (bill.direction === 'FROM_YOLK') {
+        try {
+          await NotificationService.sendBillPayedToDesigner(
+            bill.order.contractor.id,
+            bill.order.id,
+          );
+          await NotificationService.sendBillPayedToCompany(
+            bill.receiver.id,
+            bill.order.id,
+          );
+        } catch (e) {
+          console.error(e);
+        }
+      } else {
+        try {
+          await NotificationService.sendCompleteOrderToDesigner(
+            bill.order.contractor.id,
+            bill.order.id,
+          );
+        } catch (e) {
+          console.error(e);
+        }
       }
     } catch (e) {
       console.error(e);

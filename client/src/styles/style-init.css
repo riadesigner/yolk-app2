@@ -131,6 +131,14 @@ article p, article li, article ol{line-height: 1.8;}
 .is-max-11{max-width: calc(100% / 12 * 11) !important;}
 .is-max-12{max-width: calc(100%) !important;}
 
+.rows{
+    display: flex;
+    justify-content: flex-start;
+    gap:0.5rem;
+    flex-direction: column;
+    /* border:1px solid red; */
+}
+
 .columns{
     display: flex;
     justify-content: space-between; 
@@ -326,6 +334,7 @@ hr {width: 50%;border:none;border-bottom:1px solid #b5b5b5;margin-top:2rem;margi
 .mt-5{margin-top:1.5rem !important;}
 .mt-6{margin-top:3rem !important;}
 /* влево */
+.ml-auto{margin-left:auto !important;}
 .ml-0{margin-left:0 !important;}
 .ml-1{margin-left:.25rem !important;}
 .ml-2{margin-left:.5rem !important;}
@@ -334,6 +343,7 @@ hr {width: 50%;border:none;border-bottom:1px solid #b5b5b5;margin-top:2rem;margi
 .ml-5{margin-left:1.5rem !important;}
 .ml-6{margin-left:3rem !important;}
 /* вправо */
+.mr-auto{margin-right:auto !important;}
 .mr-0{margin-right:0 !important;}
 .mr-1{margin-right:.25rem !important;}
 .mr-2{margin-right:.5rem !important;}

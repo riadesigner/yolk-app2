@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../utils/api.jsx'; // Путь к вашему API
 
@@ -8,31 +8,46 @@ export default function useFetchBillToPrintPage() {
   const params = useParams();
   const { billId } = params;
 
-  useEffect(() => {
-    const fetchBill = async () => {
-      // console.log('try to loading ', billId);
-      try {
-        const response = await api.get(`/bills/${billId}`);
-        // console.log('response', response);
-        if (response.data.success) {
-          const resBill = response.data.bill;
-          // console.log('resBill', resBill);
-          if (resBill) {
-            setBill(resBill);
-            setNowLoading(false);
-          }
-        } else {
-          console.error('response.data', response.data);
+  const fetchBill = useCallback(async () => {
+    // console.log('try to loading ', billId);
+    try {
+      const response = await api.get(`/bills/${billId}`);
+      if (response.data.success) {
+        const resBill = response.data.bill;
+        // console.log('resBill', resBill);
+        if (resBill) {
+          setBill(resBill);
         }
-      } catch (err) {
-        console.error('Ошибка загрузки данных', err);
-        setNowLoading(false);
+      } else {
+        console.error('response.data', response.data);
       }
-    };
-    void fetchBill();
+    } catch (err) {
+      console.error('Ошибка загрузки данных', err);
+    } finally {
+      setNowLoading(false);
+    }
   }, [billId]);
 
+  const fetchBillSetPayed = async () => {
+    setNowLoading(true);
+    try {
+      await api.patch(`/bills/${billId}/set-paided`).then(fetchBill);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setNowLoading(false);
+    }
+  };
+
+  // console.log('fetchBill', fetchBill);/
+
+  useEffect(() => {
+    setNowLoading(true);
+    void fetchBill();
+  }, [fetchBill]);
+
   return {
+    fetchBillSetPayed,
     nowLoading,
     bill,
   };
