@@ -2,6 +2,7 @@ const express = require('express');
 const UsersService = require('../users/users.service');
 const CompaniesService = require('../companies/companies.service');
 const BillsService = require('../bills/bills.service');
+const ChatsService = require('../chats/chats.service');
 const OrdersService = require('./orders.service');
 const NotificationsService = require('../notifications/notifications.service');
 const multer = require('multer');
@@ -200,12 +201,15 @@ router.patch(
       contractorId,
     );
 
+    const chat = await ChatsService.findByUsersOrCreate([userId, contractorId]);
+
     // send notifications
     if (
       !(await NotificationsService.sendAboutNewContractor({
         customerId: userId,
         contractorId,
         orderId,
+        chatId: chat._id,
       }))
     ) {
       throw new AppError(
