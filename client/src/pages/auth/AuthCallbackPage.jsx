@@ -12,10 +12,13 @@ export default function AuthCallbackPage() {
 
   useEffect(() => {
     const token = searchParams.get('token');
+    const refreshToken = searchParams.get('refreshToken');
+
     if (token) {
-      login(token);
+      // Используем обновленный метод login для сохранения обоих токенов
+      login(token, refreshToken);
       window.history.replaceState({}, '', '/'); // Очищаем URL
-      // console.log('token = ', token);
+      // console.log('token = ', token, 'refreshToken = ', refreshToken);
 
       const checkAuth = async () => {
         const response = await api.get('/auth/check-auth');
