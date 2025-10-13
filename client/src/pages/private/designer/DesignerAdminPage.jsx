@@ -40,22 +40,26 @@ export default function DesignerAdminPage() {
               <div className="column is-6">
                 <div className="block">
                   <h2 className="is-size-5-mobile">Резюме</h2>
-                  <Link to="/cp/designer/info">
-                    <button className="button is-fluid is-medium is-regular-mobile is-link mb-3">
-                      <span>Анкета</span>
-                      <span className="icon">
-                        <i className="fa fa-angle-right" />
-                      </span>
-                    </button>
+                  <Link
+                    to={'/cp/designer/info'}
+                    as={<button />}
+                    className="button is-fluid is-medium is-regular-mobile is-link mb-3"
+                  >
+                    <span>Анкета</span>
+                    <span className="icon">
+                      <i className="fa fa-angle-right" />
+                    </span>
                   </Link>
 
-                  <Link to="/cp/designer/portfolio">
-                    <button className="button  is-fluid is-medium is-regular-mobile is-link ">
-                      <span>Портфолио</span>
-                      <span className="icon">
-                        <i className="fa fa-angle-right" />
-                      </span>
-                    </button>
+                  <Link
+                    to="/cp/designer/portfolio"
+                    as={<button />}
+                    className="button is-fluid is-medium is-regular-mobile is-link"
+                  >
+                    <span>Портфолио</span>
+                    <span className="icon">
+                      <i className="fa fa-angle-right" />
+                    </span>
                   </Link>
                 </div>
 
