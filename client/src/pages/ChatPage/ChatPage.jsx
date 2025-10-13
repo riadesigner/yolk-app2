@@ -3,11 +3,7 @@ import ChatInput from './components/ChatInput';
 import LoadMoreMessages from './components/LoadMoreMessages';
 import styles from './ChatPage.module.css';
 import { useFetchChats } from '../../hooks/useFetchChats.js';
-
-const links = [
-  { link: '/', title: 'Главная' },
-  { link: '/chats/123', title: 'Чат с дизайнером', isActive: true },
-];
+import { useMemo } from 'react';
 
 const prepareMessage = (message) => {
   return (
@@ -39,6 +35,18 @@ export default function ChatPage() {
     loadMoreError,
     isLoading,
   } = useFetchChats();
+
+  const links = useMemo(
+    () => [
+      { link: '/', title: 'Главная' },
+      {
+        link: '#',
+        title: `Чат с ${other?.role === 'designer' ? 'дизайнером' : 'заказчиком'}`,
+        isActive: true,
+      },
+    ],
+    [other?.role]
+  );
 
   return (
     <>
