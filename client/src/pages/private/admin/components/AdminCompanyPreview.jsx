@@ -1,21 +1,23 @@
 import PropTypes from 'prop-types';
 import styles from './AdminCompanyPreview.module.css';
+import { Link } from 'react-router-dom';
 
 export default function AdminCompanyPreview({ company }) {
   return (
-    <div className={styles.companyPreview}>
+    <Link to={`/companies/${company.id}`} className={styles.companyPreview}>
       <span>{company.name}</span>
+      <span>{company.companyName}</span>
       <span>{company.city}</span>
-      <span>{company.specialization}</span>
       <span>Заказов всего: {company.ordersAmount}</span>
-    </div>
+    </Link>
   );
 }
 AdminCompanyPreview.propTypes = {
   company: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     city: PropTypes.string.isRequired,
-    specialization: PropTypes.string.isRequired,
+    companyName: PropTypes.string.isRequired,
     ordersAmount: PropTypes.number.isRequired,
   }).isRequired,
 };

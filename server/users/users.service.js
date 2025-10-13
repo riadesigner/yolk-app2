@@ -17,15 +17,36 @@ exports.findById = function (id) {
   });
 };
 
+exports.findAll = async function () {
+  return UsersModel.find({})
+    .populate('userInfo')
+    .populate('userCompany')
+    .populate('contracts');
+};
+
 exports.findDesigners = async function () {
-  try {
-    return await UsersModel.find({
-      role: 'designer',
-    }).populate('userInfo');
-    // eslint-disable-next-line no-unused-vars
-  } catch (err) {
-    return [];
-  }
+  return UsersModel.find({
+    role: 'designer',
+  }).populate('userInfo');
+};
+
+exports.findAdminDesigners = async function () {
+  return UsersModel.find({
+    role: 'designer',
+  })
+    .populate('userInfo')
+    .populate('contracts');
+};
+
+exports.findCompanies = async function () {
+  return UsersModel.find({
+    role: 'company',
+  })
+    .populate('userInfo')
+    .populate({
+      path: 'userCompany',
+      populate: { path: 'orders', model: 'Orders' },
+    });
 };
 
 exports.findAdmins = async function () {
