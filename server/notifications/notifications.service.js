@@ -3,6 +3,7 @@ const UsersService = require('../users/users.service');
 const BillsService = require('../bills/bills.service');
 const AppError = require('../middleware/AppError');
 const paginate = require('../utils/paginate');
+const { formatDateTime } = require('../utils/dateUtilits');
 
 exports.findByUserId = async function (userId, opt = {}) {
   try {
@@ -96,7 +97,7 @@ exports.sendAboutCheckTheBill = async function ({
     // сообщение заказчику о создании счета для перевода Авансового платежа по Заказу
     const notifToCustomer_1 = {
       title: [
-        `Создан Счет № ${theBill.key} от ${date} для перевода авансового платежа по Заказу ${orderId}. `,
+        `Создан Счет № ${theBill.key} от ${formatDateTime(date)} для перевода авансового платежа по Заказу ${orderId}. `,
         `Проведите платеж, чтобы Дизайнер смог начать работу. `,
       ].join(''),
       readAt: '',
