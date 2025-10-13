@@ -70,7 +70,7 @@ export default function DesignerInfoPage() {
                 <Link to="/cp/designer/info/edit">
                   <button className="button is-primary is-small-mobile">
                     <span>
-                      <i className="fa-regular fa-pen-to-square"></i>
+                      <i className="fa-regular fa-pen-to-square" />
                     </span>
                     <span>Редактировать</span>
                   </button>
@@ -124,7 +124,7 @@ export default function DesignerInfoPage() {
                 </p>
                 <div className="is-size-7">
                   <span style={{ marginRight: '10px' }} className="is-primary">
-                    <i className="fa-regular fa-face-smile"></i>
+                    <i className="fa-regular fa-face-smile" />
                   </span>
                   <span>Завершенных заказов: 0</span>
                 </div>
@@ -133,12 +133,12 @@ export default function DesignerInfoPage() {
           </div>
         </section>
 
-        <section className="container">
-          <div className="section">
-            <h2>Портфолио</h2>
-            <Portfolio />
-          </div>
-        </section>
+        {/*<section className="container">*/}
+        {/*  <div className="section">*/}
+        {/*    <h2>Портфолио</h2>*/}
+        {/*    <Portfolio />*/}
+        {/*  </div>*/}
+        {/*</section>*/}
 
         <section className="container">
           <div className="section">
@@ -182,7 +182,7 @@ export default function DesignerInfoPage() {
                     <>Не указано</>
                   )}
                 </div>
-                <div className="column  desktop-only"></div>
+                <div className="column desktop-only" />
               </div>
             </div>
           </div>
@@ -196,7 +196,7 @@ export default function DesignerInfoPage() {
                 <div className="level-item ">
                   <button className="button is-small is-link is-inverted">
                     <span>
-                      <i className="fa-regular fa-at"></i>
+                      <i className="fa-regular fa-at" />
                     </span>
                     <span>{user.name}</span>
                   </button>
@@ -207,7 +207,7 @@ export default function DesignerInfoPage() {
                 <div className="level-item ">
                   <button className="button is-small is-link is-inverted">
                     <span>
-                      <i className="fa-regular fa-envelope"></i>
+                      <i className="fa-regular fa-envelope" />
                     </span>
                     <span>{user?.email}</span>
                   </button>
@@ -218,7 +218,7 @@ export default function DesignerInfoPage() {
                 <div className="level-item ">
                   <button className="button is-small is-link is-inverted">
                     <span>
-                      <i className="fa-regular fa-face-smile"></i>
+                      <i className="fa-regular fa-face-smile" />
                     </span>
                     <span>{user.userInfo.phone}</span>
                   </button>
