@@ -13,7 +13,7 @@ export default function ChatPreview({ chatId, user, lastMessage }) {
             style={{
               background: `url(${user.avatar}) no-repeat center/cover`,
             }}
-          ></div>
+          />
         </div>
         <div>
           <h3 className="subtitle is-size-7 mb-1">{title}</h3>

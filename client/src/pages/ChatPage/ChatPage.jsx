@@ -9,6 +9,25 @@ const links = [
   { link: '/chats/123', title: 'Чат с дизайнером', isActive: true },
 ];
 
+const prepareMessage = (message) => {
+  return (
+    message
+      // Экранируем HTML-теги, чтобы они не интерпретировались
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      // Обрабатываем полные URL с http(s)://
+      .replace(
+        /(https?:\/\/[^\s]+)/g,
+        '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+      )
+      // Обрабатываем домены вида ya.ru, www.site.com и т.п.
+      .replace(
+        /(?<!\S)((www\.[^\s]+)|(^[^\s]*\.[^\s]{2,}))(?=\s|$)/g,
+        '<a href="http://$1" target="_blank" rel="noopener noreferrer">$1</a>'
+      )
+  );
+};
+
 export default function ChatPage() {
   const {
     messages,
@@ -74,7 +93,11 @@ export default function ChatPage() {
                                 : styles.msgFrom
                             }
                           >
-                            <span>{message.text}</span>
+                            <span
+                              dangerouslySetInnerHTML={{
+                                __html: prepareMessage(message.text),
+                              }}
+                            />
                           </div>
                         ))}
                       </>
