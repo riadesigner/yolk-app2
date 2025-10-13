@@ -47,7 +47,7 @@ export default function LoginPage() {
           <nav className="breadcrumb" aria-label="breadcrumbs">
             <ul>
               <li>
-                <a href="/client/public">Главная</a>
+                <a href="/">Главная</a>
               </li>
               <li className="is-active">
                 <a href="#" aria-current="page">
@@ -92,7 +92,7 @@ export default function LoginPage() {
               </div>
               <div className="block">
                 <p className="has-text-centered is-size-7-mobile">
-                  <i className="fa-solid fa-check"></i> &nbsp; Я согласен с{' '}
+                  <i className="fa-solid fa-check" /> &nbsp; Я согласен с{' '}
                   <Link to="/useragree">
                     политикой обработки персональных данных
                   </Link>
