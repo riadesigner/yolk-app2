@@ -2,72 +2,16 @@ import AdminCompanyPreview from './components/AdminCompanyPreview.jsx';
 import Pagination from '../../../components/Pagination.jsx';
 
 import Breadcrumb from '../../../components/Breadcrumb.jsx';
-// import CompanyGallery from '../../components/CompanyGallery';
-// import CompanyAboutHeader from '../../components/CompanyAboutHeader';
-// import CompanyAboutOrders from '../../components/CompanyAboutOrders';
-// import TextWithBreaks from '../../components/TextWithBreaks';
+import { useFetchAdminUsers } from '../../../hooks/useFetchAdminUsers.js';
 
 export default function CompanyInfoPage() {
-  // const navigate = useNavigate();
-  // const [company, setCompany] = useState(null);
-  // const [gallery, setGallery] = useState(null);
-
-  const companies = [
-    {
-      name: '21324356',
-      city: 'sadfgfhj',
-      specialization: 'expedita voluptatibus sit sint, ',
-      ordersAmount: 6,
-    },
-    {
-      name: 'ywu098er aaf',
-      city: 'sadfgfhj',
-      specialization: 'deserunt commodi hic molestiae',
-      ordersAmount: 6,
-    },
-    {
-      name: 'Skjl-haldk',
-      city: 'sadfgfhj',
-      specialization: ' ea voluptates minus quam dolor aliquid',
-      ordersAmount: 6,
-    },
-    {
-      name: 'Harum',
-      city: 'sadfgfhj',
-      specialization: 'tates minus quam dolor aliquid eveniet deserunt',
-      ordersAmount: 6,
-    },
-  ];
-
   const links = [
     { link: '/', title: 'Главная' },
     { link: '/cp/yolk-admin', title: 'Панель управления' },
     { link: '#', title: 'Все компании', isActive: true },
   ];
-  //
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     // try {
-  //     //     const response = await api.get('/users/me');
-  //     //     console.log('response', response);
-  //     //     if(response.data.success){
-  //     //         const user = response.data.user;
-  //     //         const company = user.userCompany;
-  //     //         console.log('user', user);
-  //     //         if(company){
-  //     //             setCompany(company);
-  //     //             setGallery(company.gallery)
-  //     //         }
-  //     //     }
-  //     // } catch (err) {
-  //     //     console.error('Ошибка загрузки анкеты', err);
-  //     //     // navigate('/login');
-  //     //     navigate('/');
-  //     // }
-  //   };
-  //
-  //   // fetchUser();
-  // }, []);
+
+  const { users: companies } = useFetchAdminUsers('company');
 
   return (
     <>
@@ -85,13 +29,22 @@ export default function CompanyInfoPage() {
                 companies.length > 0 &&
                 companies.map((company) => {
                   return (
-                    <AdminCompanyPreview company={company} key={company.name} />
+                    <AdminCompanyPreview
+                      company={{
+                        name: company.name,
+                        id: company.userCompany.id,
+                        city: company.userCompany.city,
+                        companyName: company.userCompany.name,
+                        ordersAmount: company.userCompany.orders.length,
+                      }}
+                      key={company.name}
+                    />
                   );
                 })}
             </div>
-            <div className="block mt-6">
-              <Pagination />
-            </div>
+            {/*<div className="block mt-6">*/}
+            {/*  <Pagination />*/}
+            {/*</div>*/}
           </div>
         </section>
       </article>

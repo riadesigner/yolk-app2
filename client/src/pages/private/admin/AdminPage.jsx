@@ -68,13 +68,15 @@ export default function DesignerAdminPage() {
 
                 <h2 className="is-size-5-mobile">Пользователи</h2>
                 <div className="block">
-                  <Link to="/cp/yolk-admin/designers">
-                    <button className="button is-fluid is-medium is-regular-mobile is-primary mb-3">
-                      <span>Дизайнеры</span>
-                      <span className="icon">
-                        <i className="fa fa-angle-right" />
-                      </span>
-                    </button>
+                  <Link
+                    to="/cp/yolk-admin/designers"
+                    as={<button />}
+                    className="button is-fluid is-medium is-regular-mobile is-primary mb-3"
+                  >
+                    <span>Дизайнеры</span>
+                    <span className="icon">
+                      <i className="fa fa-angle-right" />
+                    </span>
                   </Link>
                   <Link to="/cp/yolk-admin/companies">
                     <button className="button is-fluid is-medium is-regular-mobile is-primary">

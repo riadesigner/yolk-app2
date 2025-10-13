@@ -150,4 +150,29 @@ router.patch(
   }),
 );
 
+router.get(
+  '/admin/users',
+  passport.authenticate('jwt', { session: false }),
+  asyncHandler(async (req, res) => {
+    const { user } = req;
+
+    if (!user || user.role !== 'administrator') {
+      return sendError(res, 'У вас нет прав для просмотра пользователей', 403);
+    }
+    console.log(req.query);
+    const { role } = req.query;
+
+    if (!role) {
+      const users = await UsersService.findAll();
+      return sendSuccess(res, { users });
+    }
+
+    const users =
+      role === 'designer'
+        ? await UsersService.findAdminDesigners()
+        : await UsersService.findCompanies();
+    return sendSuccess(res, { users });
+  }),
+);
+
 module.exports = router;

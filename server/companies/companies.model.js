@@ -39,4 +39,10 @@ companySchema.virtual('user', {
   foreignField: '_id',
 });
 
+companySchema.virtual('orders', {
+  ref: 'Orders',
+  localField: '_id',
+  foreignField: 'company',
+});
+
 module.exports = model('Company', companySchema);
