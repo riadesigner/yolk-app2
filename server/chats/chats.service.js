@@ -9,7 +9,7 @@ exports.findById = async (id) => {
 };
 
 exports.findByUserId = async (userId) => {
-  return ChatsModel.find({ users: userId });
+  return ChatsModel.find({ users: userId }).populate('users');
 };
 
 exports.findByUsersOrCreate = async (users) => {

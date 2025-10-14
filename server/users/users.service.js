@@ -105,7 +105,11 @@ exports.findByEmail = function (email) {
       const user = await UsersModel.findOne({ email: email })
         .populate('userInfo')
         .populate('userCompany')
-        .populate('contracts');
+        .populate('contracts')
+        .populate({
+          path: 'chats',
+          populate: { path: 'users', model: 'Users' },
+        });
       res(user);
     } catch (e) {
       console.log(`cant find user by id ${email}, err:${e.message || e}`);

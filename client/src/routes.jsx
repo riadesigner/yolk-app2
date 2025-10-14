@@ -1,6 +1,7 @@
 import {
   AboutPage,
   AuthCallbackPage,
+  ChatListPage,
   ChatPage,
   CompaniesListPage,
   CompanyPublicPage,
@@ -159,6 +160,10 @@ const routes = [
                 Component: DesignerOrdersPage,
               }, // /портфолио дизайнера
             ],
+          },
+          {
+            path: 'chats',
+            Component: ChatListPage,
           },
           {
             path: 'company',

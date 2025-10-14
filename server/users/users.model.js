@@ -49,4 +49,11 @@ userSchema.virtual('contracts', {
   localField: '_id',
   foreignField: 'contractor',
 });
+
+userSchema.virtual('chats', {
+  ref: 'Chats',
+  localField: '_id',
+  foreignField: 'users',
+});
+
 module.exports = model('Users', userSchema);

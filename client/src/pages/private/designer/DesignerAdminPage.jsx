@@ -5,6 +5,7 @@ import useFetchDesignerAdmin from '../../../hooks/useFetchDesignerAdmin.js';
 import Breadcrumb from '../../../components/Breadcrumb.jsx';
 import NotifsLast from '../../../components/NotifsLast.jsx';
 import DesignerOrderItem from './components/DesignerOrderItem.jsx';
+import ChatsList from '../../../components/ChatsList.jsx';
 
 export default function DesignerAdminPage() {
   const links = [
@@ -88,6 +89,23 @@ export default function DesignerAdminPage() {
                       );
                     })}
                 </div>
+
+                <div>
+                  <h2 className="is-size-5-mobile">Мои чаты</h2>
+                  <div className="block mb-6 mb-5-mobile">
+                    <Link
+                      to={`/cp/chats`}
+                      className="button is-fluid is-medium is-regular-mobile is-white mb-4"
+                    >
+                      <span>Мои чаты</span>
+                      <span className="icon">
+                        <i className="fa fa-angle-right" />
+                      </span>
+                    </Link>
+                    <ChatsList chats={user?.chats?.slice(0, 4) ?? []} />
+                  </div>
+                </div>
+
                 <h2 className="is-size-5-mobile">Мой статус</h2>
                 <div className="block mb-6 mb-5-mobile">
                   <div className="stars-block">

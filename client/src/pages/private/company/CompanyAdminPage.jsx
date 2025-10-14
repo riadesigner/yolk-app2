@@ -6,6 +6,7 @@ import Breadcrumb from '../../../components/Breadcrumb.jsx';
 import NotifsLast from '../../../components/NotifsLast.jsx';
 
 import useFetchCompanyAdmin from '../../../hooks/useFetchCompanyAdmin.js';
+import ChatsList from '../../../components/ChatsList.jsx';
 
 export default function CompanyAdminPage() {
   const links = [
@@ -54,7 +55,7 @@ export default function CompanyAdminPage() {
                     <button className="button is-fluid is-medium is-regular-mobile is-link mb-3">
                       <span>О компании</span>
                       <span className="icon">
-                        <i className="fa fa-angle-right"></i>
+                        <i className="fa fa-angle-right" />
                       </span>
                     </button>
                   </Link>
@@ -63,7 +64,7 @@ export default function CompanyAdminPage() {
                     <button className="button  is-fluid is-medium is-regular-mobile is-link mb-3">
                       <span>Реквизиты</span>
                       <span className="icon">
-                        <i className="fa fa-angle-right"></i>
+                        <i className="fa fa-angle-right" />
                       </span>
                     </button>
                   </Link>
@@ -72,14 +73,42 @@ export default function CompanyAdminPage() {
                     <button className="button  is-fluid is-medium is-regular-mobile is-link ">
                       <span>Счета</span>
                       <span className="icon">
-                        <i className="fa fa-angle-right"></i>
+                        <i className="fa fa-angle-right" />
                       </span>
                     </button>
                   </Link>
                 </div>
 
                 <div className="block">
+                  <h2 className="is-size-5-mobile">Чаты</h2>
+                  <Link
+                    to={`/cp/chats`}
+                    className="button is-fluid is-medium is-regular-mobile is-white mb-4"
+                  >
+                    <span>Мои чаты</span>
+                    <span className="icon">
+                      <i className="fa fa-angle-right" />
+                    </span>
+                  </Link>
+                  {user?.chats && (
+                    <ChatsList chats={user?.chats?.slice(0, 4) ?? []} />
+                  )}
+                </div>
+
+                <div className="block">
                   <h2 className="is-size-5-mobile">Заказы</h2>
+                  {company && orders.length < 20 && (
+                    <Link
+                      as={<button />}
+                      className="button is-fluid is-medium is-regular-mobile is-white mb-3 "
+                      to={`/cp/company/${company ? company.id : ''}/order-new`}
+                    >
+                      <span>Создать новый</span>
+                      <span className="icon">
+                        <i className="fa fa-angle-right" />
+                      </span>
+                    </Link>
+                  )}
                   {orders &&
                     orders.length > 0 &&
                     orders.map((order) => {
@@ -91,7 +120,7 @@ export default function CompanyAdminPage() {
                         >
                           {order.contractor && (
                             <span>
-                              <i className="fa-regular fa-user"></i>
+                              <i className="fa-regular fa-user" />
                             </span>
                           )}
                           <span>
@@ -103,21 +132,6 @@ export default function CompanyAdminPage() {
                       );
                     })}
                 </div>
-
-                {company && orders.length < 20 && (
-                  <div className="block">
-                    <Link
-                      to={`/cp/company/${company ? company.id : ''}/order-new`}
-                    >
-                      <button className="button is-fluid is-medium is-regular-mobile is-white">
-                        <span>Создать новый</span>
-                        <span className="icon">
-                          <i className="fa fa-angle-right"></i>
-                        </span>
-                      </button>
-                    </Link>
-                  </div>
-                )}
 
                 <div className="block">
                   <h2 className="is-size-5-mobile">Статистика</h2>
