@@ -5,6 +5,7 @@ const BillsService = require('../bills/bills.service');
 const ChatsService = require('../chats/chats.service');
 const OrdersService = require('./orders.service');
 const NotificationsService = require('../notifications/notifications.service');
+const UserInfoService = require('../userinfo/userinfo.service');
 const multer = require('multer');
 const AWS = require('aws-sdk');
 const AppError = require('../middleware/AppError');
@@ -324,6 +325,11 @@ router.patch(
     const orderUpdated = await OrdersService.update(orderId, {
       status: 'DONE',
     });
+
+    await UserInfoService.increaseExperience(
+      orderUpdated.contractor.userInfo.id,
+      10,
+    );
 
     try {
       const admin = (await UsersService.findAdmins())[0];

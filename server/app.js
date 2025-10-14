@@ -8,6 +8,7 @@ const configurePassport = require('./config/passport');
 const configureCors = require('./config/cors');
 const configureCategories = require('./config/categories');
 const configureAdmins = require('./config/admin');
+const configureAchievements = require('./config/achievements');
 const helmet = require('helmet');
 
 const error404 = require('./middleware/error404');
@@ -68,6 +69,7 @@ app.get('/', (req, res) => {
 
 configureCategories();
 configureAdmins();
+configureAchievements();
 
 // 404 — если ни один маршрут не сработал
 app.use(error404);

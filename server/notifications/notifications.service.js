@@ -1,9 +1,11 @@
 const NotificationsModel = require('./notifications.model');
 const UsersService = require('../users/users.service');
 const BillsService = require('../bills/bills.service');
+const ChatsService = require('../chats/chats.service');
 const AppError = require('../middleware/AppError');
 const paginate = require('../utils/paginate');
 const { formatDateTime } = require('../utils/dateUtilits');
+const OrdersService = require('../orders/orders.service');
 
 exports.findByUserId = async function (userId, opt = {}) {
   try {
@@ -247,6 +249,13 @@ exports.sendWelcomeToNewCompany = async (companyId) => {
 
 exports.sendBillPayedToDesigner = async (designerId, orderId) => {
   try {
+    const order = await OrdersService.findById(orderId);
+    const chat = await ChatsService.findByUsersOrCreate([
+      designerId,
+      order.company.user.id,
+    ]);
+
+    console.log(order, chat);
     return await NotificationsModel.create({
       title: [
         'Приветствуем!',
@@ -260,7 +269,7 @@ exports.sendBillPayedToDesigner = async (designerId, orderId) => {
         },
         {
           name: 'Чат с Заказчиком',
-          url: `/chats/${orderId}`,
+          url: `/chats/${chat.id}`,
           bright: true,
         },
       ],
@@ -276,6 +285,12 @@ exports.sendBillPayedToDesigner = async (designerId, orderId) => {
 
 exports.sendBillPayedToCompany = async (companyUserId, orderId) => {
   try {
+    const order = await OrdersService.findById(orderId);
+    const chat = await ChatsService.findByUsersOrCreate([
+      companyUserId,
+      order.contractor.id,
+    ]);
+
     return await NotificationsModel.create({
       title: [
         'Приветствуем!',
@@ -289,7 +304,7 @@ exports.sendBillPayedToCompany = async (companyUserId, orderId) => {
         },
         {
           name: 'Чат с исполнителем',
-          url: `/chats/${orderId}`,
+          url: `/chats/${chat.id}`,
           bright: true,
         },
       ],

@@ -3,7 +3,7 @@ import api from '../utils/api.jsx';
 import { useLocation } from 'react-router-dom';
 
 export default function useFetchOrders({ userInput, userCategories }) {
-  const ITEMS_ON_PAGE = 3;
+  const ITEMS_ON_PAGE = 8;
   const [orders, setOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 

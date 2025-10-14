@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import api from '../../../utils/api.jsx';
 
 import Progressbar from '../../../components/ProgressBar.jsx';
-import Portfolio from './components/Portfolio.jsx';
 
 const noPhoto = '/no-image.jpg';
 

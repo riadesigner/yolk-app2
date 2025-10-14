@@ -7,6 +7,25 @@ import NotifsLast from '../../../components/NotifsLast.jsx';
 import DesignerOrderItem from './components/DesignerOrderItem.jsx';
 import ChatsList from '../../../components/ChatsList.jsx';
 
+const expLevels = [
+  {
+    title: 'Новичок',
+    exp: '0',
+  },
+  {
+    title: 'Трудяга',
+    exp: '21',
+  },
+  {
+    title: 'Умелец',
+    exp: '41',
+  },
+  {
+    title: 'Профи',
+    exp: '81',
+  },
+];
+
 export default function DesignerAdminPage() {
   const links = [
     { link: '/', title: 'Главная' },
@@ -14,6 +33,11 @@ export default function DesignerAdminPage() {
   ];
 
   const { user, notifications, nowLoading } = useFetchDesignerAdmin();
+
+  const expLevel =
+    expLevels.findLast(
+      (level) => (user?.userInfo?.experience ?? 0) >= level.exp
+    ) ?? expLevels[0];
 
   return (
     <>
@@ -109,13 +133,18 @@ export default function DesignerAdminPage() {
                 <h2 className="is-size-5-mobile">Мой статус</h2>
                 <div className="block mb-6 mb-5-mobile">
                   <div className="stars-block">
-                    <div className="stars-block-label">Новенький</div>
+                    <div className="stars-block-label">{expLevel.title}</div>
                     <div className="stars-block-items">
-                      <span className="is-active" />
-                      <span />
-                      <span />
-                      <span />
-                      <span />
+                      {expLevels.map((level) => (
+                        <span
+                          key={level.exp}
+                          className={
+                            (user?.userInfo?.experience ?? 0) >= level.exp
+                              ? 'is-active'
+                              : ''
+                          }
+                        />
+                      ))}
                     </div>
                   </div>
                 </div>

@@ -10,6 +10,7 @@ const userInfoSchema = new Schema(
     webSite: { type: String },
     softSkills: { type: Array },
     hardSkills: { type: Array },
+    experience: { type: Number, default: 0 },
     schools: { type: Array },
     specialization: { type: String },
     rating: { type: String },

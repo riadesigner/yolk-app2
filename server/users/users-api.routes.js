@@ -2,6 +2,7 @@ const express = require('express');
 const UsersService = require('./users.service');
 const UserInfoService = require('../userinfo/userinfo.service');
 const PortfoliosService = require('../portfolios/portfolios.service');
+const AchievementsService = require('../achievements/achievements.service');
 
 const CompaniesService = require('../companies/companies.service');
 const passport = require('passport');
@@ -142,6 +143,24 @@ router.patch(
       );
       if (!userInfoUpdated) {
         return sendError(res, 'Не удалось обоновить данные пользователя', 404);
+      }
+
+      const completeAchievement =
+        await AchievementsService.getCompleteAchievementByNameForUserInfo(
+          userInfo.id,
+          'complete_hard_skills',
+        );
+      if (!completeAchievement) {
+        await AchievementsService.createCompleteAchievementForUserInfo(
+          userInfo.id,
+          'complete_hard_skills',
+        );
+        await UserInfoService.increaseExperience(
+          userInfo.id,
+          (await AchievementsService.findAchievementByName(
+            'complete_hard_skills',
+          ).then((achievement) => achievement.experience)) ?? 10,
+        );
       }
       console.log('saved userInfo', userInfoUpdated);
     }

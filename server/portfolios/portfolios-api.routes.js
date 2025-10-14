@@ -6,6 +6,9 @@ const multer = require('multer');
 const AWS = require('aws-sdk');
 const sharp = require('sharp');
 const AppError = require('../middleware/AppError');
+const UserService = require('../users/users.service');
+const AchievementsService = require('../achievements/achievements.service');
+const UserInfoService = require('../userinfo/userinfo.service');
 
 const router = express.Router();
 
@@ -209,7 +212,29 @@ router.put(
     const createdPortfolio = await PortfoliosService.create(portfolioCreateDto);
 
     if (!createdPortfolio) {
-      throw new AppError('Не удалось сохраниеть проект в портфолио', 500);
+      throw new AppError('Не удалось сохранить проект в портфолио', 500);
+    }
+
+    const portfolioLength = await PortfoliosService.count({ designer: userId });
+
+    const user = await UserService.findById(userId);
+    const completeAchievement =
+      await AchievementsService.getCompleteAchievementByNameForUserInfo(
+        user.userInfo.id,
+        'complete_portfolio',
+      );
+
+    if (portfolioLength === 4 && !completeAchievement) {
+      await AchievementsService.createCompleteAchievementForUserInfo(
+        user.userInfo.id,
+        'complete_portfolio',
+      );
+      await UserInfoService.increaseExperience(
+        user.userInfo.id,
+        (await AchievementsService.findAchievementByName(
+          'complete_portfolio',
+        ).then((achievement) => achievement.experience)) ?? 10,
+      );
     }
 
     sendSuccess(res, {
