@@ -42,4 +42,13 @@ router.get(
   }),
 );
 
+router.get(
+  '/chats',
+  passport.authenticate('jwt', { session: false }),
+  asyncHandler(async (req, res) => {
+    const chats = await ChatsService.findByUserId(req.user.id);
+    sendSuccess(res, { chats });
+  }),
+);
+
 module.exports = router;
