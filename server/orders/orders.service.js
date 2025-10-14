@@ -80,7 +80,10 @@ exports.findById = function (id) {
     try {
       res(
         await OrdersModel.findById(id)
-          .populate('company')
+          .populate({
+            path: 'company',
+            populate: { path: 'user', model: 'Users', justOne: true },
+          })
           .populate('contractor')
           .populate('viewsCount'), // ← это вернет число из виртуального count
       );
@@ -149,7 +152,10 @@ exports.update = function (id, orderUpdateDto = {}) {
         id,
         orderUpdateDto,
         { new: true },
-      );
+      ).populate({
+        path: 'contractor',
+        populate: { path: 'userInfo', model: 'UserInfo' },
+      });
       res(updatedOrder);
     } catch (e) {
       console.error(`cant update order, err:${e}`);

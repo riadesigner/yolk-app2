@@ -32,3 +32,20 @@ exports.update = function (id, userInfoUpdateDto = {}) {
     }
   });
 };
+
+exports.increaseExperience = function (id, experience) {
+  // eslint-disable-next-line no-async-promise-executor
+  return new Promise(async (res) => {
+    try {
+      const userInfoUpdated = await UserInfoModel.findByIdAndUpdate(
+        id,
+        { $inc: { experience } },
+        { new: true },
+      );
+      res(userInfoUpdated);
+    } catch (e) {
+      console.log(`cant update userInfo ${id}, err:${e}`);
+      res(null);
+    }
+  });
+};

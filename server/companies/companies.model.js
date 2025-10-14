@@ -37,6 +37,7 @@ companySchema.virtual('user', {
   ref: 'Users',
   localField: 'userId',
   foreignField: '_id',
+  justOne: true,
 });
 
 companySchema.virtual('orders', {
