@@ -6,7 +6,7 @@ export default function AboutPage() {
           <nav className="breadcrumb" aria-label="breadcrumbs">
             <ul>
               <li>
-                <a href="/client/public">Главная</a>
+                <a href="/">Главная</a>
               </li>
               <li className="is-active">
                 <a href="#" aria-current="page">
@@ -24,18 +24,31 @@ export default function AboutPage() {
             <article>
               <h1>О проекте</h1>
               <p>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cumque
-                omnis non ad atque rerum. Rerum suscipit assumenda iste at quam
-                eos illo obcaecati ea, saepe amet, veniam repudiandae aliquid
-                accusamus quidem dolor architecto. Iure quas perferendis porro
-                quae excepturi quasi a itaque, laudantium in exercitationem sunt
-                placeat? Omnis, pariatur sunt?
+                Yolk — это больше чем сервис по подбору вакансий, это безопасная
+                экосистема, где начинающие дизайнеры встречаются с
+                возможностями, которые меняют их профессиональную жизнь. Мы
+                понимаем, как сложно сделать первые шаги в индустрии дизайна,
+                поэтому создали платформу с максимальной защитой интересов всех
+                участников. Наша система безопасных сделок гарантирует
+                прозрачность расчетов и защиту как для дизайнеров, так и для
+                заказчиков. Чтобы обучение и поиск работы были увлекательными,
+                мы внедрили систему геймификации — зарабатывайте баллы,
+                открывайте новые уровни и получайте награды за выполнение задач
+                и активность на платформе. Для заказчиков мы предлагаем
+                бесплатную регистрацию и простой доступ к талантливым
+                специалистам, что делает процесс поиска исполнителей быстрым и
+                экономически выгодным.
               </p>
               <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse
-                fugiat blanditiis iusto? Sapiente inventore dicta error, Lorem
-                ipsum dolor sit amet consectetur adipisicing elit. Ut,
-                delectus?facere dolore veniam at!
+                Наша миссия основана на вере, что каждый начинающий дизайнер
+                заслуживает шанса проявить себя. Мы стремимся стать тем самым
+                «желтком» (Yolk), из которого вырастает успешная карьера —
+                питательной средой для роста, развития и профессиональной
+                реализации.
+              </p>
+              <p>
+                <a href="login">Присоединяйтесь к Yolk</a> — начните строить
+                карьеру мечты уже сегодня!
               </p>
             </article>
           </div>

@@ -58,7 +58,7 @@ export default function RoleSelectionPage() {
           <nav className="breadcrumb" aria-label="breadcrumbs">
             <ul>
               <li>
-                <a href="/client/public">Главная</a>
+                <a href="/">Главная</a>
               </li>
               <li className="is-active">
                 <a href="#" aria-current="page">

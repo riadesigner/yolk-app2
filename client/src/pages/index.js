@@ -4,7 +4,7 @@ export { default as ErrorPage } from './ErrorPage';
 export { default as AboutPage } from './AboutPage';
 export * from './ChatPage';
 export { default as StartUpPage } from './StartUpPage';
-export { default as PrivacyPage } from './PrivacyPage';
+export { default as UserAgreePage } from './UserAgreePage';
 export * from './auth';
 export * from './company';
 export * from './designer';

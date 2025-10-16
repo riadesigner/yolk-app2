@@ -6,7 +6,7 @@ export default function FAQPage() {
           <nav className="breadcrumb" aria-label="breadcrumbs">
             <ul>
               <li>
-                <a href="/client/public">Главная</a>
+                <a href="/">Главная</a>
               </li>
               <li className="is-active">
                 <a href="#" aria-current="page">
@@ -22,20 +22,79 @@ export default function FAQPage() {
         <div className="section">
           <div className="article">
             <article>
-              <h1>Вопросы и ответы</h1>
+              <h1 className="title is-size-3">Вопросы и ответы</h1>
+
+              <h2>Для дизайнеров:</h2>
+
               <p>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cumque
-                omnis non ad atque rerum. Rerum suscipit assumenda iste at quam
-                eos illo obcaecati ea, saepe amet, veniam repudiandae aliquid
-                accusamus quidem dolor architecto. Iure quas perferendis porro
-                quae excepturi quasi a itaque, laudantium in exercitationem sunt
-                placeat? Omnis, pariatur sunt?
+                <strong>1. Как начать пользоваться платформой?</strong>
               </p>
               <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse
-                fugiat blanditiis iusto? Sapiente inventore dicta error, Lorem
-                ipsum dolor sit amet consectetur adipisicing elit. Ut,
-                delectus?facere dolore veniam at!
+                Зарегистрируйтесь, заполните профиль и добавьте портфолио. После
+                проверки модератором вы получите доступ к заказам.{' '}
+              </p>
+
+              <p>
+                <strong>2. Как работает система безопасных сделок?</strong>
+              </p>
+              <p>
+                Все расчеты происходят через нашу платформу. Заказчик
+                резервирует сумму на депозите, вы выполняете работу. После
+                утверждения работы Заказчиком, средства автоматически
+                переводятся на ваш счет.
+              </p>
+
+              <p>
+                <strong>4. Есть ли комиссия за заказ?</strong>
+              </p>
+              <p>
+                Да, платформа оставляет себе 5% от стоимости заказа, но не менее
+                100 руб.{' '}
+              </p>
+
+              <p>
+                <strong>3. Что такое геймификация и как она работает?</strong>
+              </p>
+
+              <p>Вы получаете баллы за:</p>
+              <ul>
+                <li>⁠Регистрацию и заполнение профиля</li>
+                <li>⁠Отклики на вакансии</li>
+                <li>⁠Успешные завершенные проекты</li>
+              </ul>
+              <p>
+                Уровни позволяют развивать профиль и получать более дорогие
+                заказы.
+              </p>
+
+              <h2>Для заказчиков:</h2>
+
+              <p>
+                <strong>1. Сколько стоит размещение заказов?</strong>
+              </p>
+              <p>Размещение заказов бесплатно.</p>
+
+              <p>
+                <strong>2. Как происходит проверка дизайнеров?</strong>
+              </p>
+              <p>Мы проверяем:</p>
+              <ul>
+                <li>⁠Подлинность портфолио</li>
+                <li>⁠Отзывы предыдущих заказчиков</li>
+                <li>⁠Активность и рейтинг на платформе</li>
+              </ul>
+
+              <p>
+                <strong>3. Какие гарантии вы предоставляете?</strong>
+              </p>
+              <p>Система безопасных сделок защищает обе стороны:</p>
+              <ul>
+                <li>⁠Посредничество в спорных ситуациях</li>
+                <li>⁠Возврат средств при невыполнении условий договора</li>
+              </ul>
+
+              <p>
+                Не нашли ответ на свой вопрос? Напишите нам в чат поддержки!
               </p>
             </article>
           </div>

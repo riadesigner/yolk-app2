@@ -28,7 +28,9 @@ const ChatListPage = () => {
       </section>
       <section className="container">
         <div className="section">
-          <ChatsList chats={chats} />
+          <article>
+            <ChatsList chats={chats} />
+          </article>
         </div>
       </section>
     </>

@@ -6,7 +6,7 @@ export default function StartUpPage() {
           <nav className="breadcrumb" aria-label="breadcrumbs">
             <ul>
               <li>
-                <a href="/client/public">Главная</a>
+                <a href="/">Главная</a>
               </li>
               <li className="is-active">
                 <a href="#" aria-current="page">
@@ -23,19 +23,67 @@ export default function StartUpPage() {
           <div className="article">
             <article>
               <h1>О стартапе</h1>
+
+              <h2 className="title mb-4 mt-5">История создания</h2>
               <p>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cumque
-                omnis non ad atque rerum. Rerum suscipit assumenda iste at quam
-                eos illo obcaecati ea, saepe amet, veniam repudiandae aliquid
-                accusamus quidem dolor architecto. Iure quas perferendis porro
-                quae excepturi quasi a itaque, laudantium in exercitationem sunt
-                placeat? Omnis, pariatur sunt?
+                Наша платформа Yolk была создана при поддержке грантовой
+                программы «Студенческий стартап» Фонда содействия инновациям.
+                Эта победа стала признанием потенциала нашего проекта и
+                возможностью реализовать идею, которая меняет подход к
+                трудоустройству в креативных индустриях.
               </p>
               <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse
-                fugiat blanditiis iusto? Sapiente inventore dicta error, Lorem
-                ipsum dolor sit amet consectetur adipisicing elit. Ut,
-                delectus?facere dolore veniam at!
+                Идея Yolk родилась из личного опыта. Будучи студентами
+                творческих специальностей, мы столкнулись с проблемой поиска
+                первых профессиональных заказов и стажировок. Существующие
+                платформы не учитывали специфику работы дизайнеров-новичков, а
+                работодатели с осторожностью доверяли проекты молодым
+                специалистам без опыта.
+              </p>
+
+              <h2 className="title mb-4 mt-5">Что мы решаем</h2>
+
+              <ul className="mt-0">
+                <li>
+                  <strong>⁠Для студентов:</strong> отсутствие безопасных каналов
+                  для поиска первых проектов
+                </li>
+                <li>
+                  <strong>⁠Для работодателей:</strong> сложности в поиске
+                  талантливых молодых дизайнеров
+                </li>
+                <li>
+                  <strong>⁠Для индустрии:</strong> необходимость в подготовке
+                  квалифицированных кадров
+                </li>
+              </ul>
+
+              <h2 className="title mb-4 mt-5">Инновационность проекта</h2>
+
+              <p>Наша платформа сочетает:</p>
+              <ul className="mt-0">
+                <li>⁠Систему верификации портфолио</li>
+                <li>⁠Геймифицированную систему профессионального роста</li>
+                <li>⁠Механизм безопасных сделок</li>
+                <li>⁠Алгоритмы подбора проектов по уровню сложности</li>
+              </ul>
+
+              <h2 className="title mb-4 mt-5">Наша цель</h2>
+
+              <p>
+                Создать экосистему, в которой каждый начинающий дизайнер может
+                найти свой первый проект, получить ценный опыт и построить
+                успешную карьеру в индустрии.
+              </p>
+              <p>
+                Мы благодарим Фонд содействия инновациям за возможность
+                превратить нашу идею в реальный проект, который уже поможет
+                сотням молодых специалистов по всей России.
+              </p>
+
+              <p>
+                <a href="login">Присоединяйтесь к Yolk</a> — вместе мы строим
+                будущее креативной индустрии!
               </p>
             </article>
           </div>

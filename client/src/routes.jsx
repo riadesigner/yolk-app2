@@ -15,7 +15,7 @@ import {
   OrdersPage,
   PortfolioItemPage,
   PortfolioPage,
-  PrivacyPage,
+  UserAgreePage,
   StartUpPage,
 } from './pages';
 
@@ -64,7 +64,7 @@ const routes = [
       { path: 'login', Component: LoginPage }, // /вход
       { path: 'faq', Component: FAQPage },
       { path: 'startup', Component: StartUpPage },
-      { path: 'useragree', Component: PrivacyPage },
+      { path: 'useragree', Component: UserAgreePage },
       {
         path: 'designers',
         children: [
