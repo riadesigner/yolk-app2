@@ -1,6 +1,7 @@
 import styles from './BillToPrint.module.css';
 import { formatDate } from '../../utils/dateUtilits.jsx';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 const YolkRequisites = () => (
   <>
@@ -26,12 +27,26 @@ const YolkRequisites = () => (
 
 const BillToPrint = ({ bill }) => {
   const platformCommission = +import.meta.env.VITE_PLATFORM_COMMISSION;
+
   const billPrice = (
     bill?.amount ??
     (bill.direction === 'TO_YOLK'
       ? (bill?.order?.price ?? 0) * (1 - platformCommission / 100)
       : (bill?.order?.price ?? 0))
   ).toLocaleString();
+
+  if (!bill) {
+    return null;
+  }
+
+  if (!bill?.receiver?.userCompany?.details && bill.direction === 'FROM_YOLK') {
+    return (
+      <div className="alert is-danger">
+        <h3>Реквизиты не заполнены!</h3>
+        <Link to="/cp/company/card">Перейти к реквизитам</Link>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.bill}>
@@ -79,11 +94,11 @@ const BillToPrint = ({ bill }) => {
         {bill.direction === 'FROM_YOLK' ? (
           <p
             dangerouslySetInnerHTML={{
-              __html: `${bill.receiver.userCompany.details.fullName},<br>
-                   ИНН ${bill.receiver.userCompany.details.codeINN}, 
-                    КПП ${bill.receiver.userCompany.details.codeKPP}, 
-                     ${bill.receiver.userCompany.details.legalType === 'ООО' ? 'ОГРН' : 'ОГРНИП'} ${bill.receiver.userCompany.details.codeOGRN}<br>
-                     Адрес ${bill.receiver.userCompany.details.fullAddress}`,
+              __html: `${bill?.receiver?.userCompany?.details?.fullName ?? ''},<br>
+                   ИНН ${bill?.receiver?.userCompany?.details?.codeINN ?? ''}, 
+                    КПП ${bill?.receiver?.userCompany?.details?.codeKPP ?? ''}, 
+                     ${bill?.receiver?.userCompany?.details?.legalType === 'ООО' ? 'ОГРН' : 'ОГРНИП'} ${bill?.receiver?.userCompany?.details?.codeOGRN ?? ''}<br>
+                     Адрес ${bill?.receiver?.userCompany?.details?.fullAddress ?? ''}`,
             }}
           />
         ) : (
