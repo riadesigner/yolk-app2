@@ -21,8 +21,8 @@ exports.count = async function (opt = {}) {
 exports.find = async function (opt = {}, populateCompanies = false) {
   try {
     let query = BillsModel.find(opt);
-
     if (populateCompanies) {
+      console.log('Populating bills with populateCompanies = true');
       query = query
         .populate({
           path: 'receiver',
@@ -46,7 +46,7 @@ exports.find = async function (opt = {}, populateCompanies = false) {
           },
         });
     }
-
+    // console.log(await query);
     return await query;
   } catch (err) {
     console.log('BillsService err:', err);

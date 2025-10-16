@@ -343,9 +343,10 @@ router.patch(
         order: orderUpdated.id,
         amount:
           orderUpdated.price * (1 - process.env.VITE_PLATFORM_COMMISSION / 100),
-        sender: orderUpdated.contractor.toString(),
+        sender: orderUpdated.contractor._id.toString(),
         description: `Счет на получение гонорара. Заказ № ${orderId}`, // Основание счета
       });
+      console.log('contractor', orderUpdated.contractor);
 
       await NotificationsService.sendWorkCompletedToAdministrator(
         admin.id,
