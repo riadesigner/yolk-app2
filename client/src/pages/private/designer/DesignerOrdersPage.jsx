@@ -5,7 +5,8 @@ import useFetchDesignerAdmin from '../../../hooks/useFetchDesignerAdmin.js';
 const DesignerOrdersPage = () => {
   const links = [
     { link: '/', title: 'Главная' },
-    { link: '#', title: 'Панель управления', isActive: true },
+    { link: '/cp/designer', title: 'Панель управления' },
+    { link: '#', title: 'Мои заказы', isActive: true },
   ];
 
   const { user } = useFetchDesignerAdmin();
@@ -33,7 +34,7 @@ const DesignerOrdersPage = () => {
           <article>
             <div className="columns">
               <div className="column is-6">
-                <h2 className="is-size-5-mobile">Заказы</h2>
+                <h2 className="title is-size-5-mobile">Заказы</h2>
                 <div className="block mb-6 mb-5-mobile">
                   {user?.contracts &&
                     user?.contracts?.length > 0 &&
@@ -48,6 +49,8 @@ const DesignerOrdersPage = () => {
                         />
                       );
                     })}
+                  {!user?.contracts ||
+                    (user?.contracts.length === 0 && <>Заказов пока нет</>)}
                 </div>
               </div>
             </div>
