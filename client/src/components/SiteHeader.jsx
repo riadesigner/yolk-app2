@@ -4,7 +4,7 @@ import SiteMobileMenu from '../components/SiteMobileMenu';
 import SearchAll from '../components/SearchAll';
 import SecondMenu from '../components/SecondMenu';
 
-import yolkLogo from '../i/yolk-logo.svg';
+import yolkLogo from '../i/yolk-logo.png';
 
 export default function SiteHeader() {
   return (
@@ -15,7 +15,7 @@ export default function SiteHeader() {
           <div className="level is-6 is-2-mobile">
             <div className="level-item is-5 ">
               <Link to="/" style={{ fontSize: 0 }}>
-                <img src={yolkLogo} alt="" style={{ height: '64px' }} />
+                <img src={yolkLogo} alt="" style={{ height: '48px' }} />
               </Link>
             </div>
             <div className="column is-5 is-right is-centered-mobile">

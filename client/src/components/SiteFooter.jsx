@@ -1,6 +1,6 @@
 import { Link, NavLink } from 'react-router-dom';
 
-import imgFooterLogo from '../i/yolk-logo.svg';
+import imgFooterLogo from '../i/yolk-logo.png';
 
 export default function SiteFooter() {
   return (
@@ -15,7 +15,7 @@ export default function SiteFooter() {
                   src={imgFooterLogo}
                   alt=""
                   style={{
-                    height: '40px',
+                    height: '22px',
                   }}
                 />
               </Link>
