@@ -42,37 +42,27 @@ const AdminBillsPage = () => {
             <div className={'columns'}>
               <div className="rows">
                 <button
-                  className={[
-                    'button',
-                    isFromYolk ? 'is-primary' : 'is-link',
-                  ].join(' ')}
+                  className={['button', isFromYolk ? 'is-link' : ''].join(' ')}
                   onClick={() => setIsFromYolk(true)}
                 >
                   Исходящие
+                  <br /> (Счета к Заказчикам)
                 </button>
                 <button
-                  className={[
-                    'button',
-                    !isFromYolk ? 'is-primary' : 'is-link',
-                  ].join(' ')}
+                  className={['button', !isFromYolk ? 'is-link' : ''].join(' ')}
                   onClick={() => setIsFromYolk(false)}
                 >
                   Входящие
+                  <br /> (Счета от Исполнителей)
                 </button>
                 <button
-                  className={[
-                    'button',
-                    !isPaided ? 'is-primary' : 'is-link',
-                  ].join(' ')}
+                  className={['button', !isPaided ? 'is-link' : ''].join(' ')}
                   onClick={() => setIsPaided(false)}
                 >
                   Не оплаченные
                 </button>
                 <button
-                  className={[
-                    'button',
-                    isPaided ? 'is-primary' : 'is-link',
-                  ].join(' ')}
+                  className={['button', isPaided ? 'is-link' : ''].join(' ')}
                   onClick={() => setIsPaided(true)}
                 >
                   Оплаченные
@@ -88,7 +78,7 @@ const AdminBillsPage = () => {
                       return (
                         <div key={b.id}>
                           <button
-                            className={`button ${b.paid ? 'is-primary' : 'is-link'} mb-3`}
+                            className={`button ${b.paid ? 'is-link' : ''} mb-3`}
                             onClick={() => {
                               navigate(`/cp/yolk-admin/bills/${b.id}`);
                             }}
@@ -104,7 +94,7 @@ const AdminBillsPage = () => {
                           </button>
                           {!b.paid && (
                             <button
-                              className="button is-primary ml-2"
+                              className="button is-link ml-2"
                               onClick={() => fetchSetBillPayed(b.id)}
                             >
                               Отметить оплаченным

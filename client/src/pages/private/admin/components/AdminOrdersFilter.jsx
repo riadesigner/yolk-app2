@@ -8,7 +8,9 @@ export default function OrdersFilter({
   return (
     <>
       <div className="block">
-        <h2 className="subtitle is-size-6 mb-4">Категории</h2>
+        <h2 className="subtitle is-size-6 mb-4">
+          Заказы / <small>сортировка по этапам</small>
+        </h2>
         <button
           className={[
             'button is-fluid mb-4 is-left',
@@ -16,7 +18,7 @@ export default function OrdersFilter({
           ].join(' ')}
           onClick={() => setFilter('PUBLISHED')}
         >
-          <span>Вакантные ({ordersCount['PUBLISHED'] ?? 0})</span>
+          <span>1. Вакантные ({ordersCount['PUBLISHED'] ?? 0})</span>
           <span>
             <i className="fa-solid fa-arrow-right" />
           </span>
@@ -28,7 +30,9 @@ export default function OrdersFilter({
           ].join(' ')}
           onClick={() => setFilter('HAS_CONTRACTOR')}
         >
-          <span>Есть исполнитель ({ordersCount['HAS_CONTRACTOR'] ?? 0})</span>
+          <span>
+            2. Есть исполнитель ({ordersCount['HAS_CONTRACTOR'] ?? 0})
+          </span>
           <span>
             <i className="fa-solid fa-arrow-right" />
           </span>
@@ -40,7 +44,7 @@ export default function OrdersFilter({
           ].join(' ')}
           onClick={() => setFilter('DEPOSIT_PAID')}
         >
-          <span>Оплачен ({ordersCount['DEPOSIT_PAID'] ?? 0})</span>
+          <span>3. Оплачен ({ordersCount['DEPOSIT_PAID'] ?? 0})</span>
           <span>
             <i className="fa-solid fa-arrow-right" />
           </span>
@@ -52,7 +56,7 @@ export default function OrdersFilter({
           ].join(' ')}
           onClick={() => setFilter('DONE')}
         >
-          <span>Выполнен ({ordersCount['DONE'] ?? 0})</span>
+          <span>4. Выполнен ({ordersCount['DONE'] ?? 0})</span>
           <span>
             <i className="fa-solid fa-arrow-right" />
           </span>
@@ -64,7 +68,7 @@ export default function OrdersFilter({
           ].join(' ')}
           onClick={() => setFilter('ARCHIVED')}
         >
-          <span>В архиве ({ordersCount['ARCHIVED'] ?? 0})</span>
+          <span>5. В архиве ({ordersCount['ARCHIVED'] ?? 0})</span>
           <span>
             <i className="fa-solid fa-arrow-right" />
           </span>
