@@ -8,7 +8,7 @@ export const useFetchAdminOrders = () => {
 
   const fetchAdminOrders = () =>
     api
-      .get('/orders', { query: { limit: Infinity } })
+      .get('/orders', { params: { limit: Infinity, allstatus: true } })
       .then(({ data }) => {
         setOrders(data.orders);
       })

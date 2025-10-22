@@ -137,6 +137,7 @@ router.get(
     const date = req.query.date || null; // "up | down"
     const price = req.query.price || null; // "up | down"
     const cats = req.query.cats || null; // "...catId:catId:catId"
+    const { allstatus } = req.query;
 
     const categories = cats !== null ? cats.split(':') : [];
 
@@ -172,9 +173,8 @@ router.get(
       limit,
       categories,
       withBills,
+      allstatus,
     });
-
-    console.log('--- orders ----', orders);
 
     const retOrders = orders.map((order) => order.toJSON());
     sendSuccess(res, { orders: retOrders, pagination });
