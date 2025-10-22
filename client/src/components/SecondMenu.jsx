@@ -31,17 +31,6 @@ export default function SeconMenu() {
             <div className="level-item">
               <div className="tabs is-boxed ">
                 <ul>
-                  {/*<li>*/}
-                  {/*  <a alt="Чаты" href="#">*/}
-                  {/*    <i className="fa-regular fa-comment" />*/}
-                  {/*  </a>*/}
-                  {/*</li>*/}
-                  {/*<li>*/}
-                  {/*  <a alt="Сообщения системы" href="#">*/}
-                  {/*    <i className="fa-regular fa-bell" />*/}
-                  {/*  </a>*/}
-                  {/*</li>*/}
-
                   <li
                     className={
                       location.pathname === navTo[userRole] ? 'is-active' : ''

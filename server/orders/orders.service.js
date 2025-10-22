@@ -33,6 +33,10 @@ exports.findAll = function (opt = {}) {
       query.categories = { $in: categories };
     }
 
+    if (!opt.allstatus) {
+      query.contractor = null;
+    }
+
     if (opt.userInput) {
       const regex = new RegExp(opt.userInput, 'i'); // 'i' - ignore case
       query.$or = [

@@ -31,6 +31,8 @@ export default [
         ...globals.browser,
         ...globals.node,
         ...globals.es2021,
+        $: 'readonly',
+        jQuery: 'readonly',
       },
     },
     rules: {
