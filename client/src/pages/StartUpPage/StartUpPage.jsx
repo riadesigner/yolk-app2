@@ -1,6 +1,7 @@
 export default function StartUpPage() {
 
   const logoFond = '/innovation.png';
+  const logoPlatforma = '/platforma.jpg';
   // const logoFond = '/no-image.jpg';
 
   return (
@@ -29,6 +30,7 @@ export default function StartUpPage() {
 
               <p>
                 <img src={logoFond} alt="logo" style={{maxWidth:'200px'}} />
+                <img src={logoPlatforma} alt="logo" style={{maxWidth:'200px',marginLeft:'30px'}} />
               </p>
                             
               <h1>О стартапе</h1>
