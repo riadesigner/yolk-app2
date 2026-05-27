@@ -4,7 +4,7 @@ import './styles/style-init.css';
 
 import './styles/style.css';
 import SiteHeader from './components/SiteHeader';
-import SiteFooter from './components/SiteFooter';
+import SiteFooter from './components/SiteFooter/SiteFooter';
 
 export default function Entry() {
   return (

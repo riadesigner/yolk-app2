@@ -1,0 +1,15 @@
+
+
+/* ----------------------------- 
+    
+   STARTED MOBILE MODE FROM HERE 
+
+   ----------------------------- */
+
+@media (max-width: 1023px) {
+ 
+  .footerLogos{
+    align-items: center !important;
+  }
+
+}

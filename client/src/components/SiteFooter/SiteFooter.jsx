@@ -1,6 +1,7 @@
 import { Link, NavLink } from 'react-router-dom';
+import styles from './SiteFooter.module.css';
 
-import imgFooterLogo from '../i/yolk-logo.png';
+import imgFooterLogo from '../../i/yolk-logo.png';
 
 export default function SiteFooter() {
   return (
@@ -62,8 +63,15 @@ export default function SiteFooter() {
       <div>
         <section className='container'>
           <hr />
-            <div className='columns section'>
+            <div               
+              className={[
+                styles.footerLogos,
+                'columns',
+                'section',
+              ].join(' ')}              
+              >
               <div><img src="./innovation.png" alt="" width='100px' height='auto' /></div>
+              <div><a target="_blank" href="https://univertechpred.ru/"><img src="./platforma.jpg" alt="" width='100px' height='auto' /></a></div>
               <div className="is-size-7">Проект создан при поддержке Федерального государственного бюджетного учреждения «Фонд содействия развитию малых форм предприятий в научно-технической сфере в рамках программы «Студенческий стартап» федерального проекта «Платформа университетского технологического предпринимательства».</div>
             </div>
         </section>          
